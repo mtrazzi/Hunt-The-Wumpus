@@ -1,11 +1,14 @@
 package mas.agents;
 
 
+import env.Attribute;
+import env.Couple;
 import env.Environment;
-
 import mas.abstractAgent;
 import mas.behaviours.*;
+
 import java.util.*;
+
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.*;
 import jade.domain.FIPAException;
@@ -17,7 +20,12 @@ public class ExplorerAgent extends abstractAgent{
 	 */
 	private static final long serialVersionUID = -1784844593772918359L;
 
-	private List<String> visited = new ArrayList<String>();
+	//private List<Couple<String,Boolean>> nodes= new ArrayList<Couple<String,Boolean>>();
+	private List<Couple<String,String>> edges = new ArrayList<Couple<String,String>>();
+	
+	Map<String, Boolean> nodes;
+	
+	//private graph my_graph;
 	
 	/**
 	 * This method is automatically called when "agent".start() is executed.
@@ -27,12 +35,24 @@ public class ExplorerAgent extends abstractAgent{
 	 *          
 	 */
 	
-	public List<String> getVisited() {
-		return visited;
+	public Map<String, Boolean> getNodes() {
+		return nodes;
 	}
 	
-	public void addVisited(String node) {
-		this.visited.add(node);
+	public void addVisited(String name, Boolean bool) {
+		this.nodes.put(name, bool);
+	}
+	
+	public List<Couple<String, String>> getEdges() {
+		return edges;
+	}
+
+	public void addEdges(Couple<String, String> edge) {
+		this.edges.add(edge);
+	}
+	
+	public void setVisited(String name, Boolean bool) {
+		this.nodes.put(name, bool);
 	}
 	
 	protected void setup(){
@@ -75,4 +95,6 @@ public class ExplorerAgent extends abstractAgent{
 	protected void takeDown(){
 
 	}
+
+
 }

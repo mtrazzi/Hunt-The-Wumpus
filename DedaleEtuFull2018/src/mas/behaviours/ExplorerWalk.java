@@ -12,6 +12,8 @@ import jade.core.behaviours.TickerBehaviour;
 
 import mas.agents.ExplorerAgent;
 
+import graph.Edge;
+
 /**************************************
  * 
  * 
@@ -38,15 +40,23 @@ public class ExplorerWalk extends TickerBehaviour{
 	public void onTick() {
 		//Example to retrieve the current position
 		String myPosition=((mas.abstractAgent)this.myAgent).getCurrentPosition();
-		List<String> visited=((mas.agents.ExplorerAgent)this.myAgent).getVisited();
-		if (!visited.contains(myPosition)) {
-			((mas.agents.ExplorerAgent)this.myAgent).addVisited(myPosition);
-		}
+		//List<String> visited=((mas.agents.ExplorerAgent)this.myAgent).getNodes();
+		//if (!visited.contains(myPosition)) {
+		//	((mas.agents.ExplorerAgent)this.myAgent).addVisited(myPosition);
+		//}
+		((mas.agents.ExplorerAgent)this.myAgent).setVisited(myPosition, true);
 		
 		if (myPosition!=""){
 			//List of observable from the agent's current position
 			List<Couple<String,List<Attribute>>> lobs=((mas.abstractAgent)this.myAgent).observe();//myPosition
 			System.out.println(this.myAgent.getLocalName()+" -- list of observables: "+lobs);
+			
+			//for (int i=0; i<lobs.size();i++) {
+			//	if (!visited.contains(lobs.get(i).getLeft())) {
+			//		moveId = i;
+			//	}
+			//}
+			((mas.agents.ExplorerAgent)this.myAgent).addEdges(myPosition, true);
 
 //			//Little pause to allow you to follow what is going on
 			try {
@@ -118,13 +128,16 @@ public class ExplorerWalk extends TickerBehaviour{
 ////				System.out.println("I can go to " + lobs.get(i).getLeft());
 ////			}
 			int moveId = r.nextInt(lobs.size()); //default value
-			for (int i=0; i<lobs.size();i++) {
-				if (!visited.contains(lobs.get(i).getLeft())) {
-					moveId = i;
-				}
-			}
 			
-			System.out.println("visited:"+((mas.agents.ExplorerAgent)this.myAgent).getVisited());
+			//for (int i=0; i<lobs.size();i++) {
+			//	if (!visited.contains(lobs.get(i).getLeft())) {
+			//		moveId = i;
+			//	}
+			//}
+			
+			
+			
+			System.out.println("visited:"+((mas.agents.ExplorerAgent)this.myAgent).getNodes());
 			//System.out.println("my move:"+lobs.get(moveId).getLeft());
 			//2) Move to the picked location. The move action (if any) MUST be the last action of your behaviour
 			((mas.abstractAgent)this.myAgent).moveTo(lobs.get(moveId).getLeft());
