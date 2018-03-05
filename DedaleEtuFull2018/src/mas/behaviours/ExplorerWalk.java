@@ -60,15 +60,11 @@ public class ExplorerWalk extends TickerBehaviour{
 			//		moveId = i;
 			//	}
 			//}
-<<<<<<< HEAD
 			
 			//((mas.agents.ExplorerAgent)this.myAgent).addEdges(myPosition, true); **
 			Pair<String,Integer> myPair = new Pair(myPosition, 2);
 			((mas.agents.ExplorerAgent)this.myAgent).getGraph().addVertex(myPair);
 			
-=======
-			//((mas.agents.ExplorerAgent)this.myAgent).addEdges(myPosition, true);
->>>>>>> 228da0b7ae4e42ab6c8bfd98c08aaa5c64d219ac
 
 //			//Little pause to allow you to follow what is going on
 			try {
