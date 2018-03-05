@@ -44,12 +44,12 @@ public class RandomWalkBehaviour extends TickerBehaviour{
 			System.out.println(this.myAgent.getLocalName()+" -- list of observables: "+lobs);
 
 //			//Little pause to allow you to follow what is going on
-			try {
-				System.out.println("Press Enter in the console to allow the agent "+this.myAgent.getLocalName() +" to execute its next move");
-				System.in.read();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+//			try {
+//				System.out.println("Press Enter in the console to allow the agent "+this.myAgent.getLocalName() +" to execute its next move");
+//				System.in.read();
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
 
 
 			//list of attribute associated to the currentPosition
@@ -70,12 +70,12 @@ public class RandomWalkBehaviour extends TickerBehaviour{
 					System.out.println("The value of treasure on the current position: (unchanged before a new call to observe()): "+a.getValue());
 					b=true;
 					//Little pause to allow you to follow what is going on
-					try {
-						System.out.println("Press Enter in the console to allow the agent "+this.myAgent.getLocalName() +" to execute its next move");
-						System.in.read();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+//					try {
+//						System.out.println("Press Enter in the console to allow the agent "+this.myAgent.getLocalName() +" to execute its next move");
+//						System.in.read();
+//					} catch (IOException e) {
+//						e.printStackTrace();
+//					}
 					break;
 			case DIAMONDS:
 				System.out.println("My type is : "+((mas.abstractAgent)this.myAgent).getMyTreasureType());
@@ -86,12 +86,12 @@ public class RandomWalkBehaviour extends TickerBehaviour{
 				System.out.println("The value of treasure on the current position: (unchanged before a new call to observe()): "+a.getValue());
 				b=true;
 				//Little pause to allow you to follow what is going on
-				try {
-					System.out.println("Press Enter in the console to allow the agent "+this.myAgent.getLocalName() +" to execute its next move");
-					System.in.read();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+//				try {
+//					System.out.println("Press Enter in the console to allow the agent "+this.myAgent.getLocalName() +" to execute its next move");
+//					System.in.read();
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				}
 				default:
 					break;
 				}
@@ -102,6 +102,11 @@ public class RandomWalkBehaviour extends TickerBehaviour{
 				List<Couple<String,List<Attribute>>> lobs2=((mas.abstractAgent)this.myAgent).observe();//myPosition
 				System.out.println("list of observables after picking "+lobs2);
 			}
+			System.out.println("My current backpack capacity is:"+ ((mas.abstractAgent)this.myAgent).getBackPackFreeSpace());
+			System.out.println("The agent tries to transfer is load into the Silo (if reachable); succes ? : "+((mas.abstractAgent)this.myAgent).emptyMyBackPack("Agent5"));
+			System.out.println("My current backpack capacity is:"+ ((mas.abstractAgent)this.myAgent).getBackPackFreeSpace());
+
+			
 
 			//Random move from the current position
 			Random r= new Random();
