@@ -1,6 +1,7 @@
 package mas.agents;
 
 
+import env.EntityType;
 import env.Environment;
 
 import mas.abstractAgent;
@@ -29,21 +30,21 @@ public class DummyExploAgent extends abstractAgent{
 
 		//get the parameters given into the object[]. In the current case, the environment where the agent will evolve
 		final Object[] args = getArguments();
-		if(args[0]!=null){
 
-			deployAgent((Environment) args[0]);
 
+		if(args!=null && args[0]!=null && args[1]!=null){
+			//deployAgent((Environment) args[0]);
+			deployAgent((Environment) args[0],(EntityType)args[1]);
 		}else{
 			System.err.println("Malfunction during parameter's loading of agent"+ this.getClass().getName());
 			System.exit(-1);
 		}
-		
-		
+
 		//Add the behaviours
 		addBehaviour(new RandomWalkBehaviour(this));
-		addBehaviour(new SayHello(this));
+		//addBehaviour(new SayHello(this));
 
-		System.out.println("the agent "+this.getLocalName()+ " is started");
+		System.out.println("the agent "+this.getLocalName()+ "of type"+ ((EntityType)args[1]).toString()+" is started");
 
 	}
 

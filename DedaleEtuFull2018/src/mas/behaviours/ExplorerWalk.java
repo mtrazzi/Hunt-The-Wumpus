@@ -56,7 +56,7 @@ public class ExplorerWalk extends TickerBehaviour{
 			//		moveId = i;
 			//	}
 			//}
-			((mas.agents.ExplorerAgent)this.myAgent).addEdges(myPosition, true);
+			//((mas.agents.ExplorerAgent)this.myAgent).addEdges(myPosition, true);
 
 //			//Little pause to allow you to follow what is going on
 			try {
