@@ -12,7 +12,8 @@ import jade.core.behaviours.TickerBehaviour;
 
 import mas.agents.ExplorerAgent;
 
-import graph.Edge;
+import mas.graph.Pair;
+
 
 /**************************************
  * 
@@ -35,6 +36,7 @@ public class ExplorerWalk extends TickerBehaviour{
 		
 		//super(myagent);
 	}
+	
 
 	@Override
 	public void onTick() {
@@ -44,7 +46,9 @@ public class ExplorerWalk extends TickerBehaviour{
 		//if (!visited.contains(myPosition)) {
 		//	((mas.agents.ExplorerAgent)this.myAgent).addVisited(myPosition);
 		//}
-		((mas.agents.ExplorerAgent)this.myAgent).setVisited(myPosition, true);
+		
+		//((mas.agents.ExplorerAgent)this.myAgent).setVisited(myPosition, true); **
+		
 		
 		if (myPosition!=""){
 			//List of observable from the agent's current position
@@ -56,7 +60,11 @@ public class ExplorerWalk extends TickerBehaviour{
 			//		moveId = i;
 			//	}
 			//}
-			((mas.agents.ExplorerAgent)this.myAgent).addEdges(myPosition, true);
+			
+			//((mas.agents.ExplorerAgent)this.myAgent).addEdges(myPosition, true); **
+			Pair<String,Integer> myPair = new Pair(myPosition, 2);
+			((mas.agents.ExplorerAgent)this.myAgent).getGraph().addVertex(myPair);
+			
 
 //			//Little pause to allow you to follow what is going on
 			try {
@@ -117,7 +125,18 @@ public class ExplorerWalk extends TickerBehaviour{
 				List<Couple<String,List<Attribute>>> lobs2=((mas.abstractAgent)this.myAgent).observe();//myPosition
 				System.out.println("list of observables after picking "+lobs2);
 			}
-
+			
+			for (int i = 0; i < lobs.size();i++) {
+				String nextPosition = lobs.get(i).getLeft();
+				System.out.println("nextPosition: " + nextPosition);
+				Pair<String,Integer> nextPair = new Pair(myPosition, 1);
+				((mas.agents.ExplorerAgent)this.myAgent).getGraph().addVertex(nextPair);
+				((mas.agents.ExplorerAgent)this.myAgent).getGraph().addEdge(myPair, nextPair);
+			}
+			
+			Iterable<Pair<String,Integer>> Vertices = ((mas.agents.ExplorerAgent)this.myAgent).getGraph().getAllVertices();
+			
+			
 //			//Random move from the current position
 			Random r= new Random();
 //			//1) get a couple <Node ID,list of percepts> from the list of observables
@@ -137,7 +156,7 @@ public class ExplorerWalk extends TickerBehaviour{
 			
 			
 			
-			System.out.println("visited:"+((mas.agents.ExplorerAgent)this.myAgent).getNodes());
+			//System.out.println("visited:"+((mas.agents.ExplorerAgent)this.myAgent).getNodes());
 			//System.out.println("my move:"+lobs.get(moveId).getLeft());
 			//2) Move to the picked location. The move action (if any) MUST be the last action of your behaviour
 			((mas.abstractAgent)this.myAgent).moveTo(lobs.get(moveId).getLeft());
