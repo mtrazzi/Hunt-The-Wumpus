@@ -24,7 +24,11 @@ public class ExplorerAgent extends abstractAgent{
 	 */
 	private static final long serialVersionUID = -1784844593772918359L;
 
-	private Graph<Pair<String, Integer> > graph;
+	private Graph<String> graph;
+	
+	private HashMap<String,String> hashmap;
+	
+	private Stack<String> stack;
 	
 	/**
 	 * This method is automatically called when "agent".start() is executed.
@@ -65,7 +69,10 @@ public class ExplorerAgent extends abstractAgent{
 		addBehaviour(new ExplorerWalk(this));
 		addBehaviour(new SayVisited(this));
 		
+		//Initialize attributes
 		this.setGraph(new Graph());
+		this.setHashmap(new HashMap());
+		this.setStack(new Stack());
 
 		System.out.println("the agent "+this.getLocalName()+ " is started");
 
@@ -78,12 +85,28 @@ public class ExplorerAgent extends abstractAgent{
 
 	}
 
-	public Graph<Pair<String, Integer> > getGraph() {
+	public Graph<String> getGraph() {
 		return graph;
 	}
 
-	public void setGraph(Graph<Pair<String, Integer> > graph) {
+	public void setGraph(Graph<String> graph) {
 		this.graph = graph;
+	}
+
+	public HashMap<String,String> getHashmap() {
+		return hashmap;
+	}
+
+	public void setHashmap(HashMap<String,String> hashmap) {
+		this.hashmap = hashmap;
+	}
+
+	public Stack<String> getStack() {
+		return stack;
+	}
+
+	public void setStack(Stack<String> stack) {
+		this.stack = stack;
 	}
 
 

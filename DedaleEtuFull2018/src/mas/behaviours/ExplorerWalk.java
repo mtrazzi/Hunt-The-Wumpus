@@ -9,6 +9,7 @@ import env.Attribute;
 import env.Couple;
 
 import jade.core.behaviours.TickerBehaviour;
+import jade.core.behaviours.SimpleBehaviour;
 
 import mas.agents.ExplorerAgent;
 
@@ -24,7 +25,7 @@ import mas.graph.Pair;
  **************************************/
 
 
-public class ExplorerWalk extends TickerBehaviour{
+public class ExplorerWalk extends SimpleBehaviour{
 	/**
 	 * When an agent choose to move
 	 *  
@@ -32,14 +33,12 @@ public class ExplorerWalk extends TickerBehaviour{
 	private static final long serialVersionUID = 9088209402507795289L;
 
 	public ExplorerWalk (final mas.abstractAgent myagent) {
-		super(myagent, 1000);
+		super(myagent);
 		
 		//super(myagent);
 	}
-	
-
 	@Override
-	public void onTick() {
+	public void action() {
 		//Example to retrieve the current position
 		String myPosition=((mas.abstractAgent)this.myAgent).getCurrentPosition();
 		//List<String> visited=((mas.agents.ExplorerAgent)this.myAgent).getNodes();
@@ -55,24 +54,12 @@ public class ExplorerWalk extends TickerBehaviour{
 			List<Couple<String,List<Attribute>>> lobs=((mas.abstractAgent)this.myAgent).observe();//myPosition
 			System.out.println(this.myAgent.getLocalName()+" -- list of observables: "+lobs);
 			
-			//for (int i=0; i<lobs.size();i++) {
-			//	if (!visited.contains(lobs.get(i).getLeft())) {
-			//		moveId = i;
-			//	}
-			//}
+			//Add myPosition to Graph
+			((mas.agents.ExplorerAgent)this.myAgent).getGraph().addVertex(myPosition);
 			
-			//((mas.agents.ExplorerAgent)this.myAgent).addEdges(myPosition, true); **
-			Pair<String,Integer> myPair = new Pair(myPosition, 2);
-			((mas.agents.ExplorerAgent)this.myAgent).getGraph().addVertex(myPair);
-			
+			//Set Node as discovered
+			((mas.agents.ExplorerAgent)this.myAgent).getHashmap().put(myPosition,"discovered");
 
-//			//Little pause to allow you to follow what is going on
-			try {
-				System.out.println("Press Enter in the console to allow the agent "+this.myAgent.getLocalName() +" to execute its next move");
-				System.in.read();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 
 
 			//list of attribute associated to the currentPosition
@@ -126,15 +113,18 @@ public class ExplorerWalk extends TickerBehaviour{
 				System.out.println("list of observables after picking "+lobs2);
 			}
 			
+			//Iterate over all adjacent nodes
 			for (int i = 0; i < lobs.size();i++) {
-				String nextPosition = lobs.get(i).getLeft();
-				System.out.println("nextPosition: " + nextPosition);
-				Pair<String,Integer> nextPair = new Pair(myPosition, 1);
-				((mas.agents.ExplorerAgent)this.myAgent).getGraph().addVertex(nextPair);
-				((mas.agents.ExplorerAgent)this.myAgent).getGraph().addEdge(myPair, nextPair);
+				//Add Edge
+				String adjacentNode = lobs.get(i).getLeft();
+				((mas.agents.ExplorerAgent)this.myAgent).getGraph().addEdge(myPosition, adjacentNode);
+				//Add adjacent node to stack if has never been discovered
+				if (!((mas.agents.ExplorerAgent)this.myAgent).getHashmap().containsKey(adjacentNode)) {
+					((mas.agents.ExplorerAgent)this.myAgent).getStack().push(adjacentNode);
+				}				
 			}
 			
-			Iterable<Pair<String,Integer>> Vertices = ((mas.agents.ExplorerAgent)this.myAgent).getGraph().getAllVertices();
+			//Pick the next Node to go
 			
 			
 //			//Random move from the current position
@@ -148,20 +138,26 @@ public class ExplorerWalk extends TickerBehaviour{
 ////			}
 			int moveId = r.nextInt(lobs.size()); //default value
 			
-			//for (int i=0; i<lobs.size();i++) {
-			//	if (!visited.contains(lobs.get(i).getLeft())) {
-			//		moveId = i;
-			//	}
-			//}
-			
 			
 			
 			//System.out.println("visited:"+((mas.agents.ExplorerAgent)this.myAgent).getNodes());
-			//System.out.println("my move:"+lobs.get(moveId).getLeft());
+			System.out.println("THIS IS A TEST");
+			System.out.println("my move:"+lobs.get(moveId).getLeft());
 			//2) Move to the picked location. The move action (if any) MUST be the last action of your behaviour
 			((mas.abstractAgent)this.myAgent).moveTo(lobs.get(moveId).getLeft());
+			
 		}
-
+		
+	}
+	public boolean	done() {
+		//Little pause to allow you to follow what is going on
+		try {
+			System.out.println("Press Enter in the console to allow the agent "+this.myAgent.getLocalName() +" to execute its next move");
+			System.in.read();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return true;
 	}
 
 }

@@ -2,6 +2,7 @@ package mas.behaviours;
 
 import jade.core.AID;
 
+import java.io.IOException;
 import java.util.*;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.*;
@@ -31,6 +32,14 @@ public class SayVisited extends TickerBehaviour{
 
 	@Override
 	public void onTick() {
+		//Little pause to allow you to follow what is going on
+		try {
+			System.out.println("Press Enter in the console to allow the agent "+this.myAgent.getLocalName() +" to execute its next move");
+			System.in.read();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		String myPosition=((mas.abstractAgent)this.myAgent).getCurrentPosition();
 
 		ACLMessage msg=new ACLMessage(7);
