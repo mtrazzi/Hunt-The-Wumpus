@@ -16,7 +16,6 @@ import mas.agents.DummyExploAgent;
 import mas.agents.DummyTankerAgent;
 import mas.agents.DummyWumpusAgent;
 import mas.agents.DummyWumpusShift;
-import mas.agents.ExplorerAgent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +24,7 @@ import java.util.List;
 import env.EntityType;
 import env.Environment;
 import env.Environment.ENVtype;
-
+import mas.agents.ExplorerAgent;
 
 public class Principal {
 
@@ -192,7 +191,7 @@ public class Principal {
 		 * Local and no GateKeeper
 		 */
 
-//		//	wumpus on container0
+		//	wumpus on container0
 //		c = containerList.get("container0");
 //		agentName="Golem";
 //		try {
@@ -269,9 +268,9 @@ public class Principal {
 //			e.printStackTrace();
 //		}
 
-		//	Explorer (no backpack)
+		//Explorer (no backpack)
 		c = containerList.get("container0");
-		agentName="Agent1";
+		agentName="MyExploreAgent";
 		try {
 
 			Object[] objtab=new Object[]{env,EntityType.AGENT_EXPLORER};//used to give informations to the agent

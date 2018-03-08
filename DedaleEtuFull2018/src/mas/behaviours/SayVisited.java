@@ -65,7 +65,7 @@ public class SayVisited extends TickerBehaviour{
 		}
 			
 		if (myPosition!=""){
-			System.out.println("Agent "+this.myAgent.getLocalName()+ " is trying to reach its friends");
+//			System.out.println("Agent "+this.myAgent.getLocalName()+ " is trying to reach its friends");
 			msg.setContent("Hello World, I'm at "+myPosition);
 			
 			for (int i = 0; i < result.length; i++) {
