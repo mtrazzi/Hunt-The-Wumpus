@@ -16,6 +16,7 @@ import mas.graph.Graph;
 import java.util.HashMap;
 import mas.graph.Pair;
 
+import env.EntityType;
 
 public class ExplorerAgent extends abstractAgent{
 
@@ -58,7 +59,7 @@ public class ExplorerAgent extends abstractAgent{
 		final Object[] args = getArguments();
 		if(args[0]!=null){
 
-			deployAgent((Environment) args[0]);
+			deployAgent((Environment) args[0],(EntityType)args[1]);
 
 		}else{
 			System.err.println("Malfunction during parameter's loading of agent"+ this.getClass().getName());
@@ -67,7 +68,7 @@ public class ExplorerAgent extends abstractAgent{
 		
 		//Add the behaviours
 		addBehaviour(new ExplorerWalk(this));
-		addBehaviour(new SayVisited(this));
+		//addBehaviour(new SayVisited(this));
 		
 		//Initialize attributes
 		this.setGraph(new Graph());
