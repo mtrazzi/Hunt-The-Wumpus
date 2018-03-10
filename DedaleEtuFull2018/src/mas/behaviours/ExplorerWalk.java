@@ -42,7 +42,6 @@ public class ExplorerWalk extends SimpleBehaviour{
 	
 	@Override
 	public void action() {
-		System.out.println("YES, I AM EXECUTING THIS PART AT THE BEGINNING OF ACTION");
 		
 		//Example to retrieve the current position
 		String myPosition=((mas.abstractAgent)this.myAgent).getCurrentPosition();
@@ -52,18 +51,13 @@ public class ExplorerWalk extends SimpleBehaviour{
 		
 		//Print the current Hashmap
 		HashMap<String,String> myHashMap = ((mas.agents.ExplorerAgent)this.myAgent).getHashmap();
-		for (String name: myHashMap.keySet()){
-
-            String key =name.toString();
-            String value = myHashMap.get(name).toString();  
-            System.out.println(key + " " + value);  
-		}
-		System.out.println("YES, I AM EXECUTING THIS PART JUST BEFORE THE IF");
+//		for (String name: myHashMap.keySet()){
+//			System.out.print('{');
+//            String key =name.toString();
+//            String value = myHashMap.get(name).toString();  
+//            System.out.print('['+ key + ": " + value + "], ");  
+//		}
 		if (myPosition!=""){
-			//Initialize the stack with current position if Hashmap is empty (first step)
-			if (((mas.agents.ExplorerAgent)this.myAgent).getHashmap().isEmpty()) {
-				((mas.agents.ExplorerAgent)this.myAgent).getStack().push(myPosition);
-			}
 			
 			//List of observable from the agent's current position
 			List<Couple<String,List<Attribute>>> lobs=((mas.abstractAgent)this.myAgent).observe();//myPosition
@@ -128,44 +122,46 @@ public class ExplorerWalk extends SimpleBehaviour{
 				List<Couple<String,List<Attribute>>> lobs2=((mas.abstractAgent)this.myAgent).observe();//myPosition
 				System.out.println("list of observables after picking "+lobs2);
 			}
-			System.out.println("YES, I AM EXECUTING THIS PART");
-			//Iterate over all adjacent nodes
+			//Iterate over all adjacent node
 			for (int i = 0; i < lobs.size();i++) {
 				//Add Edge
 				String adjacentNode = lobs.get(i).getLeft();
 				((mas.agents.ExplorerAgent)this.myAgent).getGraph().addEdge(myPosition, adjacentNode);
-				//Add adjacent node to stack if has never been discovered
-				if (!((mas.agents.ExplorerAgent)this.myAgent).getHashmap().containsKey(adjacentNode)) {
+				//Add adjacent node to stack if not in stack and not already visited
+				if (!((mas.agents.ExplorerAgent)this.myAgent).getHashmap().containsKey(adjacentNode)
+					&& !( ( (mas.agents.ExplorerAgent)this.myAgent).containsStack(adjacentNode) )	) {
 					System.out.println("Node: " + adjacentNode+ " added to Stack");
 					((mas.agents.ExplorerAgent)this.myAgent).getStack().push(adjacentNode);
 				}				
 			}
 			
-			//Prints the stack
-			System.out.println("Stack: " + Arrays.toString(((mas.agents.ExplorerAgent)this.myAgent).getStack().toArray()));
-			
 			//Pick the next Node to go
 			String myMove = ((mas.agents.ExplorerAgent)this.myAgent).getStack().pop();
 			
-			//Push current position to be sure to come back safe
-			((mas.agents.ExplorerAgent)this.myAgent).getStack().push(myPosition);
+			//Push current position to be sure to come back safe, if you need to explore more
+			if (!((mas.agents.ExplorerAgent)this.myAgent).getHashmap().containsKey(myMove)) {
+				((mas.agents.ExplorerAgent)this.myAgent).getStack().push(myPosition);
+				System.out.println("Node: " + myPosition+ " added to Stack to come back safe");
+			}
 			
 			//System.out.println("visited:"+((mas.agents.ExplorerAgent)this.myAgent).getNodes());
 			System.out.println("my move:"+myMove);
 			//2) Move to the picked location. The move action (if any) MUST be the last action of your behaviour
 			((mas.abstractAgent)this.myAgent).moveTo(myMove);
 			
+			//Prints the stack
+			System.out.println("Stack: " + Arrays.toString(((mas.agents.ExplorerAgent)this.myAgent).getStack().toArray()));
 		}
 		
 	}
 	public boolean	done() {
 		//Little pause to allow you to follow what is going on
-//		try {
-//			System.out.println("Press Enter in the console to allow the agent "+this.myAgent.getLocalName() +" to execute its next move");
-//			System.in.read();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
+		try {
+			System.out.println("Press Enter in the console to allow the agent "+this.myAgent.getLocalName() +" to execute its next move");
+			System.in.read();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		//Explorer Agent is done if and only his stack is empty
 		return (((mas.agents.ExplorerAgent)this.myAgent).getStack().empty());
 	}

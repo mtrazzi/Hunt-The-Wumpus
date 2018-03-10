@@ -15,6 +15,7 @@ import jade.domain.FIPAException;
 import mas.graph.Graph;
 import java.util.HashMap;
 import mas.graph.Pair;
+import java.util.Arrays;
 
 import env.EntityType;
 
@@ -110,5 +111,8 @@ public class ExplorerAgent extends abstractAgent{
 		this.stack = stack;
 	}
 
+	public boolean containsStack(String element) {
+		return Arrays.asList(this.stack.toArray()).contains(element);
+	}
 
 }
