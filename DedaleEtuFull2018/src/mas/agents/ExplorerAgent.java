@@ -32,6 +32,7 @@ public class ExplorerAgent extends abstractAgent{
 	
 	private Stack<String> stack;
 	
+	private String lastMove;
 	/**
 	 * This method is automatically called when "agent".start() is executed.
 	 * Consider that Agent is launched for the first time. 
@@ -76,6 +77,7 @@ public class ExplorerAgent extends abstractAgent{
 		this.setGraph(new Graph());
 		this.setHashmap(new HashMap());
 		this.setStack(new Stack());
+		this.setLastMove("");
 
 		System.out.println("the agent "+this.getLocalName()+ " is started");
 
@@ -114,6 +116,14 @@ public class ExplorerAgent extends abstractAgent{
 
 	public boolean containsStack(String element) {
 		return Arrays.asList(this.stack.toArray()).contains(element);
+	}
+
+	public String getLastMove() {
+		return lastMove;
+	}
+
+	public void setLastMove(String lastMove) {
+		this.lastMove = lastMove;
 	}
 
 }
