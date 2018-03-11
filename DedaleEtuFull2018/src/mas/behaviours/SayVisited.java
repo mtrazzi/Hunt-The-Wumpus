@@ -32,9 +32,11 @@ public class SayVisited extends TickerBehaviour{
 
 	@Override
 	public void onTick() {
+		boolean verbose = false;
+		
 		//Little pause to allow you to follow what is going on
 		try {
-			System.out.println("Press Enter in the console to allow the agent "+this.myAgent.getLocalName() +" to execute its next move");
+			System.out.println("Press Enter in the console to allow the agent "+this.myAgent.getLocalName() +" to execute its next move (message)");
 			System.in.read();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -56,11 +58,13 @@ public class SayVisited extends TickerBehaviour{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println(result.length + " results");
-		if (result.length > 0) {
-			for (int i = 0; i < result.length; i++) {
-				System.out.println(" " + result[i].getName());
+		if (verbose) {
+			System.out.println(result.length + " results");
+			if (result.length > 0) {
+				for (int i = 0; i < result.length; i++) {
+					System.out.println(" " + result[i].getName());
 
+				}
 			}
 		}
 			
@@ -69,7 +73,10 @@ public class SayVisited extends TickerBehaviour{
 			msg.setContent("Hello World, I'm at "+myPosition);
 			
 			for (int i = 0; i < result.length; i++) {
-				msg.addReceiver(result[i].getName());
+				if (!this.myAgent.getLocalName().equals(result[i].getName())) {//do not send message to yourself!
+					System.out.println(this.myAgent.getLocalName() + " totally different from " + result[i].getName());
+					msg.addReceiver(result[i].getName());
+				}
 			}
 			
 //			if (!myAgent.getLocalName().equals("Agent1")){

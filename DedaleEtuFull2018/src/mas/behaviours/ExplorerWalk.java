@@ -42,6 +42,8 @@ public class ExplorerWalk extends SimpleBehaviour{
 	
 	@Override
 	public void action() {
+		//Set verbose to true do debug the behaviour
+		boolean verbose = false;
 		
 		//Example to retrieve the current position
 		String myPosition=((mas.abstractAgent)this.myAgent).getCurrentPosition();
@@ -120,7 +122,8 @@ public class ExplorerWalk extends SimpleBehaviour{
 			//If the agent picked (part of) the treasure
 			if (b){
 				List<Couple<String,List<Attribute>>> lobs2=((mas.abstractAgent)this.myAgent).observe();//myPosition
-				System.out.println("list of observables after picking "+lobs2);
+				if (verbose)
+					System.out.println("list of observables after picking "+lobs2);
 			}
 			//Iterate over all adjacent node
 			for (int i = 0; i < lobs.size();i++) {
@@ -130,8 +133,9 @@ public class ExplorerWalk extends SimpleBehaviour{
 				//Add adjacent node to stack if not in stack and not already visited
 				if (!((mas.agents.ExplorerAgent)this.myAgent).getHashmap().containsKey(adjacentNode)
 					&& !( ( (mas.agents.ExplorerAgent)this.myAgent).containsStack(adjacentNode) )	) {
-					System.out.println("Node: " + adjacentNode+ " added to Stack");
 					((mas.agents.ExplorerAgent)this.myAgent).getStack().push(adjacentNode);
+					if (verbose)
+						System.out.println("Node: " + adjacentNode+ " added to Stack");
 				}				
 			}
 			
@@ -141,16 +145,19 @@ public class ExplorerWalk extends SimpleBehaviour{
 			//Push current position to be sure to come back safe, if you need to explore more
 			if (!((mas.agents.ExplorerAgent)this.myAgent).getHashmap().containsKey(myMove)) {
 				((mas.agents.ExplorerAgent)this.myAgent).getStack().push(myPosition);
-				System.out.println("Node: " + myPosition+ " added to Stack to come back safe");
+				if (verbose)
+					System.out.println("Node: " + myPosition+ " added to Stack to come back safe");
 			}
 			
 			//System.out.println("visited:"+((mas.agents.ExplorerAgent)this.myAgent).getNodes());
-			System.out.println("my move:"+myMove);
+			if (verbose)
+				System.out.println("my move:"+myMove);
 			//2) Move to the picked location. The move action (if any) MUST be the last action of your behaviour
 			((mas.abstractAgent)this.myAgent).moveTo(myMove);
 			
 			//Prints the stack
-			System.out.println("Stack: " + Arrays.toString(((mas.agents.ExplorerAgent)this.myAgent).getStack().toArray()));
+			if (verbose)
+				System.out.println("Stack: " + Arrays.toString(((mas.agents.ExplorerAgent)this.myAgent).getStack().toArray()));
 		}
 		
 	}
