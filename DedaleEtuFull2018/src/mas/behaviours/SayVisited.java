@@ -4,43 +4,37 @@ import jade.core.AID;
 
 import java.io.IOException;
 import java.util.*;
+
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.*;
 import jade.domain.FIPAException;
-
 import jade.core.Agent;
+import jade.core.behaviours.SimpleBehaviour;
 import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 import mas.abstractAgent;
 
-public class SayVisited extends TickerBehaviour{
+public class SayVisited extends SimpleBehaviour{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -2058134622078521998L;
 
-	/**
-	 * An agent tries to contact its friend and to give him its current position
-	 * @param myagent the agent who posses the behaviour
-	 *  
-	 */
-	public SayVisited (final Agent myagent) {
-		super(myagent, 3000);
-		//super(myagent);
+	private boolean finished=false;
+
+	public SayVisited(final Agent myagent) {
+		super(myagent);
 	}
 
-	@Override
-	public void onTick() {
+	public void action() {
 		boolean verbose = false;
 		
 		//Little pause to allow you to follow what is going on
-		try {
-			System.out.println("Press Enter in the console to allow the agent "+this.myAgent.getLocalName() +" to execute its next move (message)");
-			System.in.read();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			System.out.println("Press Enter in the console to allow the agent "+this.myAgent.getLocalName() +" to execute its next move (message)");
+//			System.in.read();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 		
 		String myPosition=((mas.abstractAgent)this.myAgent).getCurrentPosition();
 
@@ -61,11 +55,10 @@ public class SayVisited extends TickerBehaviour{
 			
 		if (myPosition!=""){
 //			System.out.println("Agent "+this.myAgent.getLocalName()+ " is trying to reach its friends");
-			msg.setContent("Hello World, I'm at "+myPosition);
+			msg.setContent("Hello World, I'm at "+myPosition + ". Can you tell me where I am?");
 			
 			for (int i = 0; i < result.length; i++) {
 				if (!this.myAgent.getLocalName().equals(result[i].getName().getLocalName())) {//do not send message to yourself!
-					System.out.println(this.myAgent.getLocalName() + " totally different from " + result[i].getName().getLocalName());
 					msg.addReceiver(result[i].getName());
 				}
 			}
@@ -79,7 +72,17 @@ public class SayVisited extends TickerBehaviour{
 			((mas.abstractAgent)this.myAgent).sendMessage(msg);
 
 		}
+	}
 
+	public boolean done() {
+		try {
+			System.out.println("Press Enter in the console to allow the agent "+this.myAgent.getLocalName() +" to execute its next move (send message)");
+			System.in.read();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return finished;
 	}
 
 }

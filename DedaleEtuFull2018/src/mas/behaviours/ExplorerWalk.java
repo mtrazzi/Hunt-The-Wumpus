@@ -5,18 +5,16 @@ import java.util.List;
 import java.util.Random;
 
 import env.Attribute;
-
 import env.Couple;
-
 import jade.core.behaviours.TickerBehaviour;
 import jade.core.behaviours.SimpleBehaviour;
-
 import mas.agents.ExplorerAgent;
-
 import mas.graph.Pair;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
+import java.lang.Thread;
 
 /**************************************
  * 
@@ -44,7 +42,7 @@ public class ExplorerWalk extends SimpleBehaviour{
 	@Override
 	public void action() {
 		//Set verbose to true do debug the behaviour
-		boolean verbose = true;
+		boolean verbose = false;
 		
 		
 		
@@ -55,7 +53,7 @@ public class ExplorerWalk extends SimpleBehaviour{
 		System.out.println("myPosition: "+myPosition);
 		
 		//Print the current Hashmap
-		HashMap<String,String> myHashMap = ((mas.agents.ExplorerAgent)this.myAgent).getHashmap();
+		//HashMap<String,String> myHashMap = ((mas.agents.ExplorerAgent)this.myAgent).getHashmap();
 //		for (String name: myHashMap.keySet()){
 //			System.out.print('{');
 //            String key =name.toString();
@@ -68,7 +66,7 @@ public class ExplorerWalk extends SimpleBehaviour{
 		if (myPosition !="" && myLastMove !="" && !myLastMove.equals(myPosition)) {
 			Random r = new Random();
 			int result = r.nextInt(2);
-			if (result == 0) { //continue, stubborn, with the same move
+			if (result == 0) { //continue, try hard, with the same move
 				if (verbose) //prints Stack
 					System.out.println("Stack: " + Arrays.toString(((mas.agents.ExplorerAgent)this.myAgent).getStack().toArray()));
 				
@@ -84,8 +82,26 @@ public class ExplorerWalk extends SimpleBehaviour{
 				//1) get a couple <Node ID,list of percepts> from the list of observables
 				int moveId=r2.nextInt(lobs.size());
 				
-				//2) push your position so you can come back safe and sound later
+				int counter = 0;
+				String nextMove = lobs.get(moveId).getLeft();
+				while (counter < 100 || nextMove.equals(myPosition) || nextMove.equals(myLastMove)) {
+					moveId=r2.nextInt(lobs.size());
+					nextMove = lobs.get(moveId).getLeft();
+					counter += 1;
+				}
+				
+				//3) push your position so you can come back safe and sound later
 				((mas.agents.ExplorerAgent)this.myAgent).getStack().push(myPosition);
+				
+				//2) push next position to stack to stay there for a while
+				
+				if (!nextMove.equals(myPosition)) {
+					for (int i=0; i<5; i++)
+						((mas.agents.ExplorerAgent)this.myAgent).getStack().push(nextMove);
+				}
+				else
+					((mas.agents.ExplorerAgent)this.myAgent).getStack().push(nextMove);
+				
 				
 				if (verbose) //prints Stack
 					System.out.println("Stack: " + Arrays.toString(((mas.agents.ExplorerAgent)this.myAgent).getStack().toArray()));
@@ -96,6 +112,10 @@ public class ExplorerWalk extends SimpleBehaviour{
 				//4) Move to the picked location. The move action (if any) MUST be the last action of your behaviour
 				((mas.abstractAgent)this.myAgent).moveTo(lobs.get(moveId).getLeft());
 			}
+		} else if (myPosition!="" && !((mas.agents.ExplorerAgent)this.myAgent).getStack().empty() &&
+				((mas.agents.ExplorerAgent)this.myAgent).getStack().peek().equals(myPosition)) {
+			((mas.agents.ExplorerAgent)this.myAgent).getStack().pop();
+			((mas.abstractAgent)this.myAgent).moveTo(myPosition);
 		} else if (myPosition!=""){
 			
 			//List of observable from the agent's current position
@@ -209,6 +229,29 @@ public class ExplorerWalk extends SimpleBehaviour{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		//Sleep to see the agents moving
+//		try {
+//			Thread.sleep(300);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		
+		//if done, do this
+		if (((mas.agents.ExplorerAgent)this.myAgent).getStack().empty()) {
+			System.out.println(this.myAgent.getLocalName() + " is Done!");
+			
+			//Print Hashmap
+			HashMap<String,String> myHashMap = ((mas.agents.ExplorerAgent)this.myAgent).getHashmap();
+			for (String name: myHashMap.keySet()){
+				System.out.print('{');
+	            String key =name.toString();
+	            String value = myHashMap.get(name).toString();  
+	            System.out.print('['+ key + ": " + value + "], ");  
+			}
+		}
+		
 		//Explorer Agent is done if and only his stack is empty
 		return (((mas.agents.ExplorerAgent)this.myAgent).getStack().empty());
 	}

@@ -1,5 +1,7 @@
 package mas.behaviours;
 
+import java.io.IOException;
+
 import jade.core.Agent;
 import jade.core.behaviours.SimpleBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -28,7 +30,8 @@ public class ReceiveVisited extends SimpleBehaviour{
 
 		final ACLMessage msg = this.myAgent.receive(msgTemplate);
 		if (msg != null) {		
-			System.out.println(this.myAgent.getLocalName()+"<----Result received from "+msg.getSender().getLocalName()+" ,content= "+msg.getContent());
+			System.out.println(this.myAgent.getLocalName()+"<----Result received from "+msg.getSender().getLocalName());
+			System.out.println("The content was: "+msg.getContent());
 			this.finished=true;
 		}else{
 			block();// the behaviour goes to sleep until the arrival of a new message in the agent's Inbox.
@@ -36,6 +39,13 @@ public class ReceiveVisited extends SimpleBehaviour{
 	}
 
 	public boolean done() {
+		try {
+			System.out.println("Press Enter in the console to allow the agent "+this.myAgent.getLocalName() +" to execute its next move (receive message)");
+			System.in.read();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		return finished;
 	}
 
