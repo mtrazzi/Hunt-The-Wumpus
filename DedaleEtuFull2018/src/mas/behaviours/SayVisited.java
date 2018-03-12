@@ -58,23 +58,14 @@ public class SayVisited extends TickerBehaviour{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if (verbose) {
-			System.out.println(result.length + " results");
-			if (result.length > 0) {
-				for (int i = 0; i < result.length; i++) {
-					System.out.println(" " + result[i].getName());
-
-				}
-			}
-		}
 			
 		if (myPosition!=""){
 //			System.out.println("Agent "+this.myAgent.getLocalName()+ " is trying to reach its friends");
 			msg.setContent("Hello World, I'm at "+myPosition);
 			
 			for (int i = 0; i < result.length; i++) {
-				if (!this.myAgent.getLocalName().equals(result[i].getName())) {//do not send message to yourself!
-					System.out.println(this.myAgent.getLocalName() + " totally different from " + result[i].getName());
+				if (!this.myAgent.getLocalName().equals(result[i].getName().getLocalName())) {//do not send message to yourself!
+					System.out.println(this.myAgent.getLocalName() + " totally different from " + result[i].getName().getLocalName());
 					msg.addReceiver(result[i].getName());
 				}
 			}

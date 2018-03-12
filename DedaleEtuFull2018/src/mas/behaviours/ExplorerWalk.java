@@ -16,6 +16,7 @@ import mas.agents.ExplorerAgent;
 import mas.graph.Pair;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Random;
 
 /**************************************
  * 
@@ -43,7 +44,9 @@ public class ExplorerWalk extends SimpleBehaviour{
 	@Override
 	public void action() {
 		//Set verbose to true do debug the behaviour
-		boolean verbose = false;
+		boolean verbose = true;
+		
+		
 		
 		//Example to retrieve the current position
 		String myPosition=((mas.abstractAgent)this.myAgent).getCurrentPosition();
@@ -59,10 +62,44 @@ public class ExplorerWalk extends SimpleBehaviour{
 //            String value = myHashMap.get(name).toString();  
 //            System.out.print('['+ key + ": " + value + "], ");  
 //		}
-		if (myPosition!=""){
+		
+		//If last move was ineffective (other agent on next node)
+		String myLastMove = ((mas.agents.ExplorerAgent)this.myAgent).getLastMove();
+		if (myPosition !="" && myLastMove !="" && !myLastMove.equals(myPosition)) {
+			Random r = new Random();
+			int result = r.nextInt(2);
+			if (result == 0) { //continue, stubborn, with the same move
+				if (verbose) //prints Stack
+					System.out.println("Stack: " + Arrays.toString(((mas.agents.ExplorerAgent)this.myAgent).getStack().toArray()));
+				
+				//1) Set the last move to the move you will make
+				((mas.agents.ExplorerAgent)this.myAgent).setLastMove(((mas.agents.ExplorerAgent)this.myAgent).getLastMove());
+				
+				//2) Do the move
+				((mas.abstractAgent)this.myAgent).moveTo(((mas.agents.ExplorerAgent)this.myAgent).getLastMove());
+				
+			} else { //pick a random move
+				List<Couple<String,List<Attribute>>> lobs=((mas.abstractAgent)this.myAgent).observe();
+				Random r2 = new Random();
+				//1) get a couple <Node ID,list of percepts> from the list of observables
+				int moveId=r2.nextInt(lobs.size());
+				
+				//2) push your position so you can come back safe and sound later
+				((mas.agents.ExplorerAgent)this.myAgent).getStack().push(myPosition);
+				
+				if (verbose) //prints Stack
+					System.out.println("Stack: " + Arrays.toString(((mas.agents.ExplorerAgent)this.myAgent).getStack().toArray()));
+				
+				//3)Set the last move to the move you will make
+				((mas.agents.ExplorerAgent)this.myAgent).setLastMove(lobs.get(moveId).getLeft());
+				
+				//4) Move to the picked location. The move action (if any) MUST be the last action of your behaviour
+				((mas.abstractAgent)this.myAgent).moveTo(lobs.get(moveId).getLeft());
+			}
+		} else if (myPosition!=""){
 			
 			//List of observable from the agent's current position
-			List<Couple<String,List<Attribute>>> lobs=((mas.abstractAgent)this.myAgent).observe();//myPosition
+			List<Couple<String,List<Attribute>>> lobs=((mas.abstractAgent)this.myAgent).observe();
 			System.out.println(this.myAgent.getLocalName()+" -- list of observables: "+lobs);
 			
 			//Add myPosition to Graph
@@ -152,12 +189,15 @@ public class ExplorerWalk extends SimpleBehaviour{
 			//System.out.println("visited:"+((mas.agents.ExplorerAgent)this.myAgent).getNodes());
 			if (verbose)
 				System.out.println("my move:"+myMove);
-			//2) Move to the picked location. The move action (if any) MUST be the last action of your behaviour
-			((mas.abstractAgent)this.myAgent).moveTo(myMove);
+			//Set the last move to the move you will make
+			((mas.agents.ExplorerAgent)this.myAgent).setLastMove(myMove);
 			
 			//Prints the stack
 			if (verbose)
 				System.out.println("Stack: " + Arrays.toString(((mas.agents.ExplorerAgent)this.myAgent).getStack().toArray()));
+			
+			//2) Move to the picked location. The move action (if any) MUST be the last action of your behaviour
+			((mas.abstractAgent)this.myAgent).moveTo(myMove);
 		}
 		
 	}
