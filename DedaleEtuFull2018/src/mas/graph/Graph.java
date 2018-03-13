@@ -3,13 +3,14 @@ package mas.graph;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.io.*;
 
 /**
  * A simple undirected and unweighted graph implementation.
  * 
  * @param <T> The type that would be used as vertex.
  */
-public class Graph<T> {
+public class Graph<T> implements Serializable  {
     final private HashMap<T, Set<T>> adjacencyList;
     private int nbEdges;
     /**
@@ -120,4 +121,33 @@ public class Graph<T> {
     public Iterable<T> getAllVertices() {
         return this.adjacencyList.keySet();
     }
+    
+    public void printNodes() {
+    	Iterable<T> allVertices = getAllVertices();
+    	for (T node : allVertices) {
+    		System.out.print((String)node + " ");
+    	}
+    	System.out.println("");
+    }
+    
+    public void printEdges() {
+    	for (T node : getAllVertices()) {
+    		System.out.println("Neighbor of " + (String)node);
+    		for (T adjacentNode : getNeighbors(node)) {
+    			System.out.println("-->" + adjacentNode);
+    		}
+    	}
+    }
+    
+    //Merge the received graph with current graph
+    public void mergeGraph(Graph<T> receivedGraph) {
+    	Iterable<T> allVertices = receivedGraph.getAllVertices();
+    	for (T node : allVertices) {
+    		addVertex(node);
+    		for (T adjacentNode : getNeighbors(node)) {
+    			addEdge(node, adjacentNode);
+    		}
+    	}
+    }
+    
 }
