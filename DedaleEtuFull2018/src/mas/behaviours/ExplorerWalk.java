@@ -9,7 +9,7 @@ import env.Couple;
 import jade.core.behaviours.TickerBehaviour;
 import jade.core.behaviours.SimpleBehaviour;
 import mas.agents.ExplorerAgent;
-import mas.graph.Pair;
+
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -41,8 +41,16 @@ public class ExplorerWalk extends SimpleBehaviour{
 	
 	@Override
 	public void action() {
+		
+		try {
+			System.out.println("Press Enter in the console to allow the agent "+this.myAgent.getLocalName() +" to execute its next move (move)");
+			System.in.read();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		//Set verbose to true do debug the behaviour
-		boolean verbose = false;
+		boolean verbose = true;
 		
 		
 		
@@ -66,7 +74,9 @@ public class ExplorerWalk extends SimpleBehaviour{
 		if (myPosition !="" && myLastMove !="" && !myLastMove.equals(myPosition)) {
 			Random r = new Random();
 			int result = r.nextInt(2);
-			if (result == 0) { //continue, try hard, with the same move
+			
+			//continue, try hard, with the same move
+			if (result == 0) { 
 				if (verbose) //prints Stack
 					System.out.println("Stack: " + Arrays.toString(((mas.agents.ExplorerAgent)this.myAgent).getStack().toArray()));
 				
@@ -75,8 +85,10 @@ public class ExplorerWalk extends SimpleBehaviour{
 				
 				//2) Do the move
 				((mas.abstractAgent)this.myAgent).moveTo(((mas.agents.ExplorerAgent)this.myAgent).getLastMove());
+			
 				
-			} else { //pick a random move
+			//pick a random move	
+			} else { 
 				List<Couple<String,List<Attribute>>> lobs=((mas.abstractAgent)this.myAgent).observe();
 				Random r2 = new Random();
 				//1) get a couple <Node ID,list of percepts> from the list of observables
@@ -89,6 +101,9 @@ public class ExplorerWalk extends SimpleBehaviour{
 					nextMove = lobs.get(moveId).getLeft();
 					counter += 1;
 				}
+				
+				//1) ALWAYS REMEMBER TO COME BACK WHERE YOU FAILED
+				((mas.agents.ExplorerAgent)this.myAgent).getStack().push(myLastMove);
 				
 				//3) push your position so you can come back safe and sound later
 				((mas.agents.ExplorerAgent)this.myAgent).getStack().push(myPosition);
@@ -124,6 +139,8 @@ public class ExplorerWalk extends SimpleBehaviour{
 			
 			//Add myPosition to Graph
 			((mas.agents.ExplorerAgent)this.myAgent).getGraph().addVertex(myPosition);
+			if (verbose)
+				System.out.println("Added node " + myPosition + " to Graph");
 			
 			//Set Node as discovered
 			((mas.agents.ExplorerAgent)this.myAgent).getHashmap().put(myPosition,"discovered");
@@ -186,14 +203,23 @@ public class ExplorerWalk extends SimpleBehaviour{
 			for (int i = 0; i < lobs.size();i++) {
 				//Add Edge
 				String adjacentNode = lobs.get(i).getLeft();
-				((mas.agents.ExplorerAgent)this.myAgent).getGraph().addEdge(myPosition, adjacentNode);
-				//Add adjacent node to stack if not in stack and not already visited
-				if (!((mas.agents.ExplorerAgent)this.myAgent).getHashmap().containsKey(adjacentNode)
-					&& !( ( (mas.agents.ExplorerAgent)this.myAgent).containsStack(adjacentNode) )	) {
-					((mas.agents.ExplorerAgent)this.myAgent).getStack().push(adjacentNode);
+				
+				//Only add edge and node different from myPosition
+				if (!adjacentNode.equals(myPosition)) {
+					((mas.agents.ExplorerAgent)this.myAgent).getGraph().addVertex(adjacentNode);
 					if (verbose)
-						System.out.println("Node: " + adjacentNode+ " added to Stack");
-				}				
+						System.out.println("Added node " + myPosition + " to Graph");
+					((mas.agents.ExplorerAgent)this.myAgent).getGraph().addEdge(myPosition, adjacentNode);
+					if (verbose)
+						System.out.println("Edge (" + myPosition + ", " + adjacentNode + ") added to Graph");
+					//Add adjacent node to stack if not in stack and not already visited
+					if (!((mas.agents.ExplorerAgent)this.myAgent).getHashmap().containsKey(adjacentNode)
+						&& !( ( (mas.agents.ExplorerAgent)this.myAgent).containsStack(adjacentNode) )	) {
+						((mas.agents.ExplorerAgent)this.myAgent).getStack().push(adjacentNode);
+						if (verbose)
+							System.out.println("Node: " + adjacentNode+ " added to Stack");
+					}	
+				}
 			}
 			
 			//Pick the next Node to go
@@ -223,12 +249,6 @@ public class ExplorerWalk extends SimpleBehaviour{
 	}
 	public boolean	done() {
 		//Little pause to allow you to follow what is going on
-		try {
-			System.out.println("Press Enter in the console to allow the agent "+this.myAgent.getLocalName() +" to execute its next move");
-			System.in.read();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 
 		//Sleep to see the agents moving
 //		try {
@@ -253,7 +273,8 @@ public class ExplorerWalk extends SimpleBehaviour{
 		}
 		
 		//Explorer Agent is done if and only his stack is empty
-		return (((mas.agents.ExplorerAgent)this.myAgent).getStack().empty());
+		//return (((mas.agents.ExplorerAgent)this.myAgent).getStack().empty());
+		return false;
 	}
 
 }

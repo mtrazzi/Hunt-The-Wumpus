@@ -24,17 +24,22 @@ public class SayVisited extends SimpleBehaviour{
 	public SayVisited(final Agent myagent) {
 		super(myagent);
 	}
+	
+	private static <T> Iterable<T> iterable(final Iterator<T> it){
+	     return new Iterable<T>(){ public Iterator<T> iterator(){ return it; } };
+	}
 
+	@SuppressWarnings("unchecked")
 	public void action() {
-		boolean verbose = false;
+		boolean verbose = true;
 		
 		//Little pause to allow you to follow what is going on
-//		try {
-//			System.out.println("Press Enter in the console to allow the agent "+this.myAgent.getLocalName() +" to execute its next move (message)");
-//			System.in.read();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
+		try {
+			System.out.println("Press Enter in the console to allow the agent "+this.myAgent.getLocalName() +" to execute its next move (message)");
+			System.in.read();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		String myPosition=((mas.abstractAgent)this.myAgent).getCurrentPosition();
 
@@ -54,35 +59,31 @@ public class SayVisited extends SimpleBehaviour{
 		}
 			
 		if (myPosition!=""){
-//			System.out.println("Agent "+this.myAgent.getLocalName()+ " is trying to reach its friends");
-			msg.setContent("Hello World, I'm at "+myPosition + ". Can you tell me where I am?");
+//			Sends the Graph
 			
+			
+			try {
+				msg.setContentObject(((mas.agents.ExplorerAgent)this.myAgent).getGraph());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			System.out.println(this.myAgent.getLocalName()+" --> Sending message to");
 			for (int i = 0; i < result.length; i++) {
 				if (!this.myAgent.getLocalName().equals(result[i].getName().getLocalName())) {//do not send message to yourself!
 					msg.addReceiver(result[i].getName());
+					System.out.println("\t" + result[i].getName().getLocalName());
 				}
 			}
-			
-//			if (!myAgent.getLocalName().equals("Agent1")){
-//				msg.addReceiver(new AID("Agent1",AID.ISLOCALNAME));
-//			}else{
-//				msg.addReceiver(new AID("Agent2",AID.ISLOCALNAME));
-//			}
-
 			((mas.abstractAgent)this.myAgent).sendMessage(msg);
 
 		}
 	}
 
 	public boolean done() {
-		try {
-			System.out.println("Press Enter in the console to allow the agent "+this.myAgent.getLocalName() +" to execute its next move (send message)");
-			System.in.read();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		
-		return finished;
+		return false;
 	}
 
 }
