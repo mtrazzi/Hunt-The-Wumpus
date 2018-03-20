@@ -14,7 +14,6 @@ import jade.domain.FIPAException;
 
 import mas.graph.Graph;
 import java.util.HashMap;
-import mas.graph.Pair;
 import java.util.Arrays;
 
 import env.EntityType;

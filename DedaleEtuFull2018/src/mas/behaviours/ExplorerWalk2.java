@@ -9,7 +9,6 @@ import env.Couple;
 import jade.core.behaviours.TickerBehaviour;
 import jade.core.behaviours.SimpleBehaviour;
 import mas.agents.ExplorerAgent2;
-import mas.graph.Pair;
 
 import java.util.Arrays;
 import java.util.HashMap;
