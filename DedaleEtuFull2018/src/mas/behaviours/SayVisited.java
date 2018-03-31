@@ -29,7 +29,6 @@ public class SayVisited extends SimpleBehaviour{
 	     return new Iterable<T>(){ public Iterator<T> iterator(){ return it; } };
 	}
 
-	@SuppressWarnings("unchecked")
 	public void action() {
 		boolean verbose = true;
 		
@@ -63,7 +62,7 @@ public class SayVisited extends SimpleBehaviour{
 			
 			
 			try {
-				msg.setContentObject(((mas.agents.ExplorerAgent)this.myAgent).getGraph());
+				msg.setContentObject(((mas.agents.ExplorerAgent2)this.myAgent).getGraph());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

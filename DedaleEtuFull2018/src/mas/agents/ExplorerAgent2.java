@@ -69,8 +69,8 @@ public class ExplorerAgent2 extends abstractAgent{
 		
 		//Add the behaviours
 		addBehaviour(new ExplorerWalk2(this)); //To explore the map
-		addBehaviour(new SayVisited(this)); //To communicate the map
-		addBehaviour(new ReceiveVisited(this));//To receive a map
+		//addBehaviour(new SayVisited(this)); //To communicate the map
+		//addBehaviour(new ReceiveVisited(this));//To receive a map
 		
 		//Initialize attributes
 		this.setGraph(new Graph());
