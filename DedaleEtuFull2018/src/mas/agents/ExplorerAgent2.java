@@ -4,6 +4,7 @@ package mas.agents;
 import env.Environment;
 import mas.abstractAgent;
 import mas.behaviours.*;
+import mas.agents.GeneralAgent;
 
 import java.util.*;
 
@@ -17,20 +18,8 @@ import java.util.Arrays;
 
 import env.EntityType;
 
-public class ExplorerAgent2 extends abstractAgent{
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -1784844593772918359L;
-
-	private Graph<String> graph;
+public class ExplorerAgent2 extends GeneralAgent{
 	
-	private HashMap<String,String> hashmap;
-	
-	private Stack<String> stack;
-	
-	private String lastMove;
 	/**
 	 * This method is automatically called when "agent".start() is executed.
 	 * Consider that Agent is launched for the first time. 
@@ -79,49 +68,6 @@ public class ExplorerAgent2 extends abstractAgent{
 
 		System.out.println("the agent "+this.getLocalName()+ " is started");
 
-	}
-
-	/**
-	 * This method is automatically called after doDelete()
-	 */
-	protected void takeDown(){
-
-	}
-
-	public Graph<String> getGraph() {
-		return graph;
-	}
-
-	public void setGraph(Graph<String> graph) {
-		this.graph = graph;
-	}
-
-	public HashMap<String,String> getHashmap() {
-		return hashmap;
-	}
-
-	public void setHashmap(HashMap<String,String> hashmap) {
-		this.hashmap = hashmap;
-	}
-
-	public Stack<String> getStack() {
-		return stack;
-	}
-
-	public void setStack(Stack<String> stack) {
-		this.stack = stack;
-	}
-
-	public boolean containsStack(String element) {
-		return Arrays.asList(this.stack.toArray()).contains(element);
-	}
-
-	public String getLastMove() {
-		return lastMove;
-	}
-
-	public void setLastMove(String lastMove) {
-		this.lastMove = lastMove;
 	}
 
 }

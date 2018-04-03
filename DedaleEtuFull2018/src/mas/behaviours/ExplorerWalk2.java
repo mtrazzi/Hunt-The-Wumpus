@@ -2,6 +2,7 @@ package mas.behaviours;
 
 import java.io.IOException;
 import java.util.List;
+
 import env.Attribute;
 import env.Couple;
 import jade.core.behaviours.SimpleBehaviour;
@@ -10,6 +11,7 @@ import mas.agents.ExplorerAgent2;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Stack;
 
 /**************************************
  * 
@@ -48,17 +50,6 @@ public class ExplorerWalk2 extends SimpleBehaviour {
 		return (mas.agents.ExplorerAgent2)this.myAgent;
 	}
 
-	public void printCurrentHashmap() {
-		// Print the current Hashmap
-		HashMap<String, String> myHashMap = getExplorerAgent().getHashmap();
-		for (String name : myHashMap.keySet()) {
-			System.out.print('{');
-			String key = name.toString();
-			String value = myHashMap.get(name).toString();
-			System.out.print('[' + key + ": " + value + "], ");
-		}
-	}
-
 	public void printStack() {
 		System.out.println("Stack: " + Arrays.toString(getExplorerAgent().getStack().toArray()));
 	}
@@ -74,17 +65,36 @@ public class ExplorerWalk2 extends SimpleBehaviour {
 		}
 	}
 	
-	public void UpdateHashmapAndStack(String myPosition, List<Couple<String, List<Attribute>>> lobs) {
+	public void UpdateHashmap(String myPosition, List<Couple<String, List<Attribute>>> lobs) {
 		for (int i = 0; i < lobs.size(); i++) {
 			// Add Edge
 			String adjacentNode = lobs.get(i).getLeft();
 			getExplorerAgent().getGraph().addEdge(myPosition, adjacentNode);
+		}
+	}
+	
+	//Hardcoded, to change
+	public void UpdateStackDFS(String myPosition, List<Couple<String, List<Attribute>>> lobs) {
+		for (int i = 0; i < lobs.size(); i++) {
+			String adjacentNode = lobs.get(i).getLeft();
+
 			// Add adjacent node to stack if not in stack and not already visited
-			if (!getExplorerAgent().getHashmap().containsKey(adjacentNode)
-					&& !(getExplorerAgent().containsStack(adjacentNode))) {
+			if (!getExplorerAgent().getHashmap().containsKey(adjacentNode) //node not open
+					&& !(getExplorerAgent().containsStack(adjacentNode))) { //push only if not in stack
 				getExplorerAgent().getStack().push(adjacentNode);
 			}
 		}
+	}
+	
+	//TO DO
+	public void UpdateStackNeirest(String myPosition, List<Couple<String, List<Attribute>>> lobs) {
+		//Check the neirest node not visited (node still open but not closed)
+		//Stack <- path to neirest node (example : [1, 3, 4])
+	}
+	
+	//TO DO
+	Stack<String> PathToNeirestUnseen() {	//Called in UpdateStackNeirest
+		return getExplorerAgent().getStack(); //TO CHANGE, only for eclipse warning
 	}
 
 	public void action() {
@@ -105,7 +115,7 @@ public class ExplorerWalk2 extends SimpleBehaviour {
 				System.out.println(this.myAgent.getLocalName() + " -- list of observables: " + lobs);
 			
 			/////////////////////////////////
-			//// Update Graph
+			//// STEP 1) Update Graph
 			
 			// Add myPosition to Graph
 			getExplorerAgent().getGraph().addVertex(myPosition);
@@ -114,11 +124,15 @@ public class ExplorerWalk2 extends SimpleBehaviour {
 			getExplorerAgent().getHashmap().put(myPosition, "discovered");
 
 			/////////////////////////////////
-			//// Update the Hashmap and the Stack
-			UpdateHashmapAndStack(myPosition, lobs);
+			//// STEP 2) Update the Hashmap
+			UpdateHashmap(myPosition, lobs);
+			
+			/////////////////////////////////
+			//// STEP 3) Update the Stack
+			UpdateStackDFS(myPosition, lobs);
 
 			/////////////////////////////////
-			//// Pick the next Move and do it
+			//// STEP 4) Pick the next Move and do it
 			
 			// Pick the next Node to go
 			String myMove = getExplorerAgent().getStack().pop();
@@ -141,7 +155,7 @@ public class ExplorerWalk2 extends SimpleBehaviour {
 		// if done, do this
 		if (getExplorerAgent().getStack().empty()) {
 			System.out.println(this.myAgent.getLocalName() + " is Done!");
-			this.printCurrentHashmap();
+			getExplorerAgent().printCurrentHashmap();
 		}
 
 		// Explorer Agent is done if and only his stack is empty
