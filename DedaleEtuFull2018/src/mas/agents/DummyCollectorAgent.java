@@ -5,10 +5,6 @@ import env.EntityType;
 import env.Environment;
 
 import mas.abstractAgent;
-import mas.behaviours.*;
-
-
-import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 

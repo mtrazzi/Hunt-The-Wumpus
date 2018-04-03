@@ -1,37 +1,22 @@
 package mas.behaviours;
 
-import jade.core.AID;
-
 import java.io.IOException;
-import java.util.*;
-
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.*;
 import jade.domain.FIPAException;
 import jade.core.Agent;
 import jade.core.behaviours.SimpleBehaviour;
-import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
-import mas.abstractAgent;
 
 public class SayVisited extends SimpleBehaviour{
 
 	private static final long serialVersionUID = -2058134622078521998L;
 
-	private boolean finished=false;
-
 	public SayVisited(final Agent myagent) {
 		super(myagent);
 	}
 	
-	private static <T> Iterable<T> iterable(final Iterator<T> it){
-	     return new Iterable<T>(){ public Iterator<T> iterator(){ return it; } };
-	}
-
 	public void action() {
-		boolean verbose = true;
-		
 		//Little pause to allow you to follow what is going on
 		try {
 			System.out.println("Press Enter in the console to allow the agent "+this.myAgent.getLocalName() +" to execute its next move (message)");

@@ -11,7 +11,11 @@ import java.io.*;
  * @param <T> The type that would be used as vertex.
  */
 public class Graph<T> implements Serializable  {
-    final private HashMap<T, Set<T>> adjacencyList;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	final private HashMap<T, Set<T>> adjacencyList;
     private int nbEdges;
     /**
      * Create new Graph object.

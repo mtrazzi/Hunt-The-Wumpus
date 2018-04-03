@@ -11,12 +11,6 @@ import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
-import mas.agents.DummyCollectorAgent;
-import mas.agents.DummyExploAgent;
-import mas.agents.DummyTankerAgent;
-import mas.agents.DummyWumpusAgent;
-import mas.agents.DummyWumpusShift;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +18,6 @@ import java.util.List;
 import env.EntityType;
 import env.Environment;
 import env.Environment.ENVtype;
-import mas.agents.ExplorerAgent;
 import mas.agents.ExplorerAgent2;
 
 public class Principal {
@@ -32,8 +25,6 @@ public class Principal {
 	private static String hostname = "127.0.0.1"; 
 	private static HashMap<String, ContainerController> containerList=new HashMap<String, ContainerController>();// container's name - container's ref
 	private static List<AgentController> agentList;// agents's ref
-	private static Runtime rt;	
-
 	private static Environment env;// static ref of the real environment
 
 	public static void main(String[] args){
@@ -44,8 +35,7 @@ public class Principal {
 		env= new Environment(ENVtype.DOROGOVTSEV_T,150,null);
 		//env=new Environment("ressources/map2018-2","ressources/map2017-config");
 
-		//1), create the platform (Main container (DF+AMS) + containers + monitoring agents : RMA and SNIFFER)
-		rt=emptyPlatform(containerList);
+		emptyPlatform(containerList);
 
 		//2) create agents and add them to the platform.
 		agentList=createAgents(containerList);

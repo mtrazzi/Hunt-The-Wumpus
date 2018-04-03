@@ -1,17 +1,13 @@
 package mas.agents;
 
 
-import java.io.IOException;
 import java.util.List;
-import java.util.Random;
-
 import env.Attribute;
 import env.Couple;
 import env.EntityType;
 import env.Environment;
 import jade.core.behaviours.TickerBehaviour;
 import mas.abstractAgent;
-import mas.behaviours.*;
 
 
 public class DummyTankerAgent extends abstractAgent{

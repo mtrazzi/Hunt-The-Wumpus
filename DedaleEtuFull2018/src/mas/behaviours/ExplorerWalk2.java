@@ -2,19 +2,14 @@ package mas.behaviours;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Random;
-
 import env.Attribute;
 import env.Couple;
-import jade.core.behaviours.TickerBehaviour;
 import jade.core.behaviours.SimpleBehaviour;
 import mas.abstractAgent;
 import mas.agents.ExplorerAgent2;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Random;
-import java.lang.Thread;
 
 /**************************************
  * 

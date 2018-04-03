@@ -14,8 +14,6 @@ public class ReceiveVisited extends SimpleBehaviour{
 
 	private static final long serialVersionUID = 9088209402507795289L;
 
-	private boolean finished=false;
-	
 	private boolean verbose=true;
 	/**
 	 * 

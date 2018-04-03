@@ -6,15 +6,9 @@ import java.util.Random;
 
 import env.Attribute;
 import env.Couple;
-import jade.core.behaviours.TickerBehaviour;
 import jade.core.behaviours.SimpleBehaviour;
-import mas.agents.ExplorerAgent;
-
-
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Random;
-import java.lang.Thread;
 
 /**************************************
  * 
@@ -147,9 +141,6 @@ public class ExplorerWalk extends SimpleBehaviour{
 
 			//while (!((mas.agents.ExplorerAgent)this.myAgent).getHashmap().containsKey(adjacentNode))
 
-			//list of attribute associated to the currentPosition
-			List<Attribute> lattribute= lobs.get(0).getRight();
-			
 			//example related to the use of the backpack for the treasure hunt
 			Boolean b=false;
 			

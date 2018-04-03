@@ -1,7 +1,6 @@
 package mas.agents;
 
 
-import env.Attribute;
 import env.Environment;
 import mas.abstractAgent;
 import mas.behaviours.*;
@@ -73,9 +72,9 @@ public class ExplorerAgent extends abstractAgent{
 		addBehaviour(new ReceiveVisited(this));//To receive a map
 		
 		//Initialize attributes
-		this.setGraph(new Graph());
-		this.setHashmap(new HashMap());
-		this.setStack(new Stack());
+		this.setGraph(new Graph<String>());
+		this.setHashmap(new HashMap<String, String>());
+		this.setStack(new Stack<String>());
 		this.setLastMove("");
 
 		System.out.println("the agent "+this.getLocalName()+ " is started");
