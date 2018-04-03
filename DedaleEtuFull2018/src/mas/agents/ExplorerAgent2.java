@@ -2,7 +2,6 @@ package mas.agents;
 
 
 import env.Environment;
-import mas.abstractAgent;
 import mas.behaviours.*;
 import mas.agents.GeneralAgent;
 
@@ -14,12 +13,15 @@ import jade.domain.FIPAException;
 
 import mas.graph.Graph;
 import java.util.HashMap;
-import java.util.Arrays;
-
 import env.EntityType;
 
 public class ExplorerAgent2 extends GeneralAgent{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * This method is automatically called when "agent".start() is executed.
 	 * Consider that Agent is launched for the first time. 

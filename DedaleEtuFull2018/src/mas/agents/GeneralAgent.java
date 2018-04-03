@@ -1,21 +1,11 @@
 package mas.agents;
 
-import env.Environment;
 import mas.abstractAgent;
-import mas.behaviours.*;
-
-import java.util.*;
-
-import jade.domain.DFService;
-import jade.domain.FIPAAgentManagement.*;
-import jade.domain.FIPAException;
 import mas.graph.Graph;
 
 import java.util.HashMap;
 import java.util.Arrays;
 import java.util.Stack;
-
-import env.EntityType;
 
 public class GeneralAgent extends abstractAgent{
 	private static final long serialVersionUID = -1784844593772918359L;

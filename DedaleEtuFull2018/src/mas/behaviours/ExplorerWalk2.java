@@ -10,7 +10,6 @@ import mas.abstractAgent;
 import mas.agents.ExplorerAgent2;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Stack;
 
 /**************************************
