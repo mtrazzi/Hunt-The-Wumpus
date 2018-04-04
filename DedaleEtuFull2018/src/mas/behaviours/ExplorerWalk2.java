@@ -64,10 +64,11 @@ public class ExplorerWalk2 extends SimpleBehaviour {
 		}
 	}
 	
-	public void UpdateHashmap(String myPosition, List<Couple<String, List<Attribute>>> lobs) {
+	public void UpdateEdges(String myPosition, List<Couple<String, List<Attribute>>> lobs) {
 		for (int i = 0; i < lobs.size(); i++) {
 			// Add Edge
 			String adjacentNode = lobs.get(i).getLeft();
+			getExplorerAgent().getGraph().addVertex(adjacentNode);
 			getExplorerAgent().getGraph().addEdge(myPosition, adjacentNode);
 		}
 	}
@@ -124,11 +125,15 @@ public class ExplorerWalk2 extends SimpleBehaviour {
 
 			/////////////////////////////////
 			//// STEP 2) Update the Hashmap
-			UpdateHashmap(myPosition, lobs);
+			UpdateEdges(myPosition, lobs);
 			
 			/////////////////////////////////
 			//// STEP 3) Update the Stack
-			UpdateStackDFS(myPosition, lobs);
+			
+			String s = getExplorerAgent().getGraph().bfs(myPosition, 
+					getExplorerAgent().getHashmap(), getExplorerAgent().getStack());
+			System.out.println("result of bfs" + s);
+			//UpdateStackDFS(myPosition, lobs);
 
 			/////////////////////////////////
 			//// STEP 4) Pick the next Move and do it
@@ -150,6 +155,12 @@ public class ExplorerWalk2 extends SimpleBehaviour {
 
 	public boolean done() {
 		littlePause();
+//		try {
+//			Thread.sleep(300);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		
 		// if done, do this
 		if (getExplorerAgent().getStack().empty()) {

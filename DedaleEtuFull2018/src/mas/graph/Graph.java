@@ -3,6 +3,9 @@ package mas.graph;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Queue;
+import java.util.LinkedList;
+import java.util.Stack;
 import java.io.*;
 
 /**
@@ -156,5 +159,39 @@ public class Graph<T> implements Serializable  {
     		}
     	}
     }
+    
+    public T bfs(T node, HashMap<String, String> H, Stack<T> S) {
+    	T old = node;
+    	Queue<T> f = new LinkedList<T>();
+    	HashMap<T, String> h = new HashMap<T, String>();
+    	HashMap<T,T> parent = new HashMap<T,T>();
+    	f.add(node);
+    	S.push(node);
+    	h.put(node, "visited");
+		while (!f.isEmpty()) {
+			node = f.remove();
+			for (T adjacentNode : getNeighbors(node)) {
+    			if (!h.containsKey(adjacentNode)) {
+    				parent.put(adjacentNode,node);
+    				if (!H.containsKey(adjacentNode)) {
+    					updateStack(parent, old, adjacentNode, S);
+    					return adjacentNode;
+    				}
+    				f.add(adjacentNode);
+    				h.put(adjacentNode, "visited");
+    			}
+    		}
+		}
+		return node; //to make eclipse happy
+    }
+    
+    void updateStack(HashMap<T,T> parent, T node, T result, Stack<T> S) {
+    	while (!parent.get(result).equals(node)) {
+    		S.push(result);
+    		result = parent.get(result);
+    	}
+    	S.push(result);
+    };
+
     
 }

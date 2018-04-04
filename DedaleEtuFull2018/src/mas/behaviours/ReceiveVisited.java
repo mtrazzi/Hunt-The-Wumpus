@@ -27,13 +27,7 @@ public class ReceiveVisited extends SimpleBehaviour{
 
 
 	public void action() {
-		
-		try {
-			System.out.println("Press Enter in the console to allow the agent "+this.myAgent.getLocalName() +" to execute its next move (receive message)");
-			System.in.read();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+
 		
 		//1) receive the message
 		final MessageTemplate msgTemplate = MessageTemplate.MatchPerformative(ACLMessage.INFORM);			
@@ -44,7 +38,7 @@ public class ReceiveVisited extends SimpleBehaviour{
 			try {
 				Graph<String> ReceivedGraph = new Graph<String>();
 				ReceivedGraph = (Graph<String>) msg.getContentObject();
-				((mas.agents.ExplorerAgent)this.myAgent).getGraph().mergeGraph(ReceivedGraph);
+				((mas.agents.ExplorerAgent2)this.myAgent).getGraph().mergeGraph(ReceivedGraph);
 				//Print received graph
 				if (verbose) {
 					System.out.println("Received graph");
@@ -55,9 +49,9 @@ public class ReceiveVisited extends SimpleBehaviour{
 					//Print merged graph
 					System.out.println("Merged graph");
 					System.out.println("Printing nodes");
-					((mas.agents.ExplorerAgent)this.myAgent).getGraph().printNodes();
+					((mas.agents.ExplorerAgent2)this.myAgent).getGraph().printNodes();
 					System.out.println("Printing edges");
-					((mas.agents.ExplorerAgent)this.myAgent).getGraph().printEdges();
+					((mas.agents.ExplorerAgent2)this.myAgent).getGraph().printEdges();
 				}
 					
 			} catch (UnreadableException e) {

@@ -17,13 +17,6 @@ public class SayVisited extends SimpleBehaviour{
 	}
 	
 	public void action() {
-		//Little pause to allow you to follow what is going on
-		try {
-			System.out.println("Press Enter in the console to allow the agent "+this.myAgent.getLocalName() +" to execute its next move (message)");
-			System.in.read();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		
 		String myPosition=((mas.abstractAgent)this.myAgent).getCurrentPosition();
 

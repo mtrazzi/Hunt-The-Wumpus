@@ -31,8 +31,8 @@ public class Principal {
 
 		System.out.println("Hello !");
 		//0) Create the real environment and the observed one
-		//env= new Environment(ENVtype.GRID_T,5,null);
-		env= new Environment(ENVtype.DOROGOVTSEV_T,150,null);
+		env= new Environment(ENVtype.GRID_T,5,null);
+		//env= new Environment(ENVtype.DOROGOVTSEV_T,150,null);
 		//env=new Environment("ressources/map2018-2","ressources/map2017-config");
 
 		emptyPlatform(containerList);
@@ -309,7 +309,7 @@ public class Principal {
 //		}
 		
 		c = containerList.get("container0");
-		agentName="SmarterExplorerAgent";
+		agentName="SmarterExplorerAgent1";
 		try {
 
 			Object[] objtab=new Object[]{env,EntityType.AGENT_EXPLORER};//used to give informations to the agent
@@ -319,6 +319,29 @@ public class Principal {
 		} catch (StaleProxyException e) {
 			e.printStackTrace();
 		}
+		c = containerList.get("container0");
+		agentName="SmarterExplorerAgent2";
+		try {
+
+			Object[] objtab=new Object[]{env,EntityType.AGENT_EXPLORER};//used to give informations to the agent
+			AgentController	ag=c.createNewAgent(agentName,ExplorerAgent2.class.getName(),objtab);
+			agentList.add(ag);
+			System.out.println(agentName+" launched");
+		} catch (StaleProxyException e) {
+			e.printStackTrace();
+		}
+		c = containerList.get("container0");
+//		agentName="SmarterExplorerAgent3";
+//		try {
+//
+//			Object[] objtab=new Object[]{env,EntityType.AGENT_EXPLORER};//used to give informations to the agent
+//			AgentController	ag=c.createNewAgent(agentName,ExplorerAgent2.class.getName(),objtab);
+//			agentList.add(ag);
+//			System.out.println(agentName+" launched");
+//		} catch (StaleProxyException e) {
+//			e.printStackTrace();
+//		}
+
 
 
 
