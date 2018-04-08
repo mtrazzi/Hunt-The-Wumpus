@@ -8,13 +8,15 @@ import jade.core.Agent;
 import jade.core.behaviours.SimpleBehaviour;
 import jade.lang.acl.ACLMessage;
 
-public class SayVisited extends SimpleBehaviour{
+public class SayVisited extends GeneralSimpleBehaviour{
 
 	private static final long serialVersionUID = -2058134622078521998L;
 
-	public SayVisited(final Agent myagent) {
+	public SayVisited(final mas.abstractAgent myagent) {
 		super(myagent);
 	}
+	
+	private boolean verbose=false;
 	
 	public void action() {
 		
@@ -46,11 +48,13 @@ public class SayVisited extends SimpleBehaviour{
 				e.printStackTrace();
 			}
 			
-			System.out.println(this.myAgent.getLocalName()+" --> Sending message to");
+			if (verbose)
+				System.out.println(this.myAgent.getLocalName()+" --> Sending message to");
 			for (int i = 0; i < result.length; i++) {
 				if (!this.myAgent.getLocalName().equals(result[i].getName().getLocalName())) {//do not send message to yourself!
 					msg.addReceiver(result[i].getName());
-					System.out.println("\t" + result[i].getName().getLocalName());
+					if (verbose)
+						System.out.println("\t" + result[i].getName().getLocalName());
 				}
 			}
 			((mas.abstractAgent)this.myAgent).sendMessage(msg);
@@ -59,6 +63,7 @@ public class SayVisited extends SimpleBehaviour{
 	}
 
 	public boolean done() {
+		this.sleep(200);
 		
 		return false;
 	}

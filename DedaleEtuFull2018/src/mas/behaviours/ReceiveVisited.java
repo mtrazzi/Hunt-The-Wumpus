@@ -10,18 +10,18 @@ import jade.lang.acl.UnreadableException;
 import mas.graph.*;
 
 
-public class ReceiveVisited extends SimpleBehaviour{
+public class ReceiveVisited extends GeneralSimpleBehaviour{
 
 	private static final long serialVersionUID = 9088209402507795289L;
 
-	private boolean verbose=true;
+	private boolean verbose=false;
 	/**
 	 * 
 	 * This behaviour is a one Shot.
 	 * It receives a message tagged with an inform performative, print the content in the console and destroy itlself
 	 * @param myagent
 	 */
-	public ReceiveVisited(final Agent myagent) {
+	public ReceiveVisited(final mas.abstractAgent myagent) {
 		super(myagent);
 	}
 
@@ -33,8 +33,9 @@ public class ReceiveVisited extends SimpleBehaviour{
 		final MessageTemplate msgTemplate = MessageTemplate.MatchPerformative(ACLMessage.INFORM);			
 
 		final ACLMessage msg = this.myAgent.receive(msgTemplate);
-		if (msg != null) {		
-			System.out.println(this.myAgent.getLocalName()+"<----Result received from "+msg.getSender().getLocalName());
+		if (msg != null) {
+			if (verbose)
+				System.out.println(this.myAgent.getLocalName()+"<----Result received from "+msg.getSender().getLocalName());
 			try {
 				Graph<String> ReceivedGraph = new Graph<String>();
 				ReceivedGraph = (Graph<String>) msg.getContentObject();
@@ -65,6 +66,8 @@ public class ReceiveVisited extends SimpleBehaviour{
 	}
 
 	public boolean done() {
+		this.sleep(200);
+		
 		return false;
 	}
 

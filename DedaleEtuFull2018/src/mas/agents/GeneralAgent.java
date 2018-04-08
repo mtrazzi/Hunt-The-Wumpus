@@ -4,8 +4,13 @@ import mas.abstractAgent;
 import mas.graph.Graph;
 
 import java.util.HashMap;
+import java.util.List;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Stack;
+
+import env.Attribute;
+import env.Couple;
 
 public class GeneralAgent extends abstractAgent{
 	private static final long serialVersionUID = -1784844593772918359L;
@@ -71,5 +76,18 @@ public class GeneralAgent extends abstractAgent{
 			String value = myHashMap.get(name).toString();
 			System.out.print('[' + key + ": " + value + "], ");
 		}
+	}
+	
+	public void UpdateEdges(String myPosition, List<Couple<String, List<Attribute>>> lobs) {
+		for (int i = 0; i < lobs.size(); i++) {
+			// Add Edge
+			String adjacentNode = lobs.get(i).getLeft();
+			this.getGraph().addVertex(adjacentNode);
+			this.getGraph().addEdge(myPosition, adjacentNode);
+		}
+	}
+	
+	public void printStack() {
+		System.out.println("Stack: " + Arrays.toString(this.getStack().toArray()));
 	}
 }
