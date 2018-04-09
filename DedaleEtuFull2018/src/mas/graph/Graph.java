@@ -166,7 +166,6 @@ public class Graph<T> implements Serializable  {
     	HashMap<T, String> h = new HashMap<T, String>();
     	HashMap<T,T> parent = new HashMap<T,T>();
     	f.add(node);
-    	S.push(node);
     	h.put(node, "visited");
 		while (!f.isEmpty()) {
 			node = f.remove();
