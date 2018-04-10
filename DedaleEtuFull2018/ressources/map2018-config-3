@@ -1,0 +1,17 @@
+mapname:exam2017
+treasure:5:10
+treasure:42:10
+treasure:14:10
+treasure:20:10
+treasure:51:10
+treasure:36:10
+treasure:39:10
+treasure:53:10
+diamonds:30:10
+diamonds:46:10
+diamonds:8:10
+diamonds:22:10
+diamonds:13:10
+diamonds:27:10
+agentCollect:Agent3:1:-1:100
+agentCollect:Agent4:40:100:-1
