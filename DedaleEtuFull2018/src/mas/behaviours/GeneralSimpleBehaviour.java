@@ -34,4 +34,17 @@ public class GeneralSimpleBehaviour extends SimpleBehaviour {
 			e.printStackTrace();
 		}
 	}
+	
+	public void debugStack(boolean verbose) {
+		if (verbose) {
+			System.out.print(getGeneralAgent().getLocalName() +"  ->");
+			getGeneralAgent().printStack();
+		}
+
+	}
+	
+	public void debugNextMove(boolean verbose, String myMove) {
+		if (verbose)
+			System.out.println(getGeneralAgent().getLocalName() +"  -> Next Move: " + myMove);
+	}
 }

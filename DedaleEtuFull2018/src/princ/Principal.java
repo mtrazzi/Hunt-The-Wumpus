@@ -32,9 +32,9 @@ public class Principal {
 
 		System.out.println("Hello !");
 		//0) Create the real environment and the observed one
-		env= new Environment(ENVtype.GRID_T,5,null);
+		//env= new Environment(ENVtype.GRID_T,5,null);
 		//env= new Environment(ENVtype.DOROGOVTSEV_T,150,null);
-		//env=new Environment("ressources/map2018-2","ressources/map2017-config");
+		env=new Environment("ressources/map2018-2","ressources/map2018-config-2");
 
 		emptyPlatform(containerList);
 
