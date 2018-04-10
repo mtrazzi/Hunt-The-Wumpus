@@ -135,7 +135,28 @@ class RandomWalkExchangeBehaviour extends GeneralSimpleBehaviour{
 		}
 	}
 	
+	//TODO: REMEMBER: to give to tanker = emptybackpack (cf. moodle)
 	
+	public boolean isObjectMyType(mas.agents.GeneralAgent agent) {
+		System.err.println(agent.getMyTreasureType());
+
+		List<Couple<String, List<Attribute>>> lobs = agent.observe();
+		List<Attribute> lattribute= lobs.get(0).getRight();
+		
+		boolean b = false;
+		for (Attribute a:lattribute) {
+			switch (a) {
+				case DIAMONDS:
+					System.err.println(agent.getMyTreasureType());
+					b = b || agent.getMyTreasureType().equals("Diamonds");
+				case TREASURE:
+					b = b || agent.getMyTreasureType().equals("Treasure");
+			}
+		}
+		return b;
+	}
+	
+	//public boolean pickWhileYouCan()
 
 	@Override
 	public void action() {
@@ -205,6 +226,9 @@ class RandomWalkExchangeBehaviour extends GeneralSimpleBehaviour{
 			}
 			
 			printAndPick(myPosition, lobs);
+			if (isObjectMyType(agent)) {
+				System.err.println("MY TYPE!!!");
+			}
 
 			// Set last move to the next move, for next iteration
 			agent.setLastMove(myMove);
