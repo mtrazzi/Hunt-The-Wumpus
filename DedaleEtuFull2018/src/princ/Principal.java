@@ -19,6 +19,9 @@ import env.EntityType;
 import env.Environment;
 import env.Environment.ENVtype;
 import mas.agents.DummyCollectorAgent;
+import mas.agents.DummyExploAgent;
+import mas.agents.DummyTankerAgent;
+import mas.agents.ExplorerAgent;
 import mas.agents.ExplorerAgent2;
 
 public class Principal {
@@ -34,7 +37,9 @@ public class Principal {
 		//0) Create the real environment and the observed one
 		//env= new Environment(ENVtype.GRID_T,5,null);
 		//env= new Environment(ENVtype.DOROGOVTSEV_T,150,null);
-		env=new Environment("ressources/map2018-2","ressources/map2018-config-2");
+		//env=new Environment("ressources/map2018-2","ressources/map2018-config-2");
+		env=new Environment("ressources/map2018-3","ressources/map2018-config-3");
+
 
 		emptyPlatform(containerList);
 
@@ -78,7 +83,48 @@ public class Principal {
 		return rt;
 
 	}
-
+	/* CreateAgent
+	 * 
+	 */
+	private static List<AgentController> lauchAgent(String agentName,String agentClass, List<AgentController> agentList){
+		ContainerController c;
+		c = containerList.get("container0");
+		try {
+			
+			switch(agentClass) {
+				case "DummyCollectorAgent":
+					Object[] objtab=new Object[]{env,EntityType.AGENT_COLLECTOR};//used to give informations to the agent
+					AgentController ag=c.createNewAgent(agentName,DummyCollectorAgent.class.getName(),objtab);
+					agentList.add(ag);
+					break;
+				case "DummyExploAgent":
+					Object[] objtab1=new Object[]{env,EntityType.AGENT_EXPLORER};//used to give informations to the agent
+					AgentController ag1=c.createNewAgent(agentName,DummyExploAgent.class.getName(),objtab1);
+					agentList.add(ag1);
+					break;
+				case "DummyTankerAgent":
+					Object[] objtab2=new Object[]{env,EntityType.AGENT_TANKER};//used to give informations to the agent
+					AgentController ag2=c.createNewAgent(agentName,DummyTankerAgent.class.getName(),objtab2);
+					agentList.add(ag2);
+					break;
+				case "ExplorerAgent":
+					Object[] objtab3=new Object[]{env,EntityType.AGENT_EXPLORER};//used to give informations to the agent
+					AgentController ag3=c.createNewAgent(agentName,ExplorerAgent.class.getName(),objtab3);
+					agentList.add(ag3);
+					break;
+				case "ExplorerAgent2":
+					Object[] objtab4=new Object[]{env,EntityType.AGENT_EXPLORER};//used to give informations to the agent
+					AgentController ag4=c.createNewAgent(agentName,ExplorerAgent2.class.getName(),objtab4);
+					agentList.add(ag4);
+					break;
+					
+			}
+			System.out.println(agentName+" launched");
+		} catch (StaleProxyException e) {
+			e.printStackTrace();
+		}
+		return agentList;
+	}
 	/**
 	 * Create the containers used to hold the agents 
 	 * @param rt The reference to the main container
@@ -222,17 +268,19 @@ public class Principal {
 //		}
 //		
 		//Collector (backPack)
-		c = containerList.get("container0");
-		agentName="Agent3";
-		try {
+		//agentList = lauchAgent("Agent2","DummyExploAgent", agentList);
+		agentList = lauchAgent("Agent3","DummyCollectorAgent", agentList);
+		//c = containerList.get("container0");
+		//agentName="Agent3";
+		//try {
 
-			Object[] objtab=new Object[]{env,EntityType.AGENT_COLLECTOR};//used to give informations to the agent
-			AgentController	ag=c.createNewAgent(agentName,DummyCollectorAgent.class.getName(),objtab);
-			agentList.add(ag);
-			System.out.println(agentName+" launched");
-		} catch (StaleProxyException e) {
-			e.printStackTrace();
-		}
+			//Object[] objtab=new Object[]{env,EntityType.AGENT_COLLECTOR};//used to give informations to the agent
+			//AgentController	ag=c.createNewAgent(agentName,DummyCollectorAgent.class.getName(),objtab);
+			//agentList.add(ag);
+			//System.out.println(agentName+" launched");
+	//	} catch (StaleProxyException e) {
+		//	e.printStackTrace();
+	//	}
 //
 		//Collector (backPack)
 		c = containerList.get("container0");
@@ -247,19 +295,19 @@ public class Principal {
 			e.printStackTrace();
 		}
 		
-//		//Collector (backPack)
-//		c = containerList.get("container0");
-//		agentName="Agent5";
-//		try {
+		//Collector (backPack)
+	//	c = containerList.get("container0");
+	//	agentName="Agent5";
+	//	try {
 
 //		Object[] objtab=new Object[]{env,EntityType.AGENT_COLLECTOR};//used to give informations to the agent
 //		AgentController	ag=c.createNewAgent(agentName,DummyCollectorAgent.class.getName(),objtab);
 //			agentList.add(ag);
 //			System.out.println(agentName+" launched");
 //	} catch (StaleProxyException e) {
-//			e.printStackTrace();
+	//		e.printStackTrace();
 //		}
-//
+
 //		//Tanker-Silo (backPack that count for the exam, but not method pick. Can only receive from the collector agents)
 //		c = containerList.get("container0");
 //		agentName="Agent5";
