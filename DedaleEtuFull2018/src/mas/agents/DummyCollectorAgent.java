@@ -138,22 +138,33 @@ class RandomWalkExchangeBehaviour extends GeneralSimpleBehaviour{
 	//TODO: REMEMBER: to give to tanker = emptybackpack (cf. moodle)
 	
 	public boolean isObjectMyType(mas.agents.GeneralAgent agent) {
-		System.err.println(agent.getMyTreasureType());
-
 		List<Couple<String, List<Attribute>>> lobs = agent.observe();
 		List<Attribute> lattribute= lobs.get(0).getRight();
 		
 		boolean b = false;
 		for (Attribute a:lattribute) {
+			System.out.println("Value of the treasure on the current position: "+a.getName() +": "+ a.getValue());
+			System.err.println(agent.getLocalName() + "--> My type is " + agent.getMyTreasureType());
 			switch (a) {
 				case DIAMONDS:
-					System.err.println(agent.getMyTreasureType());
+					System.err.println(agent.getLocalName() + "-->I am on DIAMONDS");
 					b = b || agent.getMyTreasureType().equals("Diamonds");
+				break;
 				case TREASURE:
+					System.err.println(agent.getLocalName() + "-->I am on TREASURE");
 					b = b || agent.getMyTreasureType().equals("Treasure");
+				break;
 			}
 		}
 		return b;
+	}
+	
+	public void pickMyType(mas.agents.GeneralAgent agent) {
+		System.out.println("My current backpack capacity is:"+ ((mas.abstractAgent)this.myAgent).getBackPackFreeSpace());
+		if (isObjectMyType(agent)) {
+			agent.pick();
+		}
+		System.out.println("the remaining backpack capacity is: "+ ((mas.abstractAgent)this.myAgent).getBackPackFreeSpace());
 	}
 	
 	//public boolean pickWhileYouCan()
@@ -225,10 +236,8 @@ class RandomWalkExchangeBehaviour extends GeneralSimpleBehaviour{
 					myMove = myPosition;
 			}
 			
-			printAndPick(myPosition, lobs);
-			if (isObjectMyType(agent)) {
-				System.err.println("MY TYPE!!!");
-			}
+			//Pick Treasure
+			pickMyType(agent);
 
 			// Set last move to the next move, for next iteration
 			agent.setLastMove(myMove);
@@ -242,10 +251,9 @@ class RandomWalkExchangeBehaviour extends GeneralSimpleBehaviour{
 	public boolean done() {
 		this.sleep(300);
 
-		// Explorer Agent is done if and only his stack is empty
-		return (false);
+		return (this.getGeneralAgent().areAllNodesVisited());
 	}
-	}
+}
 
 }
 

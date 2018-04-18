@@ -192,5 +192,15 @@ public class Graph<T> implements Serializable  {
     	S.push(result);
     };
 
+    //Check if all Nodes from Graph are visited in Hashmap
+    public boolean isVisited(HashMap<String, String> H) {
+    	Iterable<T> allVertices = this.getAllVertices();
+    	for (T node : allVertices) {
+    		String nodeName = (String) node;
+    		if (!H.containsKey(nodeName) || !H.get(nodeName).equals("discovered"))
+    			return false;
+    	}
+    	return true;
+    }
     
 }
