@@ -109,8 +109,7 @@ public class ExplorerWalk2 extends GeneralSimpleBehaviour {
 	public boolean done() {
 		this.sleep(100);
 
-		// Explorer Agent is done if and only his stack is empty
-		return (false);
+		return (this.getGeneralAgent().areAllNodesVisited());
 	}
 
 }

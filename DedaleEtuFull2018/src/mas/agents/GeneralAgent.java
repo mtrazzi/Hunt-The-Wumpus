@@ -69,12 +69,13 @@ public class GeneralAgent extends abstractAgent{
 	
 	public void printCurrentHashmap() {
 		// Print the current Hashmap
+		System.err.println(this.getLocalName() + " #######");
 		HashMap<String, String> myHashMap = this.getHashmap();
 		for (String name : myHashMap.keySet()) {
 			System.out.print('{');
 			String key = name.toString();
 			String value = myHashMap.get(name).toString();
-			System.out.print('[' + key + ": " + value + "], ");
+			System.out.println('[' + key + ": " + value + "], ");
 		}
 	}
 	
@@ -89,5 +90,13 @@ public class GeneralAgent extends abstractAgent{
 	
 	public void printStack() {
 		System.out.println("Stack: " + Arrays.toString(this.getStack().toArray()));
+	}
+	
+	public boolean areAllNodesVisited() {
+		if (this.getGraph().isVisited(this.getHashmap())) {
+			this.printCurrentHashmap();
+			System.err.println(this.getLocalName() + " -->EVERYTHING IS VISITED, HOURRA!!!");
+		}
+		return this.getGraph().isVisited(this.getHashmap());
 	}
 }
