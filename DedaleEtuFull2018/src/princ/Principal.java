@@ -38,7 +38,9 @@ public class Principal {
 		//env= new Environment(ENVtype.GRID_T,5,null);
 		//env= new Environment(ENVtype.DOROGOVTSEV_T,150,null);
 		//env=new Environment("ressources/map2018-2","ressources/map2018-config-2");
-		env=new Environment("ressources/map2018-3","ressources/map2018-config-3");
+		//env=new Environment("ressources/map2018-3","ressources/map2018-config-3");
+		env=new Environment("ressources/map2018-Tanker","ressources/map2018-config-Tanker");
+
 
 
 		emptyPlatform(containerList);
@@ -270,6 +272,7 @@ public class Principal {
 		//Collector (backPack)
 		//agentList = lauchAgent("Agent2","DummyExploAgent", agentList);
 		agentList = lauchAgent("Agent3","DummyCollectorAgent", agentList);
+		agentList = lauchAgent("Agent5","DummyTankerAgent", agentList);
 		//c = containerList.get("container0");
 		//agentName="Agent3";
 		//try {
@@ -283,17 +286,17 @@ public class Principal {
 	//	}
 //
 		//Collector (backPack)
-		c = containerList.get("container0");
-		agentName="Agent4";
-		try {
+	//	c = containerList.get("container0");
+	//	agentName="Agent4";
+	//	try {
 
-		Object[] objtab=new Object[]{env,EntityType.AGENT_COLLECTOR};//used to give informations to the agent
-		AgentController	ag=c.createNewAgent(agentName,DummyCollectorAgent.class.getName(),objtab);
-			agentList.add(ag);
-			System.out.println(agentName+" launched");
-	} catch (StaleProxyException e) {
-			e.printStackTrace();
-		}
+	//	Object[] objtab=new Object[]{env,EntityType.AGENT_COLLECTOR};//used to give informations to the agent
+	//	AgentController	ag=c.createNewAgent(agentName,DummyCollectorAgent.class.getName(),objtab);
+	//		agentList.add(ag);
+		//	System.out.println(agentName+" launched");
+	//} catch (StaleProxyException e) {
+		//	e.printStackTrace();
+	//	}
 		
 		//Collector (backPack)
 	//	c = containerList.get("container0");
