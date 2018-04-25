@@ -58,7 +58,7 @@ public class ExplorerAgent2 extends GeneralAgent{
 		}
 		
 		//Add the behaviours
-		addBehaviour(new ExplorerWalk2(this)); //To explore the map
+		addBehaviour(new ExplorerWalk3(this)); //To explore the map
 		addBehaviour(new SayVisited(this)); //To communicate the map
 		addBehaviour(new ReceiveVisited(this));//To receive a map
 		

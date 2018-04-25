@@ -27,7 +27,6 @@ public class ReceiveVisited extends GeneralSimpleBehaviour{
 
 
 	public void action() {
-
 		
 		//1) receive the message
 		final MessageTemplate msgTemplate = MessageTemplate.MatchPerformative(ACLMessage.INFORM);			
@@ -66,7 +65,7 @@ public class ReceiveVisited extends GeneralSimpleBehaviour{
 	}
 
 	public boolean done() {
-		this.sleep(200);
+		this.sleep(100);
 		
 		return false;
 	}

@@ -16,7 +16,7 @@ public class SayVisited extends GeneralSimpleBehaviour{
 		super(myagent);
 	}
 	
-	private boolean verbose=false;
+	private boolean verbose=true;
 	
 	public void action() {
 		
@@ -63,7 +63,7 @@ public class SayVisited extends GeneralSimpleBehaviour{
 	}
 
 	public boolean done() {
-		this.sleep(200);
+		this.sleep(100);
 		
 		return false;
 	}

@@ -154,7 +154,8 @@ public class Graph<T> implements Serializable  {
     	Iterable<T> allVertices = receivedGraph.getAllVertices();
     	for (T node : allVertices) {
     		addVertex(node);
-    		for (T adjacentNode : getNeighbors(node)) {
+    		for (T adjacentNode : receivedGraph.getNeighbors(node)) {
+    			addVertex(adjacentNode);
     			addEdge(node, adjacentNode);
     		}
     	}
@@ -201,6 +202,44 @@ public class Graph<T> implements Serializable  {
     			return false;
     	}
     	return true;
+    }
+    
+    //Returns degree of node
+    public int degree(T node) {
+    	this.adjacencyList.get(node).remove(node);
+    	return this.adjacencyList.get(node).size();
+    }
+    
+    //BFS but the stop condition is to be a node of degree > 2
+    public T closestNode(T node, Stack<T> S) {
+    	T old = node;
+    	Queue<T> f = new LinkedList<T>();
+    	HashMap<T, String> h = new HashMap<T, String>();
+    	HashMap<T,T> parent = new HashMap<T,T>();
+    	f.add(node);
+    	h.put(node, "visited");
+		while (!f.isEmpty()) {
+			node = f.remove();
+			System.out.println("node is " + node);
+			for (T adjacentNode : getNeighbors(node)) {
+				System.out.println("in for with node = " + (String)adjacentNode );
+    			if (!h.containsKey(adjacentNode)) {
+    				System.out.println("in first if");
+    				parent.put(adjacentNode,node);
+    				if (this.degree(adjacentNode) > 2) {
+        				System.out.println("in second if");
+    					updateStack(parent, old, adjacentNode, S);
+    					System.out.println("closest node is : " + (String)adjacentNode);
+    					return adjacentNode;
+    				}
+    				f.add(adjacentNode);
+    				h.put(adjacentNode, "visited");
+    			}
+    		}
+		}
+		updateStack(parent,old, node, S);
+		System.out.println("(NOT REALLY BUT)closest node is : " + (String)node);
+		return node; //to make eclipse happy
     }
     
 }
