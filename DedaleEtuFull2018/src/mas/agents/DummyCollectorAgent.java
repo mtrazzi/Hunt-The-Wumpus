@@ -7,8 +7,6 @@ import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
-import mas.abstractAgent;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -16,10 +14,7 @@ import java.util.Stack;
 
 import env.Attribute;
 import env.Couple;
-import mas.behaviours.ExplorerWalk2;
 import mas.behaviours.GeneralSimpleBehaviour;
-import mas.behaviours.ReceiveVisited;
-import mas.behaviours.SayVisited;
 import mas.graph.Graph;
 
 public class DummyCollectorAgent extends GeneralAgent{
@@ -154,6 +149,8 @@ class RandomWalkExchangeBehaviour extends GeneralSimpleBehaviour{
 					System.err.println(agent.getLocalName() + "-->I am on TREASURE");
 					b = b || agent.getMyTreasureType().equals("Treasure");
 				break;
+			default:
+				break;
 			}
 		}
 		return b;
@@ -190,6 +187,7 @@ class RandomWalkExchangeBehaviour extends GeneralSimpleBehaviour{
 
 			/////////////////////////////////
 			//// INTERBLOCKING
+			@SuppressWarnings("unused")
 			String lastMove = agent.getLastMove();
 
 
@@ -225,7 +223,8 @@ class RandomWalkExchangeBehaviour extends GeneralSimpleBehaviour{
 
 				if (agent.getStack().empty())
 					agent.getGraph().bfs(myPosition, agent.getHashmap(),agent.getStack());
-
+				//For Tanker
+				agent.emptyMyBackPack("Agent5");
 				/////////////////////////////////
 				//// STEP 4) Pick the next Move and do it
 
@@ -249,7 +248,8 @@ class RandomWalkExchangeBehaviour extends GeneralSimpleBehaviour{
 	}
 	
 	public boolean done() {
-		this.sleep(300);
+	//	this.sleep(300);
+		this.littlePause();
 
 		return (this.getGeneralAgent().areAllNodesVisited());
 	}

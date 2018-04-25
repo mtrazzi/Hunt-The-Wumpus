@@ -1,4 +1,7 @@
 mapname:exam2017
-treasure:4:10
+treasure:2:50
+treasure:3:50
+treasure:4:50
+treasure:5:50
 agentCollect:Agent3:0:100:-1
 agentTanker:Agent5:8:200:200
