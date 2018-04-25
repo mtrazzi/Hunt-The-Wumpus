@@ -10,13 +10,10 @@ import env.Attribute;
 import env.Couple;
 import env.EntityType;
 import env.Environment;
-import jade.core.behaviours.TickerBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
-import mas.abstractAgent;
-import mas.agents.DummyCollectorAgent.RandomWalkExchangeBehaviour;
 import mas.behaviours.GeneralSimpleBehaviour;
 import mas.graph.Graph;
 
@@ -42,7 +39,7 @@ public class DummyTankerAgent extends GeneralAgent{
 		DFAgentDescription dfd = new DFAgentDescription();
 		dfd.setName(getAID());
 		ServiceDescription sd = new ServiceDescription();
-		sd.setType( "collector"); /* donner un nom aux services qu'on propose */
+		sd.setType( "Tanker"); /* donner un nom aux services qu'on propose */
 		sd.setName(getLocalName());
 		dfd.addServices(sd);
 		
@@ -128,6 +125,7 @@ class RandomTankerBehaviour extends GeneralSimpleBehaviour{
 			
 			/////////////////////////////////
 			//// INTERBLOCKING
+			@SuppressWarnings("unused")
 			String lastMove = agent.getLastMove();
 			
 
@@ -188,7 +186,8 @@ class RandomTankerBehaviour extends GeneralSimpleBehaviour{
 	}
 
 	public boolean done() {
-		this.sleep(100);
+		//this.sleep(100);
+		this.littlePause();
 
 		return (this.getGeneralAgent().areAllNodesVisited());
 	}

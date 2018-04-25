@@ -17,10 +17,10 @@ import java.util.List;
 
 import env.EntityType;
 import env.Environment;
-import env.Environment.ENVtype;
 import mas.agents.DummyCollectorAgent;
 import mas.agents.DummyExploAgent;
 import mas.agents.DummyTankerAgent;
+import mas.agents.DummyWumpusShift;
 import mas.agents.ExplorerAgent;
 import mas.agents.ExplorerAgent2;
 
@@ -38,8 +38,8 @@ public class Principal {
 		//env= new Environment(ENVtype.GRID_T,5,null);
 		//env= new Environment(ENVtype.DOROGOVTSEV_T,150,null);
 		//env=new Environment("ressources/map2018-2","ressources/map2018-config-2");
-		//env=new Environment("ressources/map2018-3","ressources/map2018-config-3");
-		env=new Environment("ressources/map2018-Tanker","ressources/map2018-config-Tanker");
+		env=new Environment("ressources/map2018-3","ressources/map2018-config-3");
+		//env=new Environment("ressources/map2018-Tanker","ressources/map2018-config-Tanker");
 
 
 
@@ -118,6 +118,11 @@ public class Principal {
 					Object[] objtab4=new Object[]{env,EntityType.AGENT_EXPLORER};//used to give informations to the agent
 					AgentController ag4=c.createNewAgent(agentName,ExplorerAgent2.class.getName(),objtab4);
 					agentList.add(ag4);
+					break;
+				case "DummyWumpusShift":
+					Object[] objtab5=new Object[]{env};//used to give informations to the agent
+					AgentController ag5=c.createNewAgent(agentName,DummyWumpusShift.class.getName(),objtab5);
+					agentList.add(ag5);
 					break;
 					
 			}
@@ -222,7 +227,9 @@ public class Principal {
 	 */
 	private static List<AgentController> createAgents(HashMap<String, ContainerController> containerList) {
 		System.out.println("Launching agents...");
+		@SuppressWarnings("unused")
 		ContainerController c;
+		@SuppressWarnings("unused")
 		String agentName;
 		List<AgentController> agentList=new ArrayList<AgentController>();
 
@@ -272,7 +279,9 @@ public class Principal {
 		//Collector (backPack)
 		//agentList = lauchAgent("Agent2","DummyExploAgent", agentList);
 		agentList = lauchAgent("Agent3","DummyCollectorAgent", agentList);
+		agentList = lauchAgent("Agent4","DummyCollectorAgent",agentList);
 		agentList = lauchAgent("Agent5","DummyTankerAgent", agentList);
+		agentList = lauchAgent("Golem","DummyWumpusShift", agentList);
 		//c = containerList.get("container0");
 		//agentName="Agent3";
 		//try {

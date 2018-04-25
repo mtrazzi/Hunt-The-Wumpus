@@ -4,8 +4,6 @@ import java.io.IOException;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.*;
 import jade.domain.FIPAException;
-import jade.core.Agent;
-import jade.core.behaviours.SimpleBehaviour;
 import jade.lang.acl.ACLMessage;
 
 public class SayVisited extends GeneralSimpleBehaviour{

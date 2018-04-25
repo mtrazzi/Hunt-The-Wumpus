@@ -1,9 +1,5 @@
 package mas.behaviours;
 
-import java.io.IOException;
-
-import jade.core.Agent;
-import jade.core.behaviours.SimpleBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
@@ -26,6 +22,7 @@ public class ReceiveVisited extends GeneralSimpleBehaviour{
 	}
 
 
+	@SuppressWarnings("unchecked")
 	public void action() {
 
 		
