@@ -20,8 +20,16 @@ public class ExplorerWalk3 extends GeneralSimpleBehaviour {
 	public ExplorerWalk3(final mas.abstractAgent myagent) {
 		super(myagent);
 	}
+	
+	//TOCHANGE
+	private Integer n = 0;
 
 	public void action() {
+		
+		// TO CHANGE: TEST
+		
+		if (this.n > 10) {
+		
 		// Set verbose to true do debug the behaviour
 		boolean verbose = false;
 		
@@ -109,13 +117,18 @@ public class ExplorerWalk3 extends GeneralSimpleBehaviour {
 			// Move to the picked location (must be last action)
 			agent.moveTo(myMove);
 		}
-
+		}
+		else {
+			System.err.println("n is " + n);
+			this.n  = this.n + 1;
+		}
 	}
 
 	public boolean done() {
 		this.sleep(100);
 
-		return (this.getGeneralAgent().areAllNodesVisited());
+		//return (this.getGeneralAgent().areAllNodesVisited());
+		return false;
 	}
 
 }
