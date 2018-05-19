@@ -12,7 +12,7 @@ import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
 import mas.agents.DummyExploAgent;
-import mas.agents.DummyMigrAgent;
+import mas.agents.MigrAgent;
 import mas.agents.DummyWumpusAgent;
 import mas.agents.GateKeeperAgent;
 
@@ -270,7 +270,7 @@ public class PrincipalD {
 		String gatekeeperName="GK";
 		try {
 			Object[] objtab=new Object[]{gatekeeperName};//used to give informations to the agent
-			AgentController	ag=c.createNewAgent(agentName,DummyMigrAgent.class.getName(),objtab);
+			AgentController	ag=c.createNewAgent(agentName,MigrAgent.class.getName(),objtab);
 			agentList.add(ag);
 			System.out.println(agentName+" launched");
 		} catch (StaleProxyException e) {

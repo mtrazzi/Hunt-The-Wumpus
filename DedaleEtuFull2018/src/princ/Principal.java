@@ -17,11 +17,10 @@ import java.util.List;
 
 import env.EntityType;
 import env.Environment;
-import mas.agents.DummyCollectorAgent;
+import mas.agents.CollectorAgent;
 import mas.agents.DummyExploAgent;
-import mas.agents.DummyTankerAgent;
+import mas.agents.TankerAgent;
 import mas.agents.DummyWumpusShift;
-import mas.agents.ExplorerAgent;
 import mas.agents.ExplorerAgent2;
 
 public class Principal {
@@ -96,7 +95,7 @@ public class Principal {
 			switch(agentClass) {
 				case "DummyCollectorAgent":
 					Object[] objtab=new Object[]{env,EntityType.AGENT_COLLECTOR};//used to give informations to the agent
-					AgentController ag=c.createNewAgent(agentName,DummyCollectorAgent.class.getName(),objtab);
+					AgentController ag=c.createNewAgent(agentName,CollectorAgent.class.getName(),objtab);
 					agentList.add(ag);
 					break;
 				case "DummyExploAgent":
@@ -106,13 +105,8 @@ public class Principal {
 					break;
 				case "DummyTankerAgent":
 					Object[] objtab2=new Object[]{env,EntityType.AGENT_TANKER};//used to give informations to the agent
-					AgentController ag2=c.createNewAgent(agentName,DummyTankerAgent.class.getName(),objtab2);
+					AgentController ag2=c.createNewAgent(agentName,TankerAgent.class.getName(),objtab2);
 					agentList.add(ag2);
-					break;
-				case "ExplorerAgent":
-					Object[] objtab3=new Object[]{env,EntityType.AGENT_EXPLORER};//used to give informations to the agent
-					AgentController ag3=c.createNewAgent(agentName,ExplorerAgent.class.getName(),objtab3);
-					agentList.add(ag3);
 					break;
 				case "ExplorerAgent2":
 					Object[] objtab4=new Object[]{env,EntityType.AGENT_EXPLORER};//used to give informations to the agent

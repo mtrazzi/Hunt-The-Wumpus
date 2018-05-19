@@ -1,36 +1,32 @@
 package mas.agents;
 
 
+import env.EntityType;
 import env.Environment;
-import mas.abstractAgent;
+import jade.domain.DFService;
+import jade.domain.FIPAException;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
+import java.util.Stack;
+
+import env.Attribute;
+import env.Couple;
+import mas.behaviours.GeneralSimpleBehaviour;
+import mas.graph.Graph;
 import mas.behaviours.*;
 
-import java.util.*;
-
-import jade.domain.DFService;
-import jade.domain.FIPAAgentManagement.*;
-import jade.domain.FIPAException;
-
-import mas.graph.Graph;
-import java.util.HashMap;
-import java.util.Arrays;
-
-import env.EntityType;
-
-public class ExplorerAgent extends abstractAgent{
+public class CollectorAgent extends GeneralAgent{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -1784844593772918359L;
 
-	private Graph<String> graph;
-	
-	private HashMap<String,String> hashmap;
-	
-	private Stack<String> stack;
-	
-	private String lastMove;
+
+
 	/**
 	 * This method is automatically called when "agent".start() is executed.
 	 * Consider that Agent is launched for the first time. 
@@ -39,13 +35,12 @@ public class ExplorerAgent extends abstractAgent{
 	 *          
 	 */
 	
-	
 	protected void setup(){
 
-		DFAgentDescription dfd = new DFAgentDescription();
+		 DFAgentDescription dfd = new DFAgentDescription();
 		dfd.setName(getAID());
 		ServiceDescription sd = new ServiceDescription();
-		sd.setType( "explorer"); /* donner un nom aux services qu'on propose */
+		sd.setType( "collector"); /* donner un nom aux services qu'on propose */
 		sd.setName(getLocalName());
 		dfd.addServices(sd);
 		
@@ -67,9 +62,7 @@ public class ExplorerAgent extends abstractAgent{
 		}
 		
 		//Add the behaviours
-		addBehaviour(new ExplorerWalk(this)); //To explore the map
-		addBehaviour(new SayVisited(this)); //To communicate the map
-		addBehaviour(new ReceiveVisited(this));//To receive a map
+		addBehaviour(new CollectingBehaviour(this)); //To explore the map
 		
 		//Initialize attributes
 		this.setGraph(new Graph<String>());
@@ -87,41 +80,5 @@ public class ExplorerAgent extends abstractAgent{
 	protected void takeDown(){
 
 	}
-
-	public Graph<String> getGraph() {
-		return graph;
-	}
-
-	public void setGraph(Graph<String> graph) {
-		this.graph = graph;
-	}
-
-	public HashMap<String,String> getHashmap() {
-		return hashmap;
-	}
-
-	public void setHashmap(HashMap<String,String> hashmap) {
-		this.hashmap = hashmap;
-	}
-
-	public Stack<String> getStack() {
-		return stack;
-	}
-
-	public void setStack(Stack<String> stack) {
-		this.stack = stack;
-	}
-
-	public boolean containsStack(String element) {
-		return Arrays.asList(this.stack.toArray()).contains(element);
-	}
-
-	public String getLastMove() {
-		return lastMove;
-	}
-
-	public void setLastMove(String lastMove) {
-		this.lastMove = lastMove;
-	}
-
 }
+

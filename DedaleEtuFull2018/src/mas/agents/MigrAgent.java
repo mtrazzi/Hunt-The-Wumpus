@@ -15,7 +15,7 @@ import mas.agents.*;
 import mas.agents.interactions.protocols.deployMe.R1_deployMe;
 import mas.agents.interactions.protocols.deployMe.R1_managerAnswer;
 
-public class DummyMigrAgent extends GeneralAgent {
+public class MigrAgent extends GeneralAgent {
 	private static final long serialVersionUID = -5686331366676803589L;
 	protected void setup(){//Automatically called at agent’s creation
 		addBehaviour(new R1_deployMe("GK",this));

@@ -1,23 +1,16 @@
 package mas.behaviours;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 
 import env.Attribute;
 import env.Couple;
-import jade.core.behaviours.SimpleBehaviour;
-import mas.abstractAgent;
-import mas.agents.ExplorerAgent2;
 
-import java.util.Arrays;
-import java.util.Stack;
-
-public class ExplorerWalk2 extends GeneralSimpleBehaviour {
+public class TankerBehaviour extends GeneralSimpleBehaviour{
 
 	private static final long serialVersionUID = 9088209402507795289L;
 
-	public ExplorerWalk2(final mas.abstractAgent myagent) {
+	public TankerBehaviour(final mas.abstractAgent myagent) {
 		super(myagent);
 	}
 
@@ -47,6 +40,7 @@ public class ExplorerWalk2 extends GeneralSimpleBehaviour {
 			
 			/////////////////////////////////
 			//// INTERBLOCKING
+			@SuppressWarnings("unused")
 			String lastMove = agent.getLastMove();
 			
 
@@ -107,9 +101,9 @@ public class ExplorerWalk2 extends GeneralSimpleBehaviour {
 	}
 
 	public boolean done() {
-		this.sleep(100);
+		//this.sleep(100);
+		this.littlePause();
 
 		return (this.getGeneralAgent().areAllNodesVisited());
 	}
-
 }
