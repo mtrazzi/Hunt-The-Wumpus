@@ -275,7 +275,7 @@ public class Principal {
 		agentList = lauchAgent("Agent3","DummyCollectorAgent", agentList);
 		agentList = lauchAgent("Agent4","DummyCollectorAgent",agentList);
 		agentList = lauchAgent("Agent5","DummyTankerAgent", agentList);
-		agentList = lauchAgent("Golem","DummyWumpusShift", agentList);
+		//agentList = lauchAgent("Golem","DummyWumpusShift", agentList);
 		//c = containerList.get("container0");
 		//agentName="Agent3";
 		//try {

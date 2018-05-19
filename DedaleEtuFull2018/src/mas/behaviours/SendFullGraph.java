@@ -6,11 +6,13 @@ import jade.domain.FIPAAgentManagement.*;
 import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 
-public class SayVisited extends GeneralSimpleBehaviour{
+import mas.behaviours.*;
+
+public class SendFullGraph extends GeneralSimpleBehaviour{
 
 	private static final long serialVersionUID = -2058134622078521998L;
 
-	public SayVisited(final mas.abstractAgent myagent) {
+	public SendFullGraph(final mas.abstractAgent myagent) {
 		super(myagent);
 	}
 	
@@ -40,6 +42,7 @@ public class SayVisited extends GeneralSimpleBehaviour{
 			
 			
 			try {
+				// TODO Change object
 				msg.setContentObject(((mas.agents.ExplorerAgent2)this.myAgent).getGraph());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

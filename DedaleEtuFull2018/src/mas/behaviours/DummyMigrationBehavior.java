@@ -69,7 +69,7 @@ public class DummyMigrationBehavior extends GeneralSimpleBehaviour{
 	}
 
 	public boolean done() {
-		this.sleep(2000);
+		this.defaultsleep();
 		
 		return false;
 	}

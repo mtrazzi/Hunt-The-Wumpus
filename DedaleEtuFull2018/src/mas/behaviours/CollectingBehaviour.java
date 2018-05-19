@@ -54,15 +54,15 @@ public class CollectingBehaviour extends GeneralSimpleBehaviour{
 		
 		boolean b = false;
 		for (Attribute a:lattribute) {
-			System.out.println("Value of the treasure on the current position: "+a.getName() +": "+ a.getValue());
-			System.err.println(agent.getLocalName() + "--> My type is " + agent.getMyTreasureType());
+			//System.out.println("Value of the treasure on the current position: "+a.getName() +": "+ a.getValue());
+			//System.err.println(agent.getLocalName() + "--> My type is " + agent.getMyTreasureType());
 			switch (a) {
 				case DIAMONDS:
-					System.err.println(agent.getLocalName() + "-->I am on DIAMONDS");
+					System.out.println(agent.getLocalName() + "is on DIAMONDS");
 					b = b || agent.getMyTreasureType().equals("Diamonds");
 				break;
 				case TREASURE:
-					System.err.println(agent.getLocalName() + "-->I am on TREASURE");
+					System.out.println(agent.getLocalName() + "is on TREASURE");
 					b = b || agent.getMyTreasureType().equals("Treasure");
 				break;
 			default:
@@ -73,17 +73,49 @@ public class CollectingBehaviour extends GeneralSimpleBehaviour{
 	}
 	
 	public void pickMyType(mas.agents.GeneralAgent agent) {
-		System.out.println("My current backpack capacity is:"+ ((mas.abstractAgent)this.myAgent).getBackPackFreeSpace());
+		System.out.println(agent.getLocalName() + "current backpack capacity is:"+ ((mas.abstractAgent)this.myAgent).getBackPackFreeSpace());
 		if (isObjectMyType(agent)) {
-			agent.pick();
+			Integer tmp = agent.pick();
+			System.err.println(agent.getLocalName() + " was able to pick: " + tmp.toString());
+			System.err.println(agent.getLocalName() + " remaining backpack capacity is: "+ ((mas.abstractAgent)this.myAgent).getBackPackFreeSpace());
 		}
-		System.out.println("the remaining backpack capacity is: "+ ((mas.abstractAgent)this.myAgent).getBackPackFreeSpace());
 	}
 	
-	//public boolean pickWhileYouCan()
+	public boolean canPick(String myPosition, List<Couple<String,List<Attribute>>> lobs) {
+		List<Attribute> lattribute= lobs.get(0).getRight();
+		
+		//TEST
+		if (!isObjectMyType(getGeneralAgent())) {
+			return false;
+		}
+		
+		for(Attribute a:lattribute){
+			switch (a) {
+			case TREASURE : case DIAMONDS :
+				//System.out.println("My treasure type is :"+((mas.abstractAgent)this.myAgent).getMyTreasureType());
+				//System.out.println("My current backpack capacity is:"+ ((mas.abstractAgent)this.myAgent).getBackPackFreeSpace());
+				//System.out.println("Value of the treasure on the current position: "+a.getName() +": "+ a.getValue());
+				//System.out.println("The agent grabbed :"+((mas.abstractAgent)this.myAgent).pick());
+				//System.out.println("the remaining backpack capacity is: "+ ((mas.abstractAgent)this.myAgent).getBackPackFreeSpace());
+				//System.out.println("The value of treasure on the current position: (unchanged before a new call to observe()): "+a.getValue());
+				
+				if (((mas.abstractAgent)this.myAgent).getBackPackFreeSpace() >= Integer.valueOf(a.getValue().toString())) {
+					System.err.println("I can pick more!");
+					return true;
+				}
+				break;
+
+			default:
+				break;
+			}
+		}
+		
+		return false;
+	}
 
 	@Override
 	public void action() {
+		
 		//Example to retrieve the current position
 		String myPosition=((mas.abstractAgent)this.myAgent).getCurrentPosition();
 
@@ -91,7 +123,8 @@ public class CollectingBehaviour extends GeneralSimpleBehaviour{
 		
 		boolean verbose = false;
 		
-		
+		//Start by Picking Treasure!
+		pickMyType(agent);
 
 		if (myPosition != "") {
 			String myMove;
@@ -102,12 +135,10 @@ public class CollectingBehaviour extends GeneralSimpleBehaviour{
 				System.out.println(agent.getLocalName() + " -- list of observables: " + lobs);
 
 			/////////////////////////////////
-			//// INTERBLOCKING
+			//// CHOSING NEXT MOVE / INTERBLOCKING
 			@SuppressWarnings("unused")
 			String lastMove = agent.getLastMove();
 
-
-			//TODO : factorize in General Agent
 			// WITH RANDOM
 			if (agent.getLastMove() != "" && !myPosition.equals(agent.getLastMove())) {
 				System.err.println("MOVE DIDN'T WORK");
@@ -139,20 +170,23 @@ public class CollectingBehaviour extends GeneralSimpleBehaviour{
 
 				if (agent.getStack().empty())
 					agent.getGraph().bfs(myPosition, agent.getHashmap(),agent.getStack());
-				//For Tanker
-				agent.emptyMyBackPack("Agent5");
+				
+				//TODO: For Tanker
+				//TODO: agent.emptyMyBackPack("Agent5");
+				
 				/////////////////////////////////
 				//// STEP 4) Pick the next Move and do it
 
 				// Pick the next Node to go
-				if (!agent.getStack().empty())
+				if (!agent.getStack().empty() && !canPick(myPosition, lobs))
 					myMove = agent.getStack().pop();
+				else if (canPick(myPosition, lobs)) {
+					System.err.println("Staying to pick more!");
+					myMove = myPosition;
+				}
 				else
 					myMove = myPosition;
 			}
-			
-			//Pick Treasure
-			pickMyType(agent);
 
 			// Set last move to the next move, for next iteration
 			agent.setLastMove(myMove);
@@ -164,8 +198,7 @@ public class CollectingBehaviour extends GeneralSimpleBehaviour{
 	}
 	
 	public boolean done() {
-	//	this.sleep(300);
-		this.littlePause();
+		this.defaultsleep();
 
 		return (this.getGeneralAgent().areAllNodesVisited());
 	}

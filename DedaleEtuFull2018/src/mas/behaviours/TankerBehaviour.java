@@ -101,8 +101,7 @@ public class TankerBehaviour extends GeneralSimpleBehaviour{
 	}
 
 	public boolean done() {
-		//this.sleep(100);
-		this.littlePause();
+		this.defaultsleep();
 
 		return (this.getGeneralAgent().areAllNodesVisited());
 	}

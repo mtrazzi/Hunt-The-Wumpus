@@ -1,10 +1,14 @@
 package mas.behaviours;
 
 import java.io.IOException;
+import java.util.List;
 
+import env.Attribute;
+import env.Couple;
 import jade.core.behaviours.SimpleBehaviour;
 
 public class GeneralSimpleBehaviour extends SimpleBehaviour {
+	
 	public GeneralSimpleBehaviour(final mas.abstractAgent myagent) {
 		super(myagent);
 	}
@@ -46,5 +50,9 @@ public class GeneralSimpleBehaviour extends SimpleBehaviour {
 	public void debugNextMove(boolean verbose, String myMove) {
 		if (verbose)
 			System.out.println(getGeneralAgent().getLocalName() +"  -> Next Move: " + myMove);
+	}
+	
+	public void defaultsleep() {
+		this.sleep(2000);
 	}
 }

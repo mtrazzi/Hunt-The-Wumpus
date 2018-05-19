@@ -62,8 +62,8 @@ public class ReceiveVisited extends GeneralSimpleBehaviour{
 	}
 
 	public boolean done() {
-		this.sleep(100);
-		
+		this.defaultsleep();
+
 		return false;
 	}
 
