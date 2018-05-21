@@ -1,0 +1,182 @@
+\documentclass[a4paper, 10pt]{article}
+
+\usepackage[french]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[top=3cm, bottom=3cm, left=3cm, right=3cm]{geometry}
+\usepackage{lmodern, amsmath, amssymb, mathrsfs, graphicx, listings, tabularx, color, pgfplots, pgfplotstable, booktabs, titling, authblk, parskip, pgfplots, csquotes}
+\usepackage{hyperref}
+\usepackage[backend=biber, url=false, isbn=false, sorting=none, natbib]{biblatex}
+\usepackage[labelfont=sc]{caption}
+\usepackage[bottom]{footmisc}
+\setlength\parindent{1cm}
+\MakeOuterQuote{"}
+\hypersetup{colorlinks, linkcolor=black, urlcolor=black}
+\pgfplotsset{compat=1.15}
+\addbibresource{biblio.bib}
+\bibliography{biblio}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+\newcommand{\Var}{\mathrm{Var}}
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+%%% MICHAEL ADDED
+
+\usepackage{titlesec}
+
+\setcounter{secnumdepth}{4}
+
+\titleformat{\paragraph}
+{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+\titlespacing*{\paragraph}
+{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
+%%%
+
+\begin{document}
+
+\begin{titlepage}
+\begin{center}
+~\\[1cm]
+\Large Faculté des Sciences et Ingénierie\\Sorbonne Université\\[3.5cm]
+\HRule 
+\\[0.4cm]{\huge \bfseries Projet - Wumpus Multi-agent\\[0.4cm]}
+\HRule \\[1cm] 
+\Large \textsc{Michaël Trazzi, Michaël Aidan} \\[0.1cm]
+\normalsize Sous la supervision d'\textsc{Aurélie Beynier, Nicolas Maudet} et \textsc{Cedric Herpson}\\[2cm]
+\Large Master 1 Informatique, spécialité ANDROIDE\\Année $2017-2018$, Semestre 2 \\[4cm]
+\includegraphics[scale=0.3]{logo.png}
+\end{center}
+\end{titlepage}
+
+\tableofcontents
+
+\newpage
+\section{Introduction}
+
+Ceci est une introduction
+
+\section{Analyse des algorithmes}
+
+Introduction générale des différents algorithmes.
+
+\subsection{Exploration}
+
+\subsubsection{Principe}
+
+\subsubsection{Avantages/inconvénients}
+
+\paragraph{Forces}
+
+\paragraph{Limites}
+
+\subsubsection{Complexité}
+
+\paragraph{Critere d'arret}
+
+\paragraph{Temps}
+
+\paragraph{Mémoire}
+
+\paragraph{Communication}
+
+\paragraph{Optimalité}
+
+\subsection{Ramassage des trésors}
+
+\subsubsection{Principe}
+
+\subsubsection{Avantages/inconvénients}
+
+\paragraph{Forces}
+
+\paragraph{Limites}
+
+\subsubsection{Complexité}
+
+\paragraph{Critere d'arret}
+
+\paragraph{Temps}
+
+\paragraph{Mémoire}
+
+\paragraph{Communication}
+
+\paragraph{Optimalité}
+
+\subsection{Interblocages}
+
+\subsubsection{Principe}
+
+\subsubsection{Avantages/inconvénients}
+
+\paragraph{Forces}
+
+\paragraph{Limites}
+
+\subsubsection{Complexité}
+
+\paragraph{Critere d'arret}
+
+\paragraph{Temps}
+
+\paragraph{Mémoire}
+
+\paragraph{Communication}
+
+\paragraph{Optimalité}
+
+\subsection{Communication}
+
+\subsubsection{Principe}
+
+\subsubsection{Avantages/inconvénients}
+
+\paragraph{Forces}
+
+\paragraph{Limites}
+
+\subsubsection{Complexité}
+
+\paragraph{Critere d'arret}
+
+\paragraph{Temps}
+
+\paragraph{Mémoire}
+
+\paragraph{Communication}
+
+\paragraph{Optimalité}
+
+\subsection{Coordination}
+
+\subsubsection{Principe}
+
+\subsubsection{Avantages/inconvénients}
+
+\paragraph{Forces}
+
+\paragraph{Limites}
+
+\subsubsection{Complexité}
+
+\paragraph{Critere d'arret}
+
+\paragraph{Temps}
+
+\paragraph{Mémoire}
+
+\paragraph{Communication}
+
+\paragraph{Optimalité}
+
+\newpage
+\section{Conclusion}
+
+\subsection{Synthese}
+
+\subsection{Regard critique sur notre travail}
+
+\subsection{Extensions et améliorations possibles}
+
+\end{document}
