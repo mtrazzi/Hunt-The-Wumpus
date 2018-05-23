@@ -19,12 +19,12 @@
 \newcolumntype{Y}{>{\centering\arraybackslash}X}
 \newcommand{\Var}{\mathrm{Var}}
 \DeclareMathOperator*{\argmax}{arg\,max}
+\usepackage{blindtext}
 
 %%% MICHAEL ADDED
 
 \usepackage{titlesec}
 \usepackage{enumitem}
-
 
 \setcounter{secnumdepth}{4}
 
@@ -56,176 +56,199 @@
 \newpage
 \section{Introduction}
 
-Pour ce projet nous avons été amenés a implémenter un Système Multi-Agent pour résoudre un problème en apparence simple : la collecte de trésors sur un graphe. Cependant, l'existence d'une perception limitée des agents, et la présence d'un terrifiant "Wumpus" sur la carte a rendu difficile l'implémentation d'une solution satisfaisante.
-
-\subsection{Présentation du probleme}
-
-Il y a 4 types d'agents: les Explorateurs, pouvant uniquement se déplacer, les Collecteurs, capables de ramasser les trésors de leur type jusqu'a remplir leur sac, les agents Silo, pouvant accumuler sans limite les trésors ramassés par les agents Collecteur, et l'agent "Wumpus", se mouvant aléatoirement sur la carte en déplaçant les trésors.
-
-Les seuls agents dont nous pouvons modifier le comportement sont les agents Explorateurs, Collecteurs et Silo. Ces agents vivent dans un environnement \verb|JADE|, environnement de développement pour des systèmes multi-agents en \verb|Java|. Ils exécutent des comportements (ou \textit{behavior}) séquentiellement, dans un ordre pré-déterminé, a chaque fois qu'un processus les réveille.
-
-En Intelligence Artificielle, un agent est n'importe quel objet percevant son environnement par des \textit{senseurs}, et agissant sur le monde a travers des \textit{effecteurs}.  Le Wumpus n'ayant pas de comportement complexe (il ne prend pas de décision mais se contente de faire des mouvements aléatoires), nous désignerons par \textit{agent} les trois autres agents (Explorateurs, Collecteurs et Silo). Ces trois agents (qu'on a été amené a implémenter) disposaient de senseurs et effecteurs relativement précaires.
-
-\begin{itemize}
-    \item \textbf{Senseurs}
-        \begin{itemize}
-            \item \underline{Observation} Un agent peut exécuter la méthode \verb|observe|, qui retourne une liste d'attributs des noeuds adjacents au noeud ou se trouve l'agent. L'agent sait donc quels noeuds sont adjacents, et si ces noeuds contiennent des trésors. Ils n'a pas \textit{a priori} connaissance de la présence d'un autre agent sur un de ces noeuds.
-            \item \underline{Réception} de message.
-        \end{itemize}
-        
-    
-    \item \textbf{Effecteurs}
-            \begin{itemize}
-            \item \underline{Mouvement}
-            \item \underline{Collecte de trésor}
-            \item \underline{Transmission de trésor}
-            \item \underline{Emission de message}
-        \end{itemize}
-\end{itemize}
-
-\subsection{Problématiques}
-
-Ou on explique les problématiques résultantes du probleme presenté ci-dessus.
+Pour ce projet nous avons été amenés a implémenter un Système Multi-Agent pour résoudre un problème en apparence simple : la collecte de trésors sur un graphe. Cependant, des contraintes sur la perception des agents et la présence d'un terrifiant "Wumpus" sur la carte ont grandement complexifié le travail algorithmique.
 
 \subsection{Ressources}
 
 Notre implémentation est disponible sur \verb|github| a l'adresse suivante : \url{https://github.com/mtrazzi/Hunt-The-Wumpus}. De plus, nous avons rédigé un article, publié en ligne, expliquant en détail les difficultées liées aux Systèmes Multi-agents, et en particulier pourquoi implémenter des protocoles Multi-Agents pouvait s'avérer bien plus complexe que simplement faire de l'apprentissage machine supervisé. Cet article de vulgarisation est hebergé sur \verb|Medium| : \url{https://hackernoon.com/why-coding-multi-agent-systems-is-hard-2064e93e29bb}.
 
+\subsection{Présentation du probleme}
+
+Quatre types d'agents sont placés sur les noeuds d'un graphe : les Explorateurs, pouvant uniquement se déplacer, les Collecteurs, capables de ramasser des trésors de leur type jusqu'à remplir leur sac, les agents Silo, pouvant accumuler sans limite les trésors ramassés par les agents Collecteurs, et l'agent "Wumpus", se mouvant aléatoirement sur la carte en déplaçant les trésors.
+
+Les seuls agents dont nous pouvons modifier le comportement sont les agents Explorateurs, Collecteurs et Silo. Ces agents vivent dans un environnement \verb|JADE|, environnement de développement pour des systèmes multi-agents en \verb|Java|. Ils exécutent des comportements (ou \textit{behavior}) séquentiellement, dans un ordre pré-déterminé, a chaque fois qu'un processus les réveille.
+
+En Intelligence Artificielle, un agent est n'importe quel objet percevant son environnement par des \textit{senseurs}, et agissant sur le monde a travers des \textit{effecteurs}.  Le Wumpus n'ayant pas de comportement complexe (il ne prend pas de décision mais se contente de faire des mouvements aléatoires), nous désignerons par \textit{agent} les trois autres agents (Explorateurs, Collecteurs et Silo). Ces trois agents (qu'on a été amené a implémenter) possédaient de senseurs et effecteurs relativement précaires.
+
+\begin{itemize}
+    \item \textbf{Senseurs}
+        \begin{itemize}
+            \item \underline{Observation de l'environnement.} Chaque agent peut exécuter la méthode \verb|observe|, qui retourne une liste d'attributs des noeuds adjacents au noeud ou il se trouve. Il découvre alors quels noeuds lui sont adjacents, si ceux-ci contiennent des trésors, et leur type dans le cas ou il y en aurait. Effectuer \verb|observe| n'apporte pas \textit{a priori} de connaissances sur la présence d'un autre agent (ou Wumpus) sur un de ces noeuds.
+            \item \underline{Réception de message.} Les agent ont des boîtes au lettre, et peuvent recevoir des messages d'autres agents, sous la forme d'objets \verb|Java| sérialisables.
+        \end{itemize}
+        
+    
+    \item \textbf{Effecteurs}
+            \begin{itemize}
+            \item \underline{Mouvement.} Possibilité de lancer une action "bouger sur case X", qui résultera sur un déplacement sur la case {X} si celle-ci est libre et adjacente.
+            \item \underline{Collecte de trésor (seulement Collecteur).} Possibilité de lancer une action "ramasser", qui collectera effectivement un trésor sur la case actuelle si celle-ci contient un trésor, l'agent Collecteur n'a pas son sac rempli et si le type du trésor correspond au type de trésor que peut ramasser le Collecteur.
+            \item \underline{Transmission de trésor (seulement Collecteur).} Possibilité de vider son sac a dos et transmettre son contenu a un agent Silo si celui-ci se trouve sur une case adjacente.
+            \item \underline{Émission de message.} Transmission d'un message (objet \verb|Java| sérialisable) a l'ensemble des destinataires étant a une distance $d < \rho_{max}$.
+        \end{itemize}
+\end{itemize}
+
+\subsection{Problématiques}
+
+Au vu des limitations perceptives et effectives mentionnées ci-dessus, un certain nombre de problématiques se posent. Ces difficultés seront rapidement soulevées ci-dessous, puis nous reviendrons plus en détails sur ces problèmes et leurs résolutions dans la partie "Analyse des algorithmes".
+
+\begin{itemize}
+    \item \textbf{Exploration de l'environnement} : un agent n'observe que la présence/quantité de trésor sur les noeuds adjacents. Afin d'avoir une vision globale ils doivent mettre en commun leurs graphes individuels. Se pose la question du partage d'information changeante (quantité de trésor diminuant, trésors se mouvant à cause du Wumpus) et d'horodatage de l'information.
+    \item \textbf{Perception limitée} : les agents ne savent pas si un autre agent se trouve en face, ou pire, un Golem. D'où le problème de l'interblocage.
+    \item \textbf{Organisation et Coalitions} : les agents doivent planifier leurs actions de sorte à intégrer la complémentarité de leurs rôles. Ils doivent se coordonner de sorte à ce qu'un Collecteur puisse toujours donner ses trésors à un agent Silo, et que les Explorateurs informent en permanence les Collecteurs de l'état de la carte.
+    \item \textbf{Système distribué} : un système multi-agent doit pouvoir se déployer sur n'importe quel système disrtibué. Il y a donc impossibilité d'utiliser une horloge interne à l'ordinateur, et nécéssité de dialoguer avec un "GateKeeper" lors de migrations.\\
+    
+\end{itemize}
+
+\noindent Voyons désormais les solutions que nous avons apporté à ces problématiques.
+
+
 \section{Analyse des algorithmes}
 
-Introduction générale des différents algorithmes.
+Nous avons implémenté, par itérations successives, une série d'algorithmes permettant de résoudre en partie les problématiques mentionnées ci-dessous. Pour chaque domaine d'application d'algorithme (Exploration, Communication, Interblocages, Ramassage de Trésors, Coordination et Migration) nous présenterons leurs principe général, étudierons leurs forces/limites puis discuterons de leurs complexité.
 
 \subsection{Exploration}
 
 \subsubsection{Principe}
 
-\subsubsection{Avantages/inconvénients}
+\blindtext
 
-\paragraph{Forces}
+\subsubsection{Avantages/Inconvénients}
 
-\paragraph{Limites}
+\begin{itemize}
+            \item \underline{Forces.} Possibilité de lancer une action "bouger sur case X", qui résultera sur un déplacement sur la case {X} si celle-ci est libre et adjacente.
+            \item \underline{Limites.} Possibilité de lancer une action "ramasser", qui collectera effectivement un trésor sur la case actuelle si celle-ci contient un trésor, l'agent Collecteur n'a pas son sac rempli et si le type du trésor correspond au type de trésor que peut ramasser le Collecteur.
+\end{itemize}
+
 
 \subsubsection{Complexité}
 
-\paragraph{Critere d'arret}
-
-\paragraph{Temps}
-
-\paragraph{Mémoire}
-
-\paragraph{Communication}
-
-\paragraph{Optimalité}
+\begin{itemize}
+            \item \underline{Critère d'arrêt.} Possibilité de lancer une action "bouger sur case X", qui résultera sur un déplacement sur la case {X} si celle-ci est libre et adjacente.
+            \item \underline{Temps.} Possibilité de lancer une action "ramasser", qui collectera effectivement un trésor sur la case actuelle si celle-ci contient un trésor, l'agent Collecteur n'a pas son sac rempli et si le type du trésor correspond au type de trésor que peut ramasser le Collecteur.
+            \item \underline{Mémoire.} Possibilité de lancer une action "bouger sur case X", qui résultera sur un déplacement sur la case {X} si celle-ci est libre et adjacente.
+            \item \underline{Communication.} Possibilité de lancer une action "ramasser", qui collectera effectivement un trésor sur la case actuelle si celle-ci contient un trésor, l'agent Collecteur n'a pas son sac rempli et si le type du trésor correspond au type de trésor que peut ramasser le Collecteur.
+            \item \underline{Optimialité.} Possibilité de lancer une action "bouger sur case X", qui résultera sur un déplacement sur la case {X} si celle-ci est libre et adjacente.
+\end{itemize}
 
 \subsection{Communication}
 
 \subsubsection{Principe}
 
-\subsubsection{Avantages/inconvénients}
+\blindtext
 
-\paragraph{Forces}
+\subsubsection{Avantages/Inconvénients}
 
-\paragraph{Limites}
+\begin{itemize}
+            \item \underline{Forces.} Possibilité de lancer une action "bouger sur case X", qui résultera sur un déplacement sur la case {X} si celle-ci est libre et adjacente.
+            \item \underline{Limites.} Possibilité de lancer une action "ramasser", qui collectera effectivement un trésor sur la case actuelle si celle-ci contient un trésor, l'agent Collecteur n'a pas son sac rempli et si le type du trésor correspond au type de trésor que peut ramasser le Collecteur.
+\end{itemize}
+
 
 \subsubsection{Complexité}
 
-\paragraph{Critere d'arret}
-
-\paragraph{Temps}
-
-\paragraph{Mémoire}
-
-\paragraph{Communication}
-
-\paragraph{Optimalité}
+\begin{itemize}
+            \item \underline{Critère d'arrêt.} Possibilité de lancer une action "bouger sur case X", qui résultera sur un déplacement sur la case {X} si celle-ci est libre et adjacente.
+            \item \underline{Temps.} Possibilité de lancer une action "ramasser", qui collectera effectivement un trésor sur la case actuelle si celle-ci contient un trésor, l'agent Collecteur n'a pas son sac rempli et si le type du trésor correspond au type de trésor que peut ramasser le Collecteur.
+            \item \underline{Mémoire.} Possibilité de lancer une action "bouger sur case X", qui résultera sur un déplacement sur la case {X} si celle-ci est libre et adjacente.
+            \item \underline{Communication.} Possibilité de lancer une action "ramasser", qui collectera effectivement un trésor sur la case actuelle si celle-ci contient un trésor, l'agent Collecteur n'a pas son sac rempli et si le type du trésor correspond au type de trésor que peut ramasser le Collecteur.
+            \item \underline{Optimialité.} Possibilité de lancer une action "bouger sur case X", qui résultera sur un déplacement sur la case {X} si celle-ci est libre et adjacente.
+\end{itemize}
 
 \subsection{Interblocages}
 
 \subsubsection{Principe}
 
-\subsubsection{Avantages/inconvénients}
+\blindtext
 
-\paragraph{Forces}
+\subsubsection{Avantages/Inconvénients}
 
-\paragraph{Limites}
+\begin{itemize}
+            \item \underline{Forces.} Possibilité de lancer une action "bouger sur case X", qui résultera sur un déplacement sur la case {X} si celle-ci est libre et adjacente.
+            \item \underline{Limites.} Possibilité de lancer une action "ramasser", qui collectera effectivement un trésor sur la case actuelle si celle-ci contient un trésor, l'agent Collecteur n'a pas son sac rempli et si le type du trésor correspond au type de trésor que peut ramasser le Collecteur.
+\end{itemize}
+
 
 \subsubsection{Complexité}
 
-\paragraph{Critere d'arret}
-
-\paragraph{Temps}
-
-\paragraph{Mémoire}
-
-\paragraph{Communication}
-
-\paragraph{Optimalité}
+\begin{itemize}
+            \item \underline{Critère d'arrêt.} Possibilité de lancer une action "bouger sur case X", qui résultera sur un déplacement sur la case {X} si celle-ci est libre et adjacente.
+            \item \underline{Temps.} Possibilité de lancer une action "ramasser", qui collectera effectivement un trésor sur la case actuelle si celle-ci contient un trésor, l'agent Collecteur n'a pas son sac rempli et si le type du trésor correspond au type de trésor que peut ramasser le Collecteur.
+            \item \underline{Mémoire.} Possibilité de lancer une action "bouger sur case X", qui résultera sur un déplacement sur la case {X} si celle-ci est libre et adjacente.
+            \item \underline{Communication.} Possibilité de lancer une action "ramasser", qui collectera effectivement un trésor sur la case actuelle si celle-ci contient un trésor, l'agent Collecteur n'a pas son sac rempli et si le type du trésor correspond au type de trésor que peut ramasser le Collecteur.
+            \item \underline{Optimialité.} Possibilité de lancer une action "bouger sur case X", qui résultera sur un déplacement sur la case {X} si celle-ci est libre et adjacente.
+\end{itemize}
 
 \subsection{Ramassage des Trésors}
 
 \subsubsection{Principe}
 
-\subsubsection{Avantages/inconvénients}
+\blindtext
 
-\paragraph{Forces}
+\subsubsection{Avantages/Inconvénients}
 
-\paragraph{Limites}
+\begin{itemize}
+            \item \underline{Forces.} Possibilité de lancer une action "bouger sur case X", qui résultera sur un déplacement sur la case {X} si celle-ci est libre et adjacente.
+            \item \underline{Limites.} Possibilité de lancer une action "ramasser", qui collectera effectivement un trésor sur la case actuelle si celle-ci contient un trésor, l'agent Collecteur n'a pas son sac rempli et si le type du trésor correspond au type de trésor que peut ramasser le Collecteur.
+\end{itemize}
+
 
 \subsubsection{Complexité}
 
-\paragraph{Critere d'arret}
-
-\paragraph{Temps}
-
-\paragraph{Mémoire}
-
-\paragraph{Communication}
-
-\paragraph{Optimalité}
+\begin{itemize}
+            \item \underline{Critère d'arrêt.} Possibilité de lancer une action "bouger sur case X", qui résultera sur un déplacement sur la case {X} si celle-ci est libre et adjacente.
+            \item \underline{Temps.} Possibilité de lancer une action "ramasser", qui collectera effectivement un trésor sur la case actuelle si celle-ci contient un trésor, l'agent Collecteur n'a pas son sac rempli et si le type du trésor correspond au type de trésor que peut ramasser le Collecteur.
+            \item \underline{Mémoire.} Possibilité de lancer une action "bouger sur case X", qui résultera sur un déplacement sur la case {X} si celle-ci est libre et adjacente.
+            \item \underline{Communication.} Possibilité de lancer une action "ramasser", qui collectera effectivement un trésor sur la case actuelle si celle-ci contient un trésor, l'agent Collecteur n'a pas son sac rempli et si le type du trésor correspond au type de trésor que peut ramasser le Collecteur.
+            \item \underline{Optimialité.} Possibilité de lancer une action "bouger sur case X", qui résultera sur un déplacement sur la case {X} si celle-ci est libre et adjacente.
+\end{itemize}
 
 \subsection{Coordination}
 
 \subsubsection{Principe}
 
-\subsubsection{Avantages/inconvénients}
+\blindtext
 
-\paragraph{Forces}
+\subsubsection{Avantages/Inconvénients}
 
-\paragraph{Limites}
+\begin{itemize}
+            \item \underline{Forces.} Possibilité de lancer une action "bouger sur case X", qui résultera sur un déplacement sur la case {X} si celle-ci est libre et adjacente.
+            \item \underline{Limites.} Possibilité de lancer une action "ramasser", qui collectera effectivement un trésor sur la case actuelle si celle-ci contient un trésor, l'agent Collecteur n'a pas son sac rempli et si le type du trésor correspond au type de trésor que peut ramasser le Collecteur.
+\end{itemize}
+
 
 \subsubsection{Complexité}
 
-\paragraph{Critere d'arret}
-
-\paragraph{Temps}
-
-\paragraph{Mémoire}
-
-\paragraph{Communication}
-
-\paragraph{Optimalité}
+\begin{itemize}
+            \item \underline{Critère d'arrêt.} Possibilité de lancer une action "bouger sur case X", qui résultera sur un déplacement sur la case {X} si celle-ci est libre et adjacente.
+            \item \underline{Temps.} Possibilité de lancer une action "ramasser", qui collectera effectivement un trésor sur la case actuelle si celle-ci contient un trésor, l'agent Collecteur n'a pas son sac rempli et si le type du trésor correspond au type de trésor que peut ramasser le Collecteur.
+            \item \underline{Mémoire.} Possibilité de lancer une action "bouger sur case X", qui résultera sur un déplacement sur la case {X} si celle-ci est libre et adjacente.
+            \item \underline{Communication.} Possibilité de lancer une action "ramasser", qui collectera effectivement un trésor sur la case actuelle si celle-ci contient un trésor, l'agent Collecteur n'a pas son sac rempli et si le type du trésor correspond au type de trésor que peut ramasser le Collecteur.
+            \item \underline{Optimialité.} Possibilité de lancer une action "bouger sur case X", qui résultera sur un déplacement sur la case {X} si celle-ci est libre et adjacente.
+\end{itemize}
 
 \subsection{Migration}
 
 \subsubsection{Principe}
 
-\subsubsection{Avantages/inconvénients}
+\blindtext
 
-\paragraph{Forces}
+\subsubsection{Avantages/Inconvénients}
 
-\paragraph{Limites}
+\begin{itemize}
+            \item \underline{Forces.} Possibilité de lancer une action "bouger sur case X", qui résultera sur un déplacement sur la case {X} si celle-ci est libre et adjacente.
+            \item \underline{Limites.} Possibilité de lancer une action "ramasser", qui collectera effectivement un trésor sur la case actuelle si celle-ci contient un trésor, l'agent Collecteur n'a pas son sac rempli et si le type du trésor correspond au type de trésor que peut ramasser le Collecteur.
+\end{itemize}
+
 
 \subsubsection{Complexité}
 
-\paragraph{Critere d'arret}
-
-\paragraph{Temps}
-
-\paragraph{Mémoire}
-
-\paragraph{Communication}
-
-\paragraph{Optimalité}
+\begin{itemize}
+            \item \underline{Critère d'arrêt.} Possibilité de lancer une action "bouger sur case X", qui résultera sur un déplacement sur la case {X} si celle-ci est libre et adjacente.
+            \item \underline{Temps.} Possibilité de lancer une action "ramasser", qui collectera effectivement un trésor sur la case actuelle si celle-ci contient un trésor, l'agent Collecteur n'a pas son sac rempli et si le type du trésor correspond au type de trésor que peut ramasser le Collecteur.
+            \item \underline{Mémoire.} Possibilité de lancer une action "bouger sur case X", qui résultera sur un déplacement sur la case {X} si celle-ci est libre et adjacente.
+            \item \underline{Communication.} Possibilité de lancer une action "ramasser", qui collectera effectivement un trésor sur la case actuelle si celle-ci contient un trésor, l'agent Collecteur n'a pas son sac rempli et si le type du trésor correspond au type de trésor que peut ramasser le Collecteur.
+            \item \underline{Optimialité.} Possibilité de lancer une action "bouger sur case X", qui résultera sur un déplacement sur la case {X} si celle-ci est libre et adjacente.
+\end{itemize}
 
 \newpage
 \section{Conclusion}
