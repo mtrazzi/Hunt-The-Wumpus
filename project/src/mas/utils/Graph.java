@@ -20,6 +20,8 @@ public class Graph<T> implements Serializable  {
 	 */
 	private static final long serialVersionUID = 1L;
 	final private HashMap<T, Set<T>> adjacencyList;
+	final private HashMap<String, MyCouple> treasureHashmap;
+	final private HashMap<String, Long> timeStampHashmap;
     private int nbEdges;
     /**
      * Create new Graph object.
@@ -32,6 +34,8 @@ public class Graph<T> implements Serializable  {
     public Graph() {
         this.adjacencyList = new HashMap<>();
         this.nbEdges = 0;
+        this.treasureHashmap = new HashMap<>();
+        this.timeStampHashmap = new HashMap<>();
     }
     
     /**
@@ -151,12 +155,33 @@ public class Graph<T> implements Serializable  {
     
     //Merge the received graph with current graph
     public void mergeGraph(Graph<T> receivedGraph) {
+    	
+    	// Merging the Vertexes and the Edges
     	Iterable<T> allVertices = receivedGraph.getAllVertices();
     	for (T node : allVertices) {
     		addVertex(node);
     		for (T adjacentNode : receivedGraph.getNeighbors(node)) {
     			addVertex(adjacentNode);
     			addEdge(node, adjacentNode);
+    		}
+    	}
+    	
+    	// Merging the Treasure Hashmaps TODO: (ideally, with vector clock)
+    	Long myTime, receivedTime;
+    	for (String node : receivedGraph.getTreasureHashmap().keySet()) {
+			MyCouple value = receivedGraph.getTreasureHashmap().get(node);
+
+			// Take the last update
+			receivedTime = receivedGraph.timeStampHashmap.get(node);
+    		if (this.treasureHashmap.containsKey(node)) {
+    			myTime = this.timeStampHashmap.get(node);
+    			if (myTime < receivedTime) {
+    				this.treasureHashmap.put(node, value);
+    			}
+    		}
+    		else {
+    			this.treasureHashmap.put(node, value);
+    			this.timeStampHashmap.put(node, receivedTime);
     		}
     	}
     }
@@ -241,5 +266,25 @@ public class Graph<T> implements Serializable  {
 		System.out.println("(NOT REALLY BUT)closest node is : " + (String)node);
 		return node; //to make eclipse happy
     }
+
+	public HashMap<String, MyCouple> getTreasureHashmap() {
+		return treasureHashmap;
+	}
+
+	public HashMap<String, Long> getTimeStampHashmap() {
+		return timeStampHashmap;
+	}
+	
+	public void printTreasureHashmap() {
+		// Print the Treasure Hashmap
+		HashMap<String, MyCouple> myHashMap = this.treasureHashmap;
+		for (String name : myHashMap.keySet()) {
+			System.out.print('{');
+			String key = name.toString();
+			String treasureValue = myHashMap.get(name).getTreasure().toString();
+			String diamondValue = myHashMap.get(name).getDiamonds().toString();
+			System.out.println('[' + key + ": (" + treasureValue + ", " + diamondValue + ")], ");
+		}
+	}
     
 }

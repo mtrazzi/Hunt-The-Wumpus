@@ -155,6 +155,7 @@ public class CollectingBehaviour extends GeneralSimpleBehaviour{
 			/////////////////////////////////
 			//// NO INTERBLOCKING
 			else {
+
 				/////////////////////////////////
 				//// STEP 1) Updating Graph and Hashmaps
 				updatingGraph(myPosition,lobs);
@@ -181,7 +182,8 @@ public class CollectingBehaviour extends GeneralSimpleBehaviour{
 				
 				/////////////////////////////////
 				// STEP 4) Because Agent Collector picked something, he might want to update his TreasureHashmap
-				agent.UpdateTreasureHashmap(lobs, myPosition);
+				agent.UpdateTreasureHashmap(agent.observe(), myPosition);
+				
 			}
 
 			// Set last move to the next move, for next iteration

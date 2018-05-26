@@ -10,7 +10,7 @@ public class ReceiveMap extends GeneralSimpleBehaviour{
 
 	private static final long serialVersionUID = 9088209402507795289L;
 
-	private boolean verbose=false;
+	private boolean verbose=true;
 	
 	public ReceiveMap(final mas.abstractAgent myagent) {
 		super(myagent);
@@ -19,6 +19,11 @@ public class ReceiveMap extends GeneralSimpleBehaviour{
 
 	@SuppressWarnings("unchecked")
 	public void action() {
+		
+		if (this.myAgent.getLocalName().equals("Agent5")) { //TODO : delete this debug
+			verbose = false;
+		}
+		
 		// Initialization
 		mas.agents.GeneralAgent agent = getGeneralAgent();
 		
@@ -37,20 +42,17 @@ public class ReceiveMap extends GeneralSimpleBehaviour{
 			try {
 				Graph<String> ReceivedGraph = new Graph<String>();
 				ReceivedGraph = (Graph<String>) msg.getContentObject();
+				if (verbose) {
+					System.out.println("My treasureHashmap");
+					agent.getGraph().printTreasureHashmap();
+				}
 				agent.getGraph().mergeGraph(ReceivedGraph);
 				//Print received graph
 				if (verbose) {
-					System.out.println("Received graph");
-					System.out.println("Printing nodes");
-					ReceivedGraph.printNodes();
-					System.out.println("Printing edges");
-					ReceivedGraph.printEdges();
-					//Print merged graph
+					System.out.println("Received treasureHashmap");
+					ReceivedGraph.printTreasureHashmap();
 					System.out.println("Merged graph");
-					System.out.println("Printing nodes");
-					agent.getGraph().printNodes();
-					System.out.println("Printing edges");
-					agent.getGraph().printEdges();
+					agent.getGraph().printTreasureHashmap();
 				}
 					
 			} catch (UnreadableException e) {

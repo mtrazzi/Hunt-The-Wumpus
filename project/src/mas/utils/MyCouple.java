@@ -1,7 +1,9 @@
 package mas.utils;
+import java.io.Serializable;
+
 import env.Couple;
 
-public class MyCouple {
+public class MyCouple implements Serializable{
 	/**
 	 * 
 	 */

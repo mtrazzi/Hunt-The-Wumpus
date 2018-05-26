@@ -28,9 +28,7 @@ public class GeneralAgent extends abstractAgent{
 	private Stack<String> stack;
 	
 	private String lastMove;
-	
-	private HashMap<String, MyCouple> treasureHashmap;
-	
+		
 	protected void takeDown(){
 
 	}
@@ -105,11 +103,11 @@ public class GeneralAgent extends abstractAgent{
 			if (adjacentNode.equals(myPosition)) {
 				List<Attribute> lattribute = lobs.get(i).getRight();
 				MyCouple couple = new MyCouple(0,0);
-				//For every treasure type (treasure or diamond)
 				
 				//Creating a couple with both the treasure and diamond value
 				for (Attribute a:lattribute) {
 					Integer val = Integer.valueOf(a.getValue().toString());
+					System.out.println("val is " + Integer.toString(val));
 					switch (a) {
 						case DIAMONDS:
 							couple.setDiamonds(val);
@@ -123,8 +121,11 @@ public class GeneralAgent extends abstractAgent{
 				}
 
 				//Adding the couple
-				//System.out.println("adding to the key " + adjacentNode + " the couple: (" + + couple.getTreasure() + ", " + couple.getDiamonds() + ")");
-				getTreasureHashmap().put(adjacentNode, couple);	
+				//System.out.println("adding to the key " + myPosition + " the couple: (" + + couple.getTreasure() + ", " + couple.getDiamonds() + ")");
+				getGraph().getTreasureHashmap().put(myPosition, couple);
+				
+				//Updating the timestamp of current node
+				getGraph().getTimeStampHashmap().put(myPosition, System.currentTimeMillis());
 			}
 			
 		}
@@ -133,7 +134,7 @@ public class GeneralAgent extends abstractAgent{
 	public void printTreasureHashmap() {
 		// Print the current Treasure Hashmap
 		System.err.println(this.getLocalName() + " #######");
-		HashMap<String, MyCouple> myHashMap = this.getTreasureHashmap();
+		HashMap<String, MyCouple> myHashMap = this.getGraph().getTreasureHashmap();
 		for (String name : myHashMap.keySet()) {
 			System.out.print('{');
 			String key = name.toString();
@@ -153,14 +154,6 @@ public class GeneralAgent extends abstractAgent{
 			System.err.println(this.getLocalName() + " -->EVERYTHING IS VISITED, HOURRA!!!");
 		}
 		return this.getGraph().isVisited(this.getHashmap());
-	}
-
-	public HashMap<String, MyCouple> getTreasureHashmap() {
-		return treasureHashmap;
-	}
-
-	public void setTreasureHashmap(HashMap<String, MyCouple> treasureHashmap) {
-		this.treasureHashmap = treasureHashmap;
 	}
 	
 	public void generalSetup(String service) {
@@ -193,6 +186,5 @@ public class GeneralAgent extends abstractAgent{
 		this.setHashmap(new HashMap<String, String>());
 		this.setStack(new Stack<String>());
 		this.setLastMove("");
-		this.setTreasureHashmap(new HashMap<String, MyCouple>());		
 	}
 }
