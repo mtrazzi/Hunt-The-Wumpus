@@ -8,17 +8,22 @@ import env.Couple;
 import jade.core.behaviours.SimpleBehaviour;
 
 public class GeneralSimpleBehaviour extends SimpleBehaviour {
-	
+
 	public GeneralSimpleBehaviour(final mas.abstractAgent myagent) {
 		super(myagent);
 	}
-	public void action() {}
-	public boolean done() {return true;}
-	
-	public mas.agents.GeneralAgent getGeneralAgent() {
-		return (mas.agents.GeneralAgent)this.myAgent;
+
+	public void action() {
 	}
-	
+
+	public boolean done() {
+		return true;
+	}
+
+	public mas.agents.GeneralAgent getGeneralAgent() {
+		return (mas.agents.GeneralAgent) this.myAgent;
+	}
+
 	public void littlePause() {
 		// Little pause to allow you to follow what is going on
 		try {
@@ -29,7 +34,7 @@ public class GeneralSimpleBehaviour extends SimpleBehaviour {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void sleep(int ms) {
 		try {
 			Thread.sleep(ms);
@@ -38,21 +43,21 @@ public class GeneralSimpleBehaviour extends SimpleBehaviour {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void debugStack(boolean verbose) {
 		if (verbose) {
-			System.out.print(getGeneralAgent().getLocalName() +"  ->");
+			System.out.print(getGeneralAgent().getLocalName() + "  ->");
 			getGeneralAgent().printStack();
 		}
 
 	}
-	
+
 	public void debugNextMove(boolean verbose, String myMove) {
 		if (verbose)
-			System.out.println(getGeneralAgent().getLocalName() +"  -> Next Move: " + myMove);
+			System.out.println(getGeneralAgent().getLocalName() + "  -> Next Move: " + myMove);
 	}
-	
+
 	public void defaultsleep() {
-		this.sleep(2000);
+		this.sleep(500);
 	}
 }

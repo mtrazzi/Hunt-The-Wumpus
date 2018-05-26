@@ -3,7 +3,7 @@ package mas.behaviours;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
-import mas.graph.*;
+import mas.utils.Graph;
 
 
 public class ReceiveVisited extends GeneralSimpleBehaviour{

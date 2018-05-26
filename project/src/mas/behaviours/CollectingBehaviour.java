@@ -12,6 +12,8 @@ public class CollectingBehaviour extends GeneralSimpleBehaviour{
 	 *  
 	 */
 	private static final long serialVersionUID = 9088209402507795289L;
+	
+	private boolean verbose = false;
 
 	public CollectingBehaviour (final mas.abstractAgent myagent) {
 		super(myagent);
@@ -25,12 +27,14 @@ public class CollectingBehaviour extends GeneralSimpleBehaviour{
 		for(Attribute a:lattribute){
 			switch (a) {
 			case TREASURE : case DIAMONDS :
-				System.out.println("My treasure type is :"+((mas.abstractAgent)this.myAgent).getMyTreasureType());
-				System.out.println("My current backpack capacity is:"+ ((mas.abstractAgent)this.myAgent).getBackPackFreeSpace());
-				System.out.println("Value of the treasure on the current position: "+a.getName() +": "+ a.getValue());
-				System.out.println("The agent grabbed :"+((mas.abstractAgent)this.myAgent).pick());
-				//System.out.println("the remaining backpack capacity is: "+ ((mas.abstractAgent)this.myAgent).getBackPackFreeSpace());
-				//System.out.println("The value of treasure on the current position: (unchanged before a new call to observe()): "+a.getValue());
+				if (verbose) {
+					System.out.println("My treasure type is :"+((mas.abstractAgent)this.myAgent).getMyTreasureType());
+					System.out.println("My current backpack capacity is:"+ ((mas.abstractAgent)this.myAgent).getBackPackFreeSpace());
+					System.out.println("Value of the treasure on the current position: "+a.getName() +": "+ a.getValue());
+					System.out.println("The agent grabbed :"+((mas.abstractAgent)this.myAgent).pick());
+					//System.out.println("the remaining backpack capacity is: "+ ((mas.abstractAgent)this.myAgent).getBackPackFreeSpace());
+					//System.out.println("The value of treasure on the current position: (unchanged before a new call to observe()): "+a.getValue());
+				}
 				b=true;
 				break;
 
@@ -40,7 +44,7 @@ public class CollectingBehaviour extends GeneralSimpleBehaviour{
 		}
 
 		//If the agent picked (part of) the treasure
-		if (b){
+		if (b && verbose){
 			List<Couple<String,List<Attribute>>> lobs2=((mas.abstractAgent)this.myAgent).observe();//myPosition
 			System.out.println("lobs after picking "+lobs2);
 		}
@@ -58,11 +62,15 @@ public class CollectingBehaviour extends GeneralSimpleBehaviour{
 			//System.err.println(agent.getLocalName() + "--> My type is " + agent.getMyTreasureType());
 			switch (a) {
 				case DIAMONDS:
-					System.out.println(agent.getLocalName() + "is on DIAMONDS");
+					if (verbose) {
+						System.out.println(agent.getLocalName() + "is on DIAMONDS");
+					}
 					b = b || agent.getMyTreasureType().equals("Diamonds");
 				break;
 				case TREASURE:
-					System.out.println(agent.getLocalName() + "is on TREASURE");
+					if (verbose) {
+						System.out.println(agent.getLocalName() + "is on TREASURE");
+					}
 					b = b || agent.getMyTreasureType().equals("Treasure");
 				break;
 			default:
@@ -73,11 +81,15 @@ public class CollectingBehaviour extends GeneralSimpleBehaviour{
 	}
 	
 	public void pickMyType(mas.agents.GeneralAgent agent) {
-		System.out.println(agent.getLocalName() + "current backpack capacity is:"+ ((mas.abstractAgent)this.myAgent).getBackPackFreeSpace());
+		if (verbose) {
+			System.out.println(agent.getLocalName() + "current backpack capacity is:"+ ((mas.abstractAgent)this.myAgent).getBackPackFreeSpace());
+		}
 		if (isObjectMyType(agent)) {
 			Integer tmp = agent.pick();
-			System.err.println(agent.getLocalName() + " was able to pick: " + tmp.toString());
-			System.err.println(agent.getLocalName() + " remaining backpack capacity is: "+ ((mas.abstractAgent)this.myAgent).getBackPackFreeSpace());
+			if (verbose) {
+				System.err.println(agent.getLocalName() + " was able to pick: " + tmp.toString());
+				System.err.println(agent.getLocalName() + " remaining backpack capacity is: "+ ((mas.abstractAgent)this.myAgent).getBackPackFreeSpace());
+			}
 		}
 	}
 	
@@ -162,8 +174,9 @@ public class CollectingBehaviour extends GeneralSimpleBehaviour{
 				agent.getHashmap().put(myPosition, "discovered");
 
 				/////////////////////////////////
-				//// STEP 2) Update the Hashmap
+				//// STEP 2) Update the Hashmaps
 				agent.UpdateEdges(myPosition, lobs);
+				agent.UpdateTreasureHashmap(lobs);
 
 				/////////////////////////////////
 				//// STEP 3) Update the Stack if empty

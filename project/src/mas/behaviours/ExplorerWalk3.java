@@ -47,10 +47,7 @@ public class ExplorerWalk3 extends GeneralSimpleBehaviour {
 				System.out.println(agent.getLocalName() + " -- list of observables: " + lobs);
 			
 			/////////////////////////////////
-			//// INTERBLOCKING
-			String lastMove = agent.getLastMove();
-			
-
+			//// INTERBLOCKING			
 			
 			if (agent.getLastMove() != "" && !myPosition.equals(agent.getLastMove())) {
 				System.err.println(agent.getLocalName() + " -> MOVE DIDN'T WORK");
@@ -81,8 +78,9 @@ public class ExplorerWalk3 extends GeneralSimpleBehaviour {
 				agent.getHashmap().put(myPosition, "discovered");
 	
 				/////////////////////////////////
-				//// STEP 2) Update the Hashmap
+				//// STEP 2) Update the Hashmaps
 				agent.UpdateEdges(myPosition, lobs);
+				agent.UpdateTreasureHashmap(lobs);
 				
 				/////////////////////////////////
 				//// STEP 3) Update the Stack if empty

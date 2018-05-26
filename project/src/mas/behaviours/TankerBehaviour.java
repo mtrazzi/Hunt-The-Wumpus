@@ -16,7 +16,7 @@ public class TankerBehaviour extends GeneralSimpleBehaviour{
 
 	public void action() {
 		// Set verbose to true do debug the behaviour
-		boolean verbose = true;
+		boolean verbose = false;
 		
 		//define agent = agent from the behavior casted to general agent
 		mas.agents.GeneralAgent agent = getGeneralAgent();
@@ -68,8 +68,9 @@ public class TankerBehaviour extends GeneralSimpleBehaviour{
 				agent.getHashmap().put(myPosition, "discovered");
 	
 				/////////////////////////////////
-				//// STEP 2) Update the Hashmap
+				//// STEP 2) Update the Hashmaps
 				agent.UpdateEdges(myPosition, lobs);
+				agent.UpdateTreasureHashmap(lobs);
 				
 				/////////////////////////////////
 				//// STEP 3) Update the Stack if empty
