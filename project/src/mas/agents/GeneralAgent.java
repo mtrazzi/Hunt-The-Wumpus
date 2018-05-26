@@ -96,31 +96,50 @@ public class GeneralAgent extends abstractAgent{
 		}
 	}
 	
-	public void UpdateTreasureHashmap(List<Couple<String, List<Attribute>>> lobs) {
+	public void UpdateTreasureHashmap(List<Couple<String, List<Attribute>>> lobs, String myPosition) {
 		//For every adjacent node
 		for (int i = 0; i < lobs.size(); i++) {
 			String adjacentNode = lobs.get(i).getLeft();
-			List<Attribute> lattribute = lobs.get(i).getRight();
-			MyCouple couple = new MyCouple(0,0);
-			//For every treasure type (treasure or diamond)
 			
-			//Creating a couple with both the treasure and diamond value
-			for (Attribute a:lattribute) {
-				Integer val = Integer.valueOf(a.getValue().toString());
-				switch (a) {
-					case DIAMONDS:
-						couple.setDiamonds(val);
-					break;
-					case TREASURE:
-						couple.setTreasure(val);
-					break;
-				default:
-					break;
+			//Only add the treasure value of the node you're visiting
+			if (adjacentNode.equals(myPosition)) {
+				List<Attribute> lattribute = lobs.get(i).getRight();
+				MyCouple couple = new MyCouple(0,0);
+				//For every treasure type (treasure or diamond)
+				
+				//Creating a couple with both the treasure and diamond value
+				for (Attribute a:lattribute) {
+					Integer val = Integer.valueOf(a.getValue().toString());
+					switch (a) {
+						case DIAMONDS:
+							couple.setDiamonds(val);
+						break;
+						case TREASURE:
+							couple.setTreasure(val);
+						break;
+					default:
+						break;
+					}
 				}
-			}
 
-			//Adding the couple
-			getTreasureHashmap().put(adjacentNode, couple);
+				//Adding the couple
+				//System.out.println("adding to the key " + adjacentNode + " the couple: (" + + couple.getTreasure() + ", " + couple.getDiamonds() + ")");
+				getTreasureHashmap().put(adjacentNode, couple);	
+			}
+			
+		}
+	}
+	
+	public void printTreasureHashmap() {
+		// Print the current Treasure Hashmap
+		System.err.println(this.getLocalName() + " #######");
+		HashMap<String, MyCouple> myHashMap = this.getTreasureHashmap();
+		for (String name : myHashMap.keySet()) {
+			System.out.print('{');
+			String key = name.toString();
+			String treasureValue = myHashMap.get(name).getTreasure().toString();
+			String diamondValue = myHashMap.get(name).getDiamonds().toString();
+			System.out.println('[' + key + ": (" + treasureValue + ", " + diamondValue + ")], ");
 		}
 	}
 	
@@ -144,11 +163,11 @@ public class GeneralAgent extends abstractAgent{
 		this.treasureHashmap = treasureHashmap;
 	}
 	
-	public void generalSetup() {
+	public void generalSetup(String service) {
 		DFAgentDescription dfd = new DFAgentDescription();
 		dfd.setName(getAID());
 		ServiceDescription sd = new ServiceDescription();
-		sd.setType( "Tanker"); /* donner un nom aux services qu'on propose */
+		sd.setType( service);
 		sd.setName(getLocalName());
 		dfd.addServices(sd);
 		

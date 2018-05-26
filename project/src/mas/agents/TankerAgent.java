@@ -37,7 +37,7 @@ public class TankerAgent extends GeneralAgent{
 	protected void setup(){
 
 		//general setup for every agent (from GeneralAgent class)
-		generalSetup();	
+		generalSetup("tanker");
 		
 		//Add the behaviours
 		addBehaviour(new TankerBehaviour(this)); //To explore the map

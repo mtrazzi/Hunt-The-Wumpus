@@ -8,6 +8,9 @@ import env.Couple;
 import jade.core.behaviours.SimpleBehaviour;
 
 public class GeneralSimpleBehaviour extends SimpleBehaviour {
+	/*
+	 * Methods useful for all kind of agents. Available for every behavior inheriting from GeneralSimpleBehaviour.
+	 */
 
 	public GeneralSimpleBehaviour(final mas.abstractAgent myagent) {
 		super(myagent);
@@ -59,5 +62,41 @@ public class GeneralSimpleBehaviour extends SimpleBehaviour {
 
 	public void defaultsleep() {
 		this.sleep(500);
+	}
+	
+	public String choseMoveInterblocking(String myPosition) {
+		mas.agents.GeneralAgent agent = this.getGeneralAgent();
+		System.err.println(agent.getLocalName() + " -> MOVE DIDN'T WORK");
+		while (!agent.getStack().empty())
+			agent.getStack().pop();
+		// WITH RANDOM
+		/*Random r = new Random();
+		Integer moveId=r.nextInt(lobs.size());
+		myMove = lobs.get(moveId).getLeft();*/
+		// Finding Closest Node with high degree
+		System.out.println(agent.getLocalName() + "---@@ HERE");
+		//this.getGraph().printNodes();
+		//this.getGraph().printEdges();
+		agent.getGraph().closestNode(myPosition, agent.getStack());
+		return agent.getStack().pop();
+	}
+	
+	public void updatingGraph(String myPosition, List<Couple<String, List<Attribute>>> lobs) {
+		mas.agents.GeneralAgent agent = this.getGeneralAgent();
+		
+		/////////////////////////////////
+		//// STEP 1) Update Graph
+		
+		// Add myPosition to Graph
+		agent.getGraph().addVertex(myPosition);
+
+		// Set Node as discovered
+		agent.getHashmap().put(myPosition, "discovered");
+
+		/////////////////////////////////
+		//// STEP 2) Update the Hashmaps
+		
+		agent.UpdateEdges(myPosition, lobs);
+		agent.UpdateTreasureHashmap(lobs, myPosition);
 	}
 }

@@ -23,7 +23,7 @@ public class MigrAgent extends GeneralAgent {
 		addBehaviour(new R1_managerAnswer("GK",this));
 		
 		addBehaviour(new DummyMigrationBehavior(this));
-		addBehaviour(new ExplorerWalk3(this));
+		addBehaviour(new ExplorerWalk(this));
 		this.setGraph(new Graph<String>());
 		this.setHashmap(new HashMap<String, String>());
 		this.setStack(new Stack<String>());

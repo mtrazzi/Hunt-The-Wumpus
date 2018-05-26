@@ -229,7 +229,7 @@ public class Graph<T> implements Serializable  {
     				if (this.degree(adjacentNode) > 2) {
         				//System.out.println("in second if");
     					updateStack(parent, old, adjacentNode, S);
-    					//System.out.println("closest node is : " + (String)adjacentNode);
+    					System.out.println("closest node is : " + (String)adjacentNode);
     					return adjacentNode;
     				}
     				f.add(adjacentNode);
@@ -238,7 +238,7 @@ public class Graph<T> implements Serializable  {
     		}
 		}
 		updateStack(parent,old, node, S);
-		//System.out.println("(NOT REALLY BUT)closest node is : " + (String)node);
+		System.out.println("(NOT REALLY BUT)closest node is : " + (String)node);
 		return node; //to make eclipse happy
     }
     

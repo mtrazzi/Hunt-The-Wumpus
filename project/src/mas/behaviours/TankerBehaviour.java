@@ -38,49 +38,27 @@ public class TankerBehaviour extends GeneralSimpleBehaviour{
 			if (verbose)
 				System.out.println(agent.getLocalName() + " -- list of observables: " + lobs);
 			
+
 			/////////////////////////////////
 			//// INTERBLOCKING
-			@SuppressWarnings("unused")
-			String lastMove = agent.getLastMove();
-			
-
-			
-			// WITH RANDOM
 			if (agent.getLastMove() != "" && !myPosition.equals(agent.getLastMove())) {
-				System.err.println("MOVE DIDN'T WORK");
-				while (!agent.getStack().empty())
-					agent.getStack().pop();
-				Random r = new Random();
-				Integer moveId=r.nextInt(lobs.size());
-				myMove = lobs.get(moveId).getLeft();
+				myMove = choseMoveInterblocking(myPosition);
 			}
 			
 			/////////////////////////////////
 			//// NO INTERBLOCKING
 			else {
 				/////////////////////////////////
-				//// STEP 1) Update Graph
-				
-				// Add myPosition to Graph
-				agent.getGraph().addVertex(myPosition);
-	
-				// Set Node as discovered
-				agent.getHashmap().put(myPosition, "discovered");
-	
-				/////////////////////////////////
-				//// STEP 2) Update the Hashmaps
-				agent.UpdateEdges(myPosition, lobs);
-				agent.UpdateTreasureHashmap(lobs);
+				//// STEP 1) Updating Graph and Hashmaps
+				updatingGraph(myPosition,lobs);
 				
 				/////////////////////////////////
-				//// STEP 3) Update the Stack if empty
-				
+				//// STEP 2) Update the Stack if empty	
 				if (agent.getStack().empty())
 					agent.getGraph().bfs(myPosition, agent.getHashmap(),agent.getStack());
 	
 				/////////////////////////////////
-				//// STEP 4) Pick the next Move and do it
-				
+				//// STEP 3) Pick the next Move and do it		
 				// Pick the next Node to go
 				myMove = agent.getStack().pop();
 			}

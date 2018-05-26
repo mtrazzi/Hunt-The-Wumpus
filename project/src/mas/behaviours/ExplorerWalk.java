@@ -8,16 +8,16 @@ import env.Attribute;
 import env.Couple;
 import jade.core.behaviours.SimpleBehaviour;
 import mas.abstractAgent;
-import mas.agents.ExplorerAgent2;
+import mas.agents.ExplorerAgent;
 
 import java.util.Arrays;
 import java.util.Stack;
 
-public class ExplorerWalk3 extends GeneralSimpleBehaviour {
+public class ExplorerWalk extends GeneralSimpleBehaviour {
 
 	private static final long serialVersionUID = 9088209402507795289L;
 
-	public ExplorerWalk3(final mas.abstractAgent myagent) {
+	public ExplorerWalk(final mas.abstractAgent myagent) {
 		super(myagent);
 	}
 
@@ -50,47 +50,24 @@ public class ExplorerWalk3 extends GeneralSimpleBehaviour {
 			//// INTERBLOCKING			
 			
 			if (agent.getLastMove() != "" && !myPosition.equals(agent.getLastMove())) {
-				System.err.println(agent.getLocalName() + " -> MOVE DIDN'T WORK");
-				while (!agent.getStack().empty())
-					agent.getStack().pop();
-				// WITH RANDOM
-				/*Random r = new Random();
-				Integer moveId=r.nextInt(lobs.size());
-				myMove = lobs.get(moveId).getLeft();*/
-				// WITH CLOSEST NODE
-				System.out.println(agent.getLocalName() + "---@@ HERE");
-				agent.getGraph().printNodes();
-				agent.getGraph().printEdges();
-				agent.getGraph().closestNode(myPosition, agent.getStack());
-				myMove = agent.getStack().pop();
+				myMove = choseMoveInterblocking(myPosition);
 			}
 			
 			/////////////////////////////////
 			//// NO INTERBLOCKING
 			else {
-				/////////////////////////////////
-				//// STEP 1) Update Graph
-				
-				// Add myPosition to Graph
-				agent.getGraph().addVertex(myPosition);
-	
-				// Set Node as discovered
-				agent.getHashmap().put(myPosition, "discovered");
-	
-				/////////////////////////////////
-				//// STEP 2) Update the Hashmaps
-				agent.UpdateEdges(myPosition, lobs);
-				agent.UpdateTreasureHashmap(lobs);
 				
 				/////////////////////////////////
-				//// STEP 3) Update the Stack if empty
+				//// STEP 1) Updating Graph and Hashmaps
+				updatingGraph(myPosition,lobs);
 				
+				/////////////////////////////////
+				//// STEP 2) Update the Stack if empty
 				if (agent.getStack().empty())
 					agent.getGraph().bfs(myPosition, agent.getHashmap(),agent.getStack());
 	
 				/////////////////////////////////
-				//// STEP 4) Pick the next Move and do it
-				
+				//// STEP 3) Pick the next Move and do it
 				// Pick the next Node to go
 				myMove = agent.getStack().pop();
 			}
@@ -113,7 +90,6 @@ public class ExplorerWalk3 extends GeneralSimpleBehaviour {
 	public boolean done() {
 		this.defaultsleep();
 		
-		//return (this.getGeneralAgent().areAllNodesVisited());
 		return false;
 	}
 

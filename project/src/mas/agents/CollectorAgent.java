@@ -14,7 +14,6 @@ import java.util.Stack;
 
 import env.Attribute;
 import env.Couple;
-import mas.behaviours.GeneralSimpleBehaviour;
 import mas.utils.Graph;
 import mas.utils.MyCouple;
 import mas.behaviours.*;
@@ -39,10 +38,12 @@ public class CollectorAgent extends GeneralAgent{
 	protected void setup(){
 		
 		//general setup for every agent (from GeneralAgent class)
-		generalSetup();
+		generalSetup("collector");
 		
 		//Add the behaviours
 		addBehaviour(new CollectingBehaviour(this)); //To explore the map
+		addBehaviour(new SendMap(this)); //To communicate the map
+		addBehaviour(new ReceiveMap(this));//To receive a map
 
 		System.out.println("the agent "+this.getLocalName()+ " is started");
 

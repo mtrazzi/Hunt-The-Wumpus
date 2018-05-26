@@ -147,40 +147,20 @@ public class CollectingBehaviour extends GeneralSimpleBehaviour{
 				System.out.println(agent.getLocalName() + " -- list of observables: " + lobs);
 
 			/////////////////////////////////
-			//// CHOSING NEXT MOVE / INTERBLOCKING
-			@SuppressWarnings("unused")
-			String lastMove = agent.getLastMove();
-
-			// WITH RANDOM
+			//// INTERBLOCKING
 			if (agent.getLastMove() != "" && !myPosition.equals(agent.getLastMove())) {
-				System.err.println("MOVE DIDN'T WORK");
-				while (!agent.getStack().empty())
-					agent.getStack().pop();
-				Random r = new Random();
-				Integer moveId=r.nextInt(lobs.size());
-				myMove = lobs.get(moveId).getLeft();
+				myMove = choseMoveInterblocking(myPosition);
 			}
 
 			/////////////////////////////////
 			//// NO INTERBLOCKING
 			else {
 				/////////////////////////////////
-				//// STEP 1) Update Graph
-
-				// Add myPosition to Graph
-				agent.getGraph().addVertex(myPosition);
-
-				// Set Node as discovered
-				agent.getHashmap().put(myPosition, "discovered");
+				//// STEP 1) Updating Graph and Hashmaps
+				updatingGraph(myPosition,lobs);
 
 				/////////////////////////////////
-				//// STEP 2) Update the Hashmaps
-				agent.UpdateEdges(myPosition, lobs);
-				agent.UpdateTreasureHashmap(lobs);
-
-				/////////////////////////////////
-				//// STEP 3) Update the Stack if empty
-
+				//// STEP 2) Update the Stack if empty
 				if (agent.getStack().empty())
 					agent.getGraph().bfs(myPosition, agent.getHashmap(),agent.getStack());
 				
@@ -188,8 +168,7 @@ public class CollectingBehaviour extends GeneralSimpleBehaviour{
 				//TODO: agent.emptyMyBackPack("Agent5");
 				
 				/////////////////////////////////
-				//// STEP 4) Pick the next Move and do it
-
+				//// STEP 3) Pick the next Move and do it
 				// Pick the next Node to go
 				if (!agent.getStack().empty() && !canPick(myPosition, lobs))
 					myMove = agent.getStack().pop();
@@ -199,6 +178,10 @@ public class CollectingBehaviour extends GeneralSimpleBehaviour{
 				}
 				else
 					myMove = myPosition;
+				
+				/////////////////////////////////
+				// STEP 4) Because Agent Collector picked something, he might want to update his TreasureHashmap
+				agent.UpdateTreasureHashmap(lobs, myPosition);
 			}
 
 			// Set last move to the next move, for next iteration
