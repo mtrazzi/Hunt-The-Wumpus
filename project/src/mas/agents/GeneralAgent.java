@@ -44,11 +44,7 @@ public class GeneralAgent extends abstractAgent{
 	}
 
 	public HashMap<String,String> getHashmap() {
-		return hashmap;
-	}
-
-	public void setHashmap(HashMap<String,String> hashmap) {
-		this.hashmap = hashmap;
+		return this.graph.getIsVisitedHashmap();
 	}
 
 	public Stack<String> getStack() {
@@ -192,7 +188,6 @@ public class GeneralAgent extends abstractAgent{
 		
 		//Initialize attributes
 		this.setGraph(new Graph<String>());
-		this.setHashmap(new HashMap<String, String>());
 		this.setStack(new Stack<String>());
 		this.setLastMove("");
 		this.setNbRandomMoves(0);

@@ -36,10 +36,12 @@ public class ExplorerWalk extends GeneralSimpleBehaviour {
 		String myPosition = agent.getCurrentPosition();
 
 		// Prints the current position
-		System.out.println("Position of: " + agent.getLocalName() + ": " + myPosition);
+		if (verbose)
+			System.out.println("Position of: " + agent.getLocalName() + ": " + myPosition);
 
 		if (myPosition != "") {
-			String myMove;
+			// Default move
+			String myMove = myPosition;
 			
 			// List of observable from the agent's current position
 			List<Couple<String, List<Attribute>>> lobs = agent.observe();
@@ -49,7 +51,7 @@ public class ExplorerWalk extends GeneralSimpleBehaviour {
 			/////////////////////////////////
 			//// INTERBLOCKING			
 			
-			if (agent.getLastMove() != "" && !myPosition.equals(agent.getLastMove())) {
+			if (agent.getNbRandomMoves() > 0 || (agent.getLastMove() != "" && !myPosition.equals(agent.getLastMove()))) {
 				myMove = choseMoveInterblocking(myPosition, lobs);
 			}
 			
@@ -69,7 +71,8 @@ public class ExplorerWalk extends GeneralSimpleBehaviour {
 				/////////////////////////////////
 				//// STEP 3) Pick the next Move and do it
 				// Pick the next Node to go
-				myMove = agent.getStack().pop();
+				if (!agent.getStack().empty()) // avoid EmptyStackException
+					myMove = agent.getStack().pop();
 			}
 			
 			//Debug next move
@@ -78,6 +81,10 @@ public class ExplorerWalk extends GeneralSimpleBehaviour {
 				System.out.print(agent.getLocalName() +"  ->");
 				getGeneralAgent().printStack();
 			}
+			
+			// If agent wants to stay at the same spot forever, introduce some random
+			if (myMove.equals(myPosition))
+				agent.setNbRandomMoves(10);
 			
 			// Set last move to the next move, for next iteration
 			agent.setLastMove(myMove);

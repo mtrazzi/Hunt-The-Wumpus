@@ -48,7 +48,6 @@ public class TankerAgent extends GeneralAgent{
 
 		System.out.println("the agent "+this.getLocalName()+ " is started");
 
-
 	}
 
 	/**

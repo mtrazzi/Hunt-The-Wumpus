@@ -22,6 +22,7 @@ public class Graph<T> implements Serializable  {
 	final private HashMap<T, Set<T>> adjacencyList;
 	final private HashMap<String, MyCouple> treasureHashmap;
 	final private HashMap<String, Long> timeStampHashmap;
+	final private HashMap<String, String> isVisitedHashmap;
     private int nbEdges;
     /**
      * Create new Graph object.
@@ -36,6 +37,7 @@ public class Graph<T> implements Serializable  {
         this.nbEdges = 0;
         this.treasureHashmap = new HashMap<>();
         this.timeStampHashmap = new HashMap<>();
+        this.isVisitedHashmap = new HashMap<>();
     }
     
     /**
@@ -166,7 +168,7 @@ public class Graph<T> implements Serializable  {
     		}
     	}
     	
-    	// Merging the Treasure Hashmaps TODO: (ideally, with vector clock)
+    	// Merging the Treasure Hashmaps
     	Long myTime, receivedTime;
     	for (String node : receivedGraph.getTreasureHashmap().keySet()) {
 			MyCouple value = receivedGraph.getTreasureHashmap().get(node);
@@ -183,6 +185,12 @@ public class Graph<T> implements Serializable  {
     			this.treasureHashmap.put(node, value);
     			this.timeStampHashmap.put(node, receivedTime);
     		}
+    	}
+    	
+    	// Merging the isVisitedHashmaps
+    	
+    	for (String node : receivedGraph.getIsVisitedHashmap().keySet()) {
+    		this.isVisitedHashmap.put(node, "discovered");
     	}
     }
     
@@ -333,6 +341,10 @@ public class Graph<T> implements Serializable  {
 			String diamondValue = myHashMap.get(name).getDiamonds().toString();
 			System.out.println('[' + key + ": (" + treasureValue + ", " + diamondValue + ")], ");
 		}
+	}
+
+	public HashMap<String, String> getIsVisitedHashmap() {
+		return isVisitedHashmap;
 	}
     
 }

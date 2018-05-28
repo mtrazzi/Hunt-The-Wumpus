@@ -188,6 +188,9 @@ public class CollectingBehaviour extends GeneralSimpleBehaviour{
 				agent.UpdateTreasureHashmap(agent.observe(), myPosition);
 				
 			}
+			// If agent wants to stay at the same spot forever, introduce some random
+			if (myMove.equals(myPosition))
+				agent.setNbRandomMoves(10);
 
 			// Set last move to the next move, for next iteration
 			agent.setLastMove(myMove);
@@ -201,6 +204,6 @@ public class CollectingBehaviour extends GeneralSimpleBehaviour{
 	public boolean done() {
 		this.defaultsleep();
 
-		return (this.getGeneralAgent().areAllNodesVisited());
+		return false;
 	}
 }
