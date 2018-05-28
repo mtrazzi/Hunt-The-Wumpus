@@ -161,9 +161,12 @@ public class CollectingBehaviour extends GeneralSimpleBehaviour{
 				updatingGraph(myPosition,lobs);
 
 				/////////////////////////////////
-				//// STEP 2) Update the Stack if empty
-				if (agent.getStack().empty())
-					agent.getGraph().bfs(myPosition, agent.getHashmap(),agent.getStack());
+				//// STEP 2) Update the Stack to go for the closest treasure if there is one, else explore
+				if (agent.getStack().empty()) {
+					if (agent.getGraph().closestTreasure(myPosition, agent.getStack(), agent.getMyTreasureType(), agent.getBackPackFreeSpace()).equals("NOT FOUND TREASURE TYPE")) {
+						agent.getGraph().bfs(myPosition, agent.getHashmap(),agent.getStack());
+					}
+				}
 				
 				//TODO: For Tanker
 				//TODO: agent.emptyMyBackPack("Agent5");

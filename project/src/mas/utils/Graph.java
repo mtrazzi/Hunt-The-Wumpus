@@ -245,14 +245,10 @@ public class Graph<T> implements Serializable  {
     	h.put(node, "visited");
 		while (!f.isEmpty()) {
 			node = f.remove();
-			//System.out.println("node is " + node);
 			for (T adjacentNode : getNeighbors(node)) {
-				//System.out.println("in for with node = " + (String)adjacentNode );
     			if (!h.containsKey(adjacentNode)) {
-    				//System.out.println("in first if");
     				parent.put(adjacentNode,node);
     				if (this.degree(adjacentNode) > 2) {
-        				//System.out.println("in second if");
     					updateStack(parent, old, adjacentNode, S);
     					System.out.println("closest node is : " + (String)adjacentNode);
     					return adjacentNode;
@@ -263,8 +259,55 @@ public class Graph<T> implements Serializable  {
     		}
 		}
 		updateStack(parent,old, node, S);
-		System.out.println("(NOT REALLY BUT)closest node is : " + (String)node);
-		return node; //to make eclipse happy
+		return node;
+    }
+    
+    public boolean isThereDesiredTreasure(T node, String treasureType, int backPackFreeSpace) {
+    	// Check that there is indeed treasure on the node
+    	if (!this.treasureHashmap.containsKey(node)) {
+    		return false;
+    	}
+    	
+    	MyCouple couple = this.treasureHashmap.get((String)node);
+    
+    	// How much treasure of the type I want?
+    	int value = 0;
+    	if (treasureType.equals("Diamonds")) {value = couple.getDiamonds();}
+    	if (treasureType.equals("Treasure")) {value = couple.getTreasure();}
+    	
+		return (value > 0 && value < backPackFreeSpace);
+    }
+    
+    //Same algorithm as closestNode above, but stop condition is a treasure
+    public T closestTreasure(T node, Stack<T> S, String treasureType, int backPackFreeSpace) {
+    	T old = node;
+    	Queue<T> f = new LinkedList<T>();
+    	HashMap<T, String> h = new HashMap<T, String>();
+    	HashMap<T,T> parent = new HashMap<T,T>();
+    	f.add(node);
+    	h.put(node, "visited");
+		while (!f.isEmpty()) {
+			node = f.remove();
+			//System.out.println("node is " + node);
+			for (T adjacentNode : getNeighbors(node)) {
+				//System.out.println("in for with node = " + (String)adjacentNode );
+    			if (!h.containsKey(adjacentNode)) {
+    				//System.out.println("in first if");
+    				parent.put(adjacentNode,node);
+    				if (isThereDesiredTreasure(adjacentNode, treasureType, backPackFreeSpace)) {
+        				//System.out.println("in second if");
+    					updateStack(parent, old, adjacentNode, S);
+    					System.out.println("closest treasure of my type is : " + (String)adjacentNode);
+    					return adjacentNode;
+    				}
+    				f.add(adjacentNode);
+    				h.put(adjacentNode, "visited");
+    			}
+    		}
+		}
+		//updateStack(parent,old, node, S); NO UPDATE STACK IF NOTHING WAS FOUND
+		//System.out.println("(NOT REALLY BUT)closest node is : " + (String)node);
+		return (T) "NOT FOUND TREASURE TYPE";
     }
 
 	public HashMap<String, MyCouple> getTreasureHashmap() {
