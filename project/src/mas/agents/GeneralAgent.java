@@ -193,5 +193,10 @@ public class GeneralAgent extends abstractAgent{
 		this.setNbRandomMoves(0);
 	}
 
-
+	// The position of the Tanker is encoded with a value of treasure equal to (-1,-1)
+	public boolean isTankerAtPosition(String position) {
+		if (!this.getGraph().getTreasureHashmap().containsKey(position))
+			return false;
+		return this.getGraph().getTreasureHashmap().get(position).equals(-1, -1);
+	}
 }

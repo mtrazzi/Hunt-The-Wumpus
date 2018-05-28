@@ -32,4 +32,8 @@ public class MyCouple implements Serializable{
 	public void setDiamonds(Integer diamonds) {
 		this.diamonds = diamonds;
 	}
+	
+	public boolean equals(Integer treasure, Integer diamonds) {
+		return (this.treasure == treasure && this.diamonds == diamonds);
+	}
 }

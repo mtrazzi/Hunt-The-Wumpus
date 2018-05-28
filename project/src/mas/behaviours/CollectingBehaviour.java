@@ -5,6 +5,10 @@ import java.util.Random;
 
 import env.Attribute;
 import env.Couple;
+import jade.domain.DFService;
+import jade.domain.FIPAException;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
 
 public class CollectingBehaviour extends GeneralSimpleBehaviour{
 	/**
@@ -124,6 +128,30 @@ public class CollectingBehaviour extends GeneralSimpleBehaviour{
 		
 		return false;
 	}
+	
+	//
+	public String getTankerName() {
+		DFAgentDescription dfd = new DFAgentDescription();
+		ServiceDescription sd = new ServiceDescription();
+		sd.setType("tanker");
+		dfd.addServices(sd);
+
+		// Searching for agents with desired qualities
+		DFAgentDescription[] result = null;
+		try {
+			result = DFService.search(this.getGeneralAgent(), dfd);
+		} catch (FIPAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.err.println("name of the Tanker: " + result[0].getName().getLocalName());
+		return result[0].getName().getLocalName();
+	}
+	
+	public void giveTreasureToTanker() {
+		System.err.println("Trying to give my treasures to Tanker");
+		this.getGeneralAgent().emptyMyBackPack(getTankerName());
+	}
 
 	@Override
 	public void action() {
@@ -134,11 +162,17 @@ public class CollectingBehaviour extends GeneralSimpleBehaviour{
 		mas.agents.GeneralAgent agent = getGeneralAgent();
 		
 		boolean verbose = false;
-		
-		//Start by Picking Treasure!
-		pickMyType(agent);
 
 		if (myPosition != "") {
+			
+			//Start by Picking Treasure!
+			pickMyType(agent);
+			
+			//Then, try to empty the backpack if there is a Tanker around
+			if (agent.getGraph().isThereTankerAround(myPosition)) {
+				giveTreasureToTanker();
+			}
+			
 			String myMove;
 
 			// List of observable from the agent's current position
@@ -161,15 +195,16 @@ public class CollectingBehaviour extends GeneralSimpleBehaviour{
 				updatingGraph(myPosition,lobs);
 
 				/////////////////////////////////
-				//// STEP 2) Update the Stack to go for the closest treasure if there is one, else explore
+				//// STEP 2) Update the Stack to go for the closest treasure if there is one.
+				//// 		 Otherwise, if backpack is full or no treasure around, go for the closest Tanker to give treasure
+				////		 If no treasure and no tanker, explore the map
 				if (agent.getStack().empty()) {
 					if (agent.getGraph().closestTreasure(myPosition, agent.getStack(), agent.getMyTreasureType(), agent.getBackPackFreeSpace()).equals("NOT FOUND TREASURE TYPE")) {
-						agent.getGraph().bfs(myPosition, agent.getHashmap(),agent.getStack());
+						if (agent.getGraph().closestTanker(myPosition, agent.getStack()).equals("TANKER NOT FOUND")) {
+							agent.getGraph().bfs(myPosition, agent.getHashmap(),agent.getStack());
+						}
 					}
 				}
-				
-				//TODO: For Tanker
-				//TODO: agent.emptyMyBackPack("Agent5");
 				
 				/////////////////////////////////
 				//// STEP 3) Pick the next Move and do it

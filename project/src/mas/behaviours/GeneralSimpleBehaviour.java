@@ -72,7 +72,9 @@ public class GeneralSimpleBehaviour extends SimpleBehaviour {
 		while (!agent.getStack().empty())
 			agent.getStack().pop();
 		System.out.println(agent.getLocalName() + "---@@ HERE");
-		if (agent.getNbRandomMoves() > 0 || agent.getGraph().closestNode(myPosition, agent.getStack(), agent.getLastMove()).equals("GO RANDOM")) {
+		if (agent.isTankerAtPosition(agent.getLastMove())
+			|| agent.getNbRandomMoves() > 0 
+			|| agent.getGraph().closestNode(myPosition, agent.getStack(), agent.getLastMove()).equals("GO RANDOM")) {
 			if (agent.getNbRandomMoves() == 0)
 				agent.setNbRandomMoves(10);
 			System.err.println("HERE");
