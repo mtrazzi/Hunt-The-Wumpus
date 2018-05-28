@@ -28,6 +28,8 @@ public class GeneralAgent extends abstractAgent{
 	private Stack<String> stack;
 	
 	private String lastMove;
+	
+	private Integer nbRandomMoves;
 		
 	protected void takeDown(){
 
@@ -73,6 +75,14 @@ public class GeneralAgent extends abstractAgent{
 		return (mas.abstractAgent)this;
 	}
 	
+	public Integer getNbRandomMoves() {
+		return nbRandomMoves;
+	}
+
+	public void setNbRandomMoves(Integer nbRandomMoves) {
+		this.nbRandomMoves = nbRandomMoves;
+	}
+	
 	public void printCurrentHashmap() {
 		// Print the current Hashmap
 		System.err.println(this.getLocalName() + " #######");
@@ -107,7 +117,6 @@ public class GeneralAgent extends abstractAgent{
 				//Creating a couple with both the treasure and diamond value
 				for (Attribute a:lattribute) {
 					Integer val = Integer.valueOf(a.getValue().toString());
-					System.out.println("val is " + Integer.toString(val));
 					switch (a) {
 						case DIAMONDS:
 							couple.setDiamonds(val);
@@ -186,5 +195,8 @@ public class GeneralAgent extends abstractAgent{
 		this.setHashmap(new HashMap<String, String>());
 		this.setStack(new Stack<String>());
 		this.setLastMove("");
+		this.setNbRandomMoves(0);
 	}
+
+
 }

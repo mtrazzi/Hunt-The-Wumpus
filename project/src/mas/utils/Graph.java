@@ -236,7 +236,7 @@ public class Graph<T> implements Serializable  {
     }
     
     //BFS but the stop condition is to be a node of degree > 2
-    public T closestNode(T node, Stack<T> S) {
+    public T closestNode(T node, Stack<T> S, String lastMove) {
     	T old = node;
     	Queue<T> f = new LinkedList<T>();
     	HashMap<T, String> h = new HashMap<T, String>();
@@ -249,6 +249,11 @@ public class Graph<T> implements Serializable  {
     			if (!h.containsKey(adjacentNode)) {
     				parent.put(adjacentNode,node);
     				if (this.degree(adjacentNode) > 2) {
+    					// Check if not neighbor to original node
+    					if (adjacentNode.equals(lastMove)) {
+    						return (T) "GO RANDOM";
+    					}
+    					
     					updateStack(parent, old, adjacentNode, S);
     					System.out.println("closest node is : " + (String)adjacentNode);
     					return adjacentNode;

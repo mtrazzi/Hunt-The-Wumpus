@@ -16,7 +16,7 @@ public class SendMap extends GeneralSimpleBehaviour {
 		super(myagent);
 	}
 
-	private boolean verbose = true;
+	private boolean verbose = false;
 
 	public void action() {
 		// Initialization

@@ -10,7 +10,7 @@ public class ReceiveMap extends GeneralSimpleBehaviour{
 
 	private static final long serialVersionUID = 9088209402507795289L;
 
-	private boolean verbose=true;
+	private boolean verbose=false;
 	
 	public ReceiveMap(final mas.abstractAgent myagent) {
 		super(myagent);

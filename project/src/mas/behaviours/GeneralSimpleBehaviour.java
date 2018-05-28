@@ -6,6 +6,8 @@ import java.util.List;
 import env.Attribute;
 import env.Couple;
 import jade.core.behaviours.SimpleBehaviour;
+import java.util.Random;
+
 
 public class GeneralSimpleBehaviour extends SimpleBehaviour {
 	/*
@@ -61,23 +63,31 @@ public class GeneralSimpleBehaviour extends SimpleBehaviour {
 	}
 
 	public void defaultsleep() {
-		this.sleep(500);
+		this.sleep(100);
 	}
 	
-	public String choseMoveInterblocking(String myPosition) {
+	public String choseMoveInterblocking(String myPosition, List<Couple<String, List<Attribute>>> lobs) {
 		mas.agents.GeneralAgent agent = this.getGeneralAgent();
 		System.err.println(agent.getLocalName() + " -> MOVE DIDN'T WORK");
 		while (!agent.getStack().empty())
 			agent.getStack().pop();
-		// WITH RANDOM
-		/*Random r = new Random();
-		Integer moveId=r.nextInt(lobs.size());
-		myMove = lobs.get(moveId).getLeft();*/
-		// Finding Closest Node with high degree
 		System.out.println(agent.getLocalName() + "---@@ HERE");
-		//this.getGraph().printNodes();
-		//this.getGraph().printEdges();
-		agent.getGraph().closestNode(myPosition, agent.getStack());
+		if (agent.getNbRandomMoves() > 0 || agent.getGraph().closestNode(myPosition, agent.getStack(), agent.getLastMove()).equals("GO RANDOM")) {
+			if (agent.getNbRandomMoves() == 0)
+				agent.setNbRandomMoves(10);
+			System.err.println("HERE");
+			String myMove = myPosition;
+			Integer counter = new Integer(0);
+			while (counter < 10 && (myMove.equals(myPosition) || myMove.equals(this.getGeneralAgent().getLastMove()))) {
+				Random r = new Random();
+				Integer moveId=r.nextInt(lobs.size());
+				myMove = lobs.get(moveId).getLeft();
+				counter += 1;
+			}
+			// Decrease nb of random moves (still) to do
+			agent.setNbRandomMoves(agent.getNbRandomMoves() - 1);
+			return myMove;
+		}
 		return agent.getStack().pop();
 	}
 	

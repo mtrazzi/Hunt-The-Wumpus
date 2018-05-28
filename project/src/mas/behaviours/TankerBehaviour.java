@@ -42,7 +42,7 @@ public class TankerBehaviour extends GeneralSimpleBehaviour{
 			/////////////////////////////////
 			//// INTERBLOCKING
 			if (agent.getLastMove() != "" && !myPosition.equals(agent.getLastMove())) {
-				myMove = choseMoveInterblocking(myPosition);
+				myMove = choseMoveInterblocking(myPosition, lobs);
 			}
 			
 			/////////////////////////////////
