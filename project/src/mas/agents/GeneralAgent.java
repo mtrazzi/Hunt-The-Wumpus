@@ -87,7 +87,7 @@ public class GeneralAgent extends abstractAgent{
 			System.out.print('{');
 			String key = name.toString();
 			String value = myHashMap.get(name).toString();
-			System.out.println('[' + key + ": " + value + "], ");
+			System.out.print('[' + key + ": " + value + "], ");
 		}
 	}
 	
@@ -145,7 +145,7 @@ public class GeneralAgent extends abstractAgent{
 			String key = name.toString();
 			String treasureValue = myHashMap.get(name).getTreasure().toString();
 			String diamondValue = myHashMap.get(name).getDiamonds().toString();
-			System.out.println('[' + key + ": (" + treasureValue + ", " + diamondValue + ")], ");
+			System.out.print('[' + key + ": (" + treasureValue + ", " + diamondValue + ")], ");
 		}
 	}
 	

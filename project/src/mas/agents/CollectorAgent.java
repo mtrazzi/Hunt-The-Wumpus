@@ -25,7 +25,7 @@ public class CollectorAgent extends GeneralAgent{
 	 */
 	private static final long serialVersionUID = -1784844593772918359L;
 
-
+	private int maxBackPackFreeSpace;
 
 	/**
 	 * This method is automatically called when "agent".start() is executed.
@@ -46,6 +46,8 @@ public class CollectorAgent extends GeneralAgent{
 		addBehaviour(new ReceiveMap(this));//To receive a map
 
 		System.out.println("the agent "+this.getLocalName()+ " is started");
+		
+		this.setMaxBackPackFreeSpace(this.getBackPackFreeSpace());
 
 	}
 
@@ -54,6 +56,20 @@ public class CollectorAgent extends GeneralAgent{
 	 */
 	protected void takeDown(){
 
+	}
+
+	public int getMaxBackPackFreeSpace() {
+		return maxBackPackFreeSpace;
+	}
+
+	public void setMaxBackPackFreeSpace(int maxBackPackFreeSpace) {
+		this.maxBackPackFreeSpace = maxBackPackFreeSpace;
+	}
+	
+	public boolean isBackPackEmpty() {
+		if (this.getBackPackFreeSpace() == this.getMaxBackPackFreeSpace())
+			System.out.println("values are equal");
+		return (this.getBackPackFreeSpace() == this.getMaxBackPackFreeSpace());
 	}
 }
 

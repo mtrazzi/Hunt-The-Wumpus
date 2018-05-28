@@ -293,6 +293,11 @@ public class Graph<T> implements Serializable  {
     	if (treasureType.equals("Diamonds")) {value = couple.getDiamonds();}
     	if (treasureType.equals("Treasure")) {value = couple.getTreasure();}
     	
+    	//System.err.println("value is : " + value);
+//    	if (value > 0 && value < backPackFreeSpace)
+//    		System.out.println("result is true");
+//    	else
+//    		System.out.println("result is false");
 		return (value > 0 && value < backPackFreeSpace);
     }
     
@@ -329,13 +334,15 @@ public class Graph<T> implements Serializable  {
     }
     
 	public boolean isTankerAtPosition(String position) {
-		if (!this.getTreasureHashmap().containsKey(position))
+		if (!this.getTreasureHashmap().containsKey(position)) {
 			return false;
+		}
 		return this.getTreasureHashmap().get(position).equals(-1, -1);
 	}
     
     //Same algorithm as closestNode above, but stop condition is "is there a Tanker"
     public T closestTanker(T node, Stack<T> S) {
+    	System.err.println("Doing Tanker BFS");
     	T old = node;
     	Queue<T> f = new LinkedList<T>();
     	HashMap<T, String> h = new HashMap<T, String>();
@@ -344,16 +351,13 @@ public class Graph<T> implements Serializable  {
     	h.put(node, "visited");
 		while (!f.isEmpty()) {
 			node = f.remove();
-			//System.out.println("node is " + node);
 			for (T adjacentNode : getNeighbors(node)) {
-				//System.out.println("in for with node = " + (String)adjacentNode );
     			if (!h.containsKey(adjacentNode)) {
-    				//System.out.println("in first if");
     				parent.put(adjacentNode,node);
     				if (isTankerAtPosition((String)adjacentNode)) {
-        				//System.out.println("in second if");
+        				// We update stack from old to node and not adjacent node because Tanker is in adjacentNode
     					updateStack(parent, old, adjacentNode, S);
-    					System.out.println("closest treasure of my type is : " + (String)adjacentNode);
+    					System.out.println("closest Tanker is at node: " + (String)adjacentNode);
     					return adjacentNode;
     				}
     				f.add(adjacentNode);
@@ -390,16 +394,20 @@ public class Graph<T> implements Serializable  {
 		return isVisitedHashmap;
 	}
 	
-	public boolean isThereTankerAround(T myPosition) {
-		System.err.println("position is |" + (String) myPosition + "|");
-		for (T adjacentNode : getNeighbors(myPosition)) {
-			// Add Edge
+	public boolean isThereTankerAround(T myPosition, List<Couple<String, List<Attribute>>> lobs) {
+		//System.err.println("position is |" + (String) myPosition + "|");
+		for (int i = 0; i < lobs.size(); i++) {
+			String adjacentNode = lobs.get(i).getLeft();
+			//System.out.println("considering node " + adjacentNode + "( i = " + i + " )");
 			if (this.getTreasureHashmap().containsKey(adjacentNode)) {
+				//System.out.println("first if");
 				if (this.isTankerAtPosition((String)adjacentNode)) {
+					System.out.println("Tanker is around");
 					return true;
 				}
 			}
 		}
+		System.out.println("Tanker is not around");
 		return false;
 	}
     

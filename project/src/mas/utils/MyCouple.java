@@ -34,6 +34,9 @@ public class MyCouple implements Serializable{
 	}
 	
 	public boolean equals(Integer treasure, Integer diamonds) {
-		return (this.treasure == treasure && this.diamonds == diamonds);
+		//System.out.println(" comparing (" + treasure + ", " + diamonds + ")");
+		//System.out.println(" with (" + this.treasure + ", " + this.diamonds + ")");
+		
+		return (this.treasure.equals(treasure) && this.diamonds.equals(diamonds));
 	}
 }

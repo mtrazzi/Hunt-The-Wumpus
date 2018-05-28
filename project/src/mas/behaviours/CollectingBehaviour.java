@@ -110,8 +110,8 @@ public class CollectingBehaviour extends GeneralSimpleBehaviour{
 			case TREASURE : case DIAMONDS :
 				//System.out.println("My treasure type is :"+((mas.abstractAgent)this.myAgent).getMyTreasureType());
 				//System.out.println("My current backpack capacity is:"+ ((mas.abstractAgent)this.myAgent).getBackPackFreeSpace());
-				//System.out.println("Value of the treasure on the current position: "+a.getName() +": "+ a.getValue());
-				//System.out.println("The agent grabbed :"+((mas.abstractAgent)this.myAgent).pick());
+				System.out.println("Value of the treasure on the current position: "+a.getName() +": "+ a.getValue());
+				System.out.println("The agent grabbed :"+((mas.abstractAgent)this.myAgent).pick());
 				//System.out.println("the remaining backpack capacity is: "+ ((mas.abstractAgent)this.myAgent).getBackPackFreeSpace());
 				//System.out.println("The value of treasure on the current position: (unchanged before a new call to observe()): "+a.getValue());
 				
@@ -144,13 +144,18 @@ public class CollectingBehaviour extends GeneralSimpleBehaviour{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.err.println("name of the Tanker: " + result[0].getName().getLocalName());
+		System.err.println("name of the Tanker: |" + result[0].getName().getLocalName() + "|");
 		return result[0].getName().getLocalName();
 	}
 	
 	public void giveTreasureToTanker() {
 		System.err.println("Trying to give my treasures to Tanker");
-		this.getGeneralAgent().emptyMyBackPack(getTankerName());
+		System.out.println("About My general agent:");
+		System.err.println("Backpack free space" + this.getGeneralAgent().getBackPackFreeSpace() );
+		if (this.getGeneralAgent().emptyMyBackPack(getTankerName()))
+			System.out.println("IT WORKED!");
+		else
+			System.out.println("FAILURE");
 	}
 
 	@Override
@@ -165,20 +170,17 @@ public class CollectingBehaviour extends GeneralSimpleBehaviour{
 
 		if (myPosition != "") {
 			
-			//Start by Picking Treasure!
-			pickMyType(agent);
 			
-			//Then, try to empty the backpack if there is a Tanker around
-			if (agent.getGraph().isThereTankerAround(myPosition)) {
-				giveTreasureToTanker();
-			}
-			
+						
 			String myMove;
 
 			// List of observable from the agent's current position
 			List<Couple<String, List<Attribute>>> lobs = agent.observe();
 			if (verbose)
 				System.out.println(agent.getLocalName() + " -- list of observables: " + lobs);
+
+			//Start by Picking Treasure!
+			pickMyType(agent);
 
 			/////////////////////////////////
 			//// INTERBLOCKING
@@ -200,11 +202,20 @@ public class CollectingBehaviour extends GeneralSimpleBehaviour{
 				////		 If no treasure and no tanker, explore the map
 				if (agent.getStack().empty()) {
 					if (agent.getGraph().closestTreasure(myPosition, agent.getStack(), agent.getMyTreasureType(), agent.getBackPackFreeSpace()).equals("NOT FOUND TREASURE TYPE")) {
-						if (agent.getGraph().closestTanker(myPosition, agent.getStack()).equals("TANKER NOT FOUND")) {
+						if (((mas.agents.CollectorAgent)agent).isBackPackEmpty()
+							|| agent.getGraph().closestTanker(myPosition, agent.getStack()).equals("TANKER NOT FOUND")) {
+							//System.out.println("DOING BFS");
 							agent.getGraph().bfs(myPosition, agent.getHashmap(),agent.getStack());
 						}
+						else
+							agent.printStack();
 					}
+					else
+						System.out.println("FOUND A TREASURE");
+						
 				}
+				
+				System.out.println("My current backpack free space: " + agent.getBackPackFreeSpace() );
 				
 				/////////////////////////////////
 				//// STEP 3) Pick the next Move and do it
@@ -223,6 +234,21 @@ public class CollectingBehaviour extends GeneralSimpleBehaviour{
 				agent.UpdateTreasureHashmap(agent.observe(), myPosition);
 				
 			}
+			
+			// Try to empty the backpack if there is a Tanker around (after having updated graph)
+			if (agent.getGraph().isThereTankerAround(myPosition, lobs)) {
+				System.err.println("TANKER IS AROUND! YAY!");
+				System.err.println("myPosition: " + myPosition);
+				giveTreasureToTanker();
+				//agent.emptyMyBackPack("Agent6");
+			}
+			else {
+//				System.err.println("Current position:" + myPosition);
+//				agent.printTreasureHashmap();
+//				System.err.println("Current position:" + myPosition);
+//				agent.printStack();
+			}
+			
 			// If agent wants to stay at the same spot forever, introduce some random
 			if (myMove.equals(myPosition))
 				agent.setNbRandomMoves(10);

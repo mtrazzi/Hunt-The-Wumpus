@@ -68,16 +68,17 @@ public class GeneralSimpleBehaviour extends SimpleBehaviour {
 	
 	public String choseMoveInterblocking(String myPosition, List<Couple<String, List<Attribute>>> lobs) {
 		mas.agents.GeneralAgent agent = this.getGeneralAgent();
-		System.err.println(agent.getLocalName() + " -> MOVE DIDN'T WORK");
+		if (agent.getLocalName().equals("Agent1")) {
+			System.err.println(agent.getLocalName() + " -> MOVE DIDN'T WORK");
+			System.err.println("Wanted to go to " + agent.getLastMove() + " but stayed in " + myPosition);
+		}
 		while (!agent.getStack().empty())
 			agent.getStack().pop();
-		System.out.println(agent.getLocalName() + "---@@ HERE");
 		if (agent.isTankerAtPosition(agent.getLastMove())
 			|| agent.getNbRandomMoves() > 0 
 			|| agent.getGraph().closestNode(myPosition, agent.getStack(), agent.getLastMove()).equals("GO RANDOM")) {
 			if (agent.getNbRandomMoves() == 0)
 				agent.setNbRandomMoves(10);
-			System.err.println("HERE");
 			String myMove = myPosition;
 			Integer counter = new Integer(0);
 			while (counter < 10 && (myMove.equals(myPosition) || myMove.equals(this.getGeneralAgent().getLastMove()))) {

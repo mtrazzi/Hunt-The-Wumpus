@@ -20,9 +20,7 @@ public class ReceiveMap extends GeneralSimpleBehaviour{
 	@SuppressWarnings("unchecked")
 	public void action() {
 		
-		if (this.myAgent.getLocalName().equals("Agent5")) { //TODO : delete this debug
-			verbose = false;
-		}
+
 		
 		// Initialization
 		mas.agents.GeneralAgent agent = getGeneralAgent();
@@ -37,8 +35,16 @@ public class ReceiveMap extends GeneralSimpleBehaviour{
 
 		final ACLMessage msg = agent.receive(msgTemplate);
 		if (msg != null) {
+			
+			if (this.myAgent.getLocalName().equals("Agent1")
+				&& msg.getSender().getLocalName().equals("Agent6"))	{ //TODO : delete this debug
+				verbose = false;
+			}
+			
 			if (verbose)
 				System.out.println(agent.getLocalName()+"<----Result received from "+msg.getSender().getLocalName());
+			
+			
 			try {
 				Graph<String> ReceivedGraph = new Graph<String>();
 				ReceivedGraph = (Graph<String>) msg.getContentObject();

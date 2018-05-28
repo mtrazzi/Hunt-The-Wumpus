@@ -5,6 +5,7 @@ import java.util.Random;
 
 import env.Attribute;
 import env.Couple;
+import mas.utils.MyCouple;
 
 public class TankerBehaviour extends GeneralSimpleBehaviour{
 
@@ -30,7 +31,12 @@ public class TankerBehaviour extends GeneralSimpleBehaviour{
 		String myPosition = agent.getCurrentPosition();
 
 		// Prints the current position
-		System.out.println("Position of: " + agent.getLocalName() + ": " + myPosition);
+		if (verbose)
+			System.out.println("Position of: " + agent.getLocalName() + ": " + myPosition);
+		
+		MyCouple couple = new MyCouple(-1,-1);
+		agent.getGraph().getTreasureHashmap().put(myPosition, couple);
+		agent.getGraph().getTimeStampHashmap().put(myPosition, System.currentTimeMillis());
 
 //		if (myPosition != "") {
 //			String myMove;

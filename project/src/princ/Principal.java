@@ -32,7 +32,6 @@ public class Principal {
 
 	public static void main(String[] args){
 
-		System.out.println("Hello !");
 		//0) Create the real environment and the observed one
 		//env= new Environment(ENVtype.GRID_T,5,null);
 		//env= new Environment(ENVtype.DOROGOVTSEV_T,150,null);
@@ -269,9 +268,9 @@ public class Principal {
 		agentList = lauchAgent("Agent1","CollectorAgent", agentList);
 		agentList = lauchAgent("Agent2","ExplorerAgent", agentList);
 		agentList = lauchAgent("Agent3","ExplorerAgent", agentList);
-		agentList = lauchAgent("Agent4","ExplorerAgent",agentList);
-		agentList = lauchAgent("Agent5","ExplorerAgent", agentList);
-		//agentList = lauchAgent("Agent6","TankerAgent", agentList);
+		//agentList = lauchAgent("Agent4","ExplorerAgent",agentList);
+		//agentList = lauchAgent("Agent5","ExplorerAgent", agentList);
+		agentList = lauchAgent("Agent6","TankerAgent", agentList);
 		//c = containerList.get("container0");
 		//agentName="Agent3";
 		//try {
