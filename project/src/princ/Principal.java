@@ -36,8 +36,8 @@ public class Principal {
 		//0) Create the real environment and the observed one
 		//env= new Environment(ENVtype.GRID_T,5,null);
 		//env= new Environment(ENVtype.DOROGOVTSEV_T,150,null);
-		//env=new Environment("ressources/map2018-2","ressources/map2018-config-2");
-		env=new Environment("ressources/map2018-Interblocage","ressources/map2018-config-Interblocage");
+		env=new Environment("ressources/map2017-2","ressources/map2017-config-3");
+		//env=new Environment("ressources/map2018-Interblocage","ressources/map2018-config-Interblocage");
 		//env=new Environment("ressources/map2018-Tanker","ressources/map2018-config-Tanker");
 
 
@@ -98,12 +98,7 @@ public class Principal {
 					AgentController ag=c.createNewAgent(agentName,CollectorAgent.class.getName(),objtab);
 					agentList.add(ag);
 					break;
-				case "DummyExploAgent":
-					Object[] objtab1=new Object[]{env,EntityType.AGENT_EXPLORER};//used to give informations to the agent
-					AgentController ag1=c.createNewAgent(agentName,DummyExploAgent.class.getName(),objtab1);
-					agentList.add(ag1);
-					break;
-				case "DummyTankerAgent":
+				case "TankerAgent":
 					Object[] objtab2=new Object[]{env,EntityType.AGENT_TANKER};//used to give informations to the agent
 					AgentController ag2=c.createNewAgent(agentName,TankerAgent.class.getName(),objtab2);
 					agentList.add(ag2);
@@ -271,12 +266,12 @@ public class Principal {
 //		}
 //		
 		//Collector (backPack)
-		agentList = lauchAgent("Agent3","CollectorAgent", agentList);
-		agentList = lauchAgent("Agent5","CollectorAgent", agentList);
-//		agentList = lauchAgent("Agent3","DummyCollectorAgent", agentList);
-//		agentList = lauchAgent("Agent4","DummyCollectorAgent",agentList);
-//		agentList = lauchAgent("Agent5","DummyTankerAgent", agentList);
-		//agentList = lauchAgent("Golem","DummyWumpusShift", agentList);
+		agentList = lauchAgent("Agent1","CollectorAgent", agentList);
+		agentList = lauchAgent("Agent2","ExplorerAgent", agentList);
+		agentList = lauchAgent("Agent3","ExplorerAgent", agentList);
+		agentList = lauchAgent("Agent4","ExplorerAgent",agentList);
+		agentList = lauchAgent("Agent5","ExplorerAgent", agentList);
+		//agentList = lauchAgent("Agent6","TankerAgent", agentList);
 		//c = containerList.get("container0");
 		//agentName="Agent3";
 		//try {
