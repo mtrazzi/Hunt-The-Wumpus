@@ -71,7 +71,6 @@ public class GeneralSimpleBehaviour extends SimpleBehaviour {
 		String myMove = myPosition;
 		Integer counter = new Integer(0);
 		while (counter < 100 && (myMove.equals(myPosition) || myMove.equals(this.getGeneralAgent().getLastMove()))) {
-			System.out.println("entering while loop with counter = " + counter);
 			Random r = new Random();
 			Integer moveId=r.nextInt(lobs.size());
 			myMove = lobs.get(moveId).getLeft();
@@ -91,7 +90,7 @@ public class GeneralSimpleBehaviour extends SimpleBehaviour {
 		
 		// If to many moves didn't work (for instance two agents going random in front of one another)
 		if (agent.getCounter() >= 5) {
-			agent.setNbRandomMoves(10);
+			agent.setNbRandomMoves(4);
 			agent.setCounter(0);
 		}
 		

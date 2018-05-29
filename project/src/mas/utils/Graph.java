@@ -276,8 +276,7 @@ public class Graph<T> implements Serializable  {
     			}
     		}
 		}
-		updateStack(parent,old, node, S);
-		return node;
+		return (T) "GO RANDOM";
     }
     
     public boolean isThereDesiredTreasure(T node, String treasureType, int backPackFreeSpace) {
@@ -288,10 +287,13 @@ public class Graph<T> implements Serializable  {
     	
     	MyCouple couple = this.treasureHashmap.get((String)node);
     
-    	// How much treasure of the type I want?
+    	// How much treasure of the type I want? (for collector)
     	int value = 0;
     	if (treasureType.equals("Diamonds")) {value = couple.getDiamonds();}
     	if (treasureType.equals("Treasure")) {value = couple.getTreasure();}
+    	
+    	// Where are the treasure ? (for the explorer)
+    	if (treasureType.equals("all")) {return (couple.getDiamonds() > 0 || couple.getTreasure() > 0);}
     	
     	//System.err.println("value is : " + value);
 //    	if (value > 0 && value < backPackFreeSpace)

@@ -207,14 +207,14 @@ public class CollectingBehaviour extends GeneralSimpleBehaviour{
 							if (agent.getGraph().closestTanker(myPosition, agent.getStack()).equals("TANKER NOT FOUND")) {
 								// if no tanker, you should do a bfs to explore the map and go talk with explorers
 								agent.getGraph().bfs(myPosition, agent.getHashmap(),agent.getStack());
-								System.err.println("Stack post BFS");
-								agent.printStack();
+								//System.err.println("Stack post BFS");
+								//agent.printStack();
 							}							
 						}
 						else {
 							agent.getGraph().bfs(myPosition, agent.getHashmap(),agent.getStack());
-							System.err.println("Stack post BFS");
-							agent.printStack();
+							//System.err.println("Stack post BFS");
+							//agent.printStack();
 						}
 							// if your backpack is empty you should still do a bfs to explore the map and go talk with explorers
 					}						
@@ -250,6 +250,7 @@ public class CollectingBehaviour extends GeneralSimpleBehaviour{
 			
 			// If agent wants to stay at the same spot forever, introduce some random
 			if (myMove.equals(myPosition)) {
+				System.out.println(agent.getLocalName() + " --> CHOSING RANDOM MOVE");
 				agent.emptyStack();
 				myMove = this.choseRandomMove(myPosition, lobs);
 			}

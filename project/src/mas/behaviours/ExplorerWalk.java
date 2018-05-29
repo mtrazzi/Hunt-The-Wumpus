@@ -51,9 +51,13 @@ public class ExplorerWalk extends GeneralSimpleBehaviour {
 			/////////////////////////////////
 			//// INTERBLOCKING
 
-			if (agent.getNbRandomMoves() > 0
-					|| (agent.getLastMove() != "" && !myPosition.equals(agent.getLastMove()))) {
-				myMove = choseMoveInterblocking(myPosition, lobs);
+			if ((agent.getLastMove() != "" && !myPosition.equals(agent.getLastMove()))) {
+				agent.emptyStack();
+				String result = agent.getGraph().closestNode(myPosition, agent.getStack(), agent.getLastMove());
+				if (result.equals("GO RANDOM")) {
+					myMove = this.choseRandomMove(myPosition, lobs);
+				} else
+					myMove = agent.getStack().pop();
 			}
 
 			/////////////////////////////////
@@ -66,26 +70,28 @@ public class ExplorerWalk extends GeneralSimpleBehaviour {
 
 				/////////////////////////////////
 				//// STEP 2) Update the Stack if empty
-				if (agent.getStack().empty())
+
+				// If there are still some nodes to visit
+				if (agent.getStack().empty() && !agent.areAllNodesVisited())
 					agent.getGraph().bfs(myPosition, agent.getHashmap(), agent.getStack());
 
+				// If there are still some treasure to update
+				if (agent.getStack().empty() && agent.areAllNodesVisited()) {
+
+					// Check if there are still treasures left ("all" types, size < INT_MAX)
+					if (agent.getGraph().closestTreasure(myPosition, agent.getStack(), "all", 2147483647)
+							.equals("NOT FOUND TREASURE TYPE")) {
+						// random move if no more node to visit and no more treasure
+						myMove = this.choseRandomMove(myPosition, lobs);
+					}
+
+				}
 				/////////////////////////////////
 				//// STEP 3) Pick the next Move and do it
 				// Pick the next Node to go
 				if (!agent.getStack().empty()) // avoid EmptyStackException
 					myMove = agent.getStack().pop();
 			}
-
-			// Debug next move
-			if (verbose) {
-				System.out.println(agent.getLocalName() + "  -> Next Move: " + myMove);
-				System.out.print(agent.getLocalName() + "  ->");
-				getGeneralAgent().printStack();
-			}
-
-			// If agent wants to stay at the same spot forever, introduce some random
-			if (myMove.equals(myPosition))
-				agent.setNbRandomMoves(10);
 
 			// Set last move to the next move, for next iteration
 			agent.setLastMove(myMove);
