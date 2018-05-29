@@ -149,13 +149,11 @@ public class CollectingBehaviour extends GeneralSimpleBehaviour{
 	}
 	
 	public void giveTreasureToTanker() {
-		System.err.println("Trying to give my treasures to Tanker");
-		System.out.println("About My general agent:");
-		System.err.println("Backpack free space" + this.getGeneralAgent().getBackPackFreeSpace() );
+		System.out.println("Trying to give my treasures to Tanker");
 		if (this.getGeneralAgent().emptyMyBackPack(getTankerName()))
-			System.out.println("IT WORKED!");
+			System.err.println("IT WORKED!");
 		else
-			System.out.println("FAILURE");
+			System.err.println("FAILURE");
 	}
 
 	@Override
@@ -184,7 +182,8 @@ public class CollectingBehaviour extends GeneralSimpleBehaviour{
 
 			/////////////////////////////////
 			//// INTERBLOCKING
-			if (agent.getLastMove() != "" && !myPosition.equals(agent.getLastMove())) {
+			if (agent.getNbRandomMoves() > 0 ||
+				(agent.getLastMove() != "" && !myPosition.equals(agent.getLastMove()))) {
 				myMove = choseMoveInterblocking(myPosition, lobs);
 			}
 
@@ -201,18 +200,24 @@ public class CollectingBehaviour extends GeneralSimpleBehaviour{
 				//// 		 Otherwise, if backpack is full or no treasure around, go for the closest Tanker to give treasure
 				////		 If no treasure and no tanker, explore the map
 				if (agent.getStack().empty()) {
+					// if there is no treasure (for current capacity) around, it will enter the if. If there is one around, the function "closestTreasure" already changed the "Move-Stack"
 					if (agent.getGraph().closestTreasure(myPosition, agent.getStack(), agent.getMyTreasureType(), agent.getBackPackFreeSpace()).equals("NOT FOUND TREASURE TYPE")) {
-						if (((mas.agents.CollectorAgent)agent).isBackPackEmpty()
-							|| agent.getGraph().closestTanker(myPosition, agent.getStack()).equals("TANKER NOT FOUND")) {
-							//System.out.println("DOING BFS");
-							agent.getGraph().bfs(myPosition, agent.getHashmap(),agent.getStack());
+						// if your backpack is not empty, you should look for the Tanker
+						if (!((mas.agents.CollectorAgent)agent).isBackPackEmpty()) {
+							if (agent.getGraph().closestTanker(myPosition, agent.getStack()).equals("TANKER NOT FOUND")) {
+								// if no tanker, you should do a bfs to explore the map and go talk with explorers
+								agent.getGraph().bfs(myPosition, agent.getHashmap(),agent.getStack());
+								System.err.println("Stack post BFS");
+								agent.printStack();
+							}							
 						}
-						else
+						else {
+							agent.getGraph().bfs(myPosition, agent.getHashmap(),agent.getStack());
+							System.err.println("Stack post BFS");
 							agent.printStack();
-					}
-					else
-						System.out.println("FOUND A TREASURE");
-						
+						}
+							// if your backpack is empty you should still do a bfs to explore the map and go talk with explorers
+					}						
 				}
 				
 				System.out.println("My current backpack free space: " + agent.getBackPackFreeSpace() );
@@ -238,20 +243,16 @@ public class CollectingBehaviour extends GeneralSimpleBehaviour{
 			// Try to empty the backpack if there is a Tanker around (after having updated graph)
 			if (agent.getGraph().isThereTankerAround(myPosition, lobs)) {
 				System.err.println("TANKER IS AROUND! YAY!");
-				System.err.println("myPosition: " + myPosition);
-				giveTreasureToTanker();
+				if (!((mas.agents.CollectorAgent)agent).isBackPackEmpty())
+					giveTreasureToTanker();
 				//agent.emptyMyBackPack("Agent6");
-			}
-			else {
-//				System.err.println("Current position:" + myPosition);
-//				agent.printTreasureHashmap();
-//				System.err.println("Current position:" + myPosition);
-//				agent.printStack();
 			}
 			
 			// If agent wants to stay at the same spot forever, introduce some random
-			if (myMove.equals(myPosition))
-				agent.setNbRandomMoves(10);
+			if (myMove.equals(myPosition)) {
+				agent.emptyStack();
+				myMove = this.choseRandomMove(myPosition, lobs);
+			}
 
 			// Set last move to the next move, for next iteration
 			agent.setLastMove(myMove);

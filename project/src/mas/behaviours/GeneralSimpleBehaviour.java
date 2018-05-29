@@ -66,32 +66,49 @@ public class GeneralSimpleBehaviour extends SimpleBehaviour {
 		this.sleep(100);
 	}
 	
+	public String choseRandomMove(String myPosition, List<Couple<String, List<Attribute>>> lobs) {
+		mas.agents.GeneralAgent agent = this.getGeneralAgent();
+		String myMove = myPosition;
+		Integer counter = new Integer(0);
+		while (counter < 100 && (myMove.equals(myPosition) || myMove.equals(this.getGeneralAgent().getLastMove()))) {
+			System.out.println("entering while loop with counter = " + counter);
+			Random r = new Random();
+			Integer moveId=r.nextInt(lobs.size());
+			myMove = lobs.get(moveId).getLeft();
+			counter += 1;
+		}
+		// Decrease nb of random moves (still) to do
+		if (agent.getNbRandomMoves() > 0)
+			agent.setNbRandomMoves(agent.getNbRandomMoves() - 1);
+		return myMove;
+	}
+	
 	public String choseMoveInterblocking(String myPosition, List<Couple<String, List<Attribute>>> lobs) {
 		mas.agents.GeneralAgent agent = this.getGeneralAgent();
-		if (agent.getLocalName().equals("Agent1")) {
-			System.err.println(agent.getLocalName() + " -> MOVE DIDN'T WORK");
-			System.err.println("Wanted to go to " + agent.getLastMove() + " but stayed in " + myPosition);
+		
+		// Counter counts number of moves that did not work
+		agent.setCounter(agent.getCounter() + 1);
+		
+		// If to many moves didn't work (for instance two agents going random in front of one another)
+		if (agent.getCounter() >= 5) {
+			agent.setNbRandomMoves(10);
+			agent.setCounter(0);
 		}
-		while (!agent.getStack().empty())
-			agent.getStack().pop();
-		if (agent.isTankerAtPosition(agent.getLastMove())
+		
+		agent.emptyStack();
+		if (agent.getGraph().isThereTankerAround(myPosition, lobs)
 			|| agent.getNbRandomMoves() > 0 
 			|| agent.getGraph().closestNode(myPosition, agent.getStack(), agent.getLastMove()).equals("GO RANDOM")) {
-			if (agent.getNbRandomMoves() == 0)
-				agent.setNbRandomMoves(10);
-			String myMove = myPosition;
-			Integer counter = new Integer(0);
-			while (counter < 10 && (myMove.equals(myPosition) || myMove.equals(this.getGeneralAgent().getLastMove()))) {
-				Random r = new Random();
-				Integer moveId=r.nextInt(lobs.size());
-				myMove = lobs.get(moveId).getLeft();
-				counter += 1;
-			}
-			// Decrease nb of random moves (still) to do
-			agent.setNbRandomMoves(agent.getNbRandomMoves() - 1);
-			return myMove;
+			return this.choseRandomMove(myPosition, lobs);
 		}
-		return agent.getStack().pop();
+		// if everything above is false, that means closestNode updated the Stack to the closes highest degree
+		// So pop will give the next node of interest
+		String result = agent.getStack().pop();
+		while (result.equals(myPosition) || result.equals(this.getGeneralAgent().getLastMove())
+				 && !agent.getStack().isEmpty())
+			result = agent.getStack().pop();
+		agent.setNbRandomMoves(agent.getNbRandomMoves() - 1);
+		return result;
 	}
 	
 	public void updatingGraph(String myPosition, List<Couple<String, List<Attribute>>> lobs) {

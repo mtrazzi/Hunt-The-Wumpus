@@ -30,6 +30,8 @@ public class GeneralAgent extends abstractAgent{
 	private String lastMove;
 	
 	private Integer nbRandomMoves;
+	
+	private Integer counter;
 		
 	protected void takeDown(){
 
@@ -191,6 +193,7 @@ public class GeneralAgent extends abstractAgent{
 		this.setStack(new Stack<String>());
 		this.setLastMove("");
 		this.setNbRandomMoves(0);
+		this.setCounter(0);
 	}
 
 	// The position of the Tanker is encoded with a value of treasure equal to (-1,-1)
@@ -198,5 +201,18 @@ public class GeneralAgent extends abstractAgent{
 		if (!this.getGraph().getTreasureHashmap().containsKey(position))
 			return false;
 		return this.getGraph().getTreasureHashmap().get(position).equals(-1, -1);
+	}
+	
+	public void emptyStack() {
+		while (!this.getStack().empty())
+			this.getStack().pop();
+	}
+
+	public Integer getCounter() {
+		return counter;
+	}
+
+	public void setCounter(Integer counter) {
+		this.counter = counter;
 	}
 }

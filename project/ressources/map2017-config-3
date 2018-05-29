@@ -11,7 +11,7 @@ treasure:80:50
 diamonds:96:77
 diamonds:14:57
 diamonds:38:6
-agentCollect:Agent1:129:50:-1
+agentCollect:Agent1:129:100:-1
 agentExplo:Agent2:130:-1:95
 agentExplo:Agent3:5:41:-1
 agentTanker:Agent6:36:1000:1000
