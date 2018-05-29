@@ -114,13 +114,12 @@ public class GeneralAgent extends abstractAgent{
 				
 				//Creating a couple with both the treasure and diamond value
 				for (Attribute a:lattribute) {
-					Integer val = Integer.valueOf(a.getValue().toString());
 					switch (a) {
 						case DIAMONDS:
-							couple.setDiamonds(val);
+							couple.setDiamonds(Integer.valueOf(a.getValue().toString()));
 						break;
 						case TREASURE:
-							couple.setTreasure(val);
+							couple.setTreasure(Integer.valueOf(a.getValue().toString()));
 						break;
 					default:
 						break;
